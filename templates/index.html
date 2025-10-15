@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!--el estilo este es por flask -->
+    <title>Obligatorio Carballido y Paredes</title>
+</head>
+<body>
+    <div id="barraBienvenida">
+        <h1>Salas de estudio UCU</h1>
+        <img src="{{ url_for('static', filename='ucuLogo.svg') }}" alt="logo ucu"> <!--el estilo este es por flask -->
+    </div>
+
+    <div id="formulario"> 
+        <h1>Reserva de Sala de Estudio</h1>
+        <form class="datos" method="POST" action="/">
+            <p class="titulo">Nombre de la persona que reserva: <input type="text" name="nombre" required></p>
+            <p class="titulo">Salón a reservar: <input type="text" name="salon" required></p>
+            <p class="titulo">Fecha: <input type="date" name="fecha" required></p>
+            <p class="titulo">Hora: <input type="time" name="hora" required></p>
+            <button type="submit">Enviar</button>
+        </form>
+    
+    <br>
+
+        <div id="reservas">
+            {% if reservas %} 
+                {% for r in reservas %}
+                    <p>{{ r }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+    </div>
+
+</body>
+</html>
