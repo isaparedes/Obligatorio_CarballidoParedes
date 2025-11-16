@@ -31,7 +31,10 @@
 - Frontend:
     - [ ] Pestaña inicial con formulario de login/sign up
     - [ ] Pestaña con formulario de reservas
-    - [ ] Pestaña con métrica BI ?
+    - [ ] (acceso restringido) Pestaña con métrica BI
+    - [ ] (acceso restringido) Pestaña con ABM de salas
+    - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
+    - [ ] (acceso restringido) Pestaña con ABM de sanciones
     - [ ] endpoints necesarios para el funcionamiento del front
 
 
