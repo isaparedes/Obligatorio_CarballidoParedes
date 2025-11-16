@@ -1,5 +1,6 @@
-from flask import Blueprint, jsonify
-from dao.reserva_dao import obtener_reservas, obtener_salas_mas_reservadas, obtener_reservas_por_carrera_facultad, obtener_asistencias_por_participante, obtener_porcentaje_asistencias
+from flask import Blueprint, jsonify, request
+from dao.reserva_dao import obtener_reservas
+from dao import sala_dao
 
 reserva_bp = Blueprint("reservas", __name__)
 
@@ -9,21 +10,12 @@ reserva_bp = Blueprint("reservas", __name__)
 def get_reservas():
     return jsonify(obtener_reservas())
 
+@reserva_bp.route('/salas/disponibles', methods=['GET'])
+def salas_disponibles():
+    fecha_inicio = request.args.get("fecha_inicio")
+    fecha_fin = request.args.get("fecha_fin")
+    cantidad = int(request.args.get("cantidad"))
 
-# Consultas obligatorias: 
+    salas = sala_dao.obtener_salas_disponibles(fecha_inicio, fecha_fin, cantidad)
+    return jsonify(salas)
 
-@reserva_bp.get("/salas_mas_reservadas")
-def get_salas_mas_reservadas():
-    return jsonify(obtener_salas_mas_reservadas())
-
-@reserva_bp.get("/por_carrera_facultad")
-def get_reservas_por_carrera_facultad():
-    return jsonify(obtener_reservas_por_carrera_facultad())
-
-@reserva_bp.get("/asistencias_por_participante")
-def get_asistencias_por_participante():
-    return jsonify(obtener_asistencias_por_participante())
-
-@reserva_bp.get("/porcentaje_asistencias")
-def get_porcentaje_asistencias():
-    return jsonify(obtener_porcentaje_asistencias())

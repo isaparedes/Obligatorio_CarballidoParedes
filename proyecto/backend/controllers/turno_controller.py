@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from dao.turno_dao import obtener_turnos, obtener_mas_demandados
+from dao.turno_dao import obtener_turnos
 
 turno_bp = Blueprint("turnos", __name__)
 
@@ -9,9 +9,3 @@ turno_bp = Blueprint("turnos", __name__)
 def get_turnos():
     return jsonify(obtener_turnos())
 
-
-# Consultas obligatorias: 
-
-@turno_bp.get("/mas_demandados")
-def get_mas_demandados():
-    return jsonify(obtener_mas_demandados())

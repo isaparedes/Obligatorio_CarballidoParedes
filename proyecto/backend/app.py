@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from controllers.reportes_controller import reportes_bp
 from controllers.participante_controller import participante_bp
 from controllers.reserva_controller import reserva_bp
 from controllers.turno_controller import turno_bp
@@ -16,6 +17,7 @@ app.register_blueprint(reserva_bp, url_prefix="/reservas")
 app.register_blueprint(turno_bp, url_prefix="/turnos")
 app.register_blueprint(sala_bp, url_prefix="/salas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
+app.register_blueprint(reportes_bp, url_prefix="/reportes")
 
 @app.route("/")
 def index():

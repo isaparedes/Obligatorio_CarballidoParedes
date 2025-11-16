@@ -3,19 +3,13 @@ import ucuLogo from './assets/ucuLogo.svg'
 import './App.css'
 
 function App() {
-  const [reservas, setReservas] = useState([])
-  const [participantes, setParticipantes] = useState([])
+  const [salasDisp, setSalasDisp] = useState(salasDisp)
+  const [cantidad, setCantidad] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/reservas/")
+    fetch("http://localhost:5000/reservas/salas/disponibles")
     .then(res => res.json())
-    .then(data => setReservas(data));
-  }, []);
-
-  useEffect(() => {
-    fetch("http://localhost:5000/participantes/")
-    .then(res => res.json())
-    .then(data => setParticipantes(data))
+    .then(data => setSalasDisp(data))
   }, [])
 
 
