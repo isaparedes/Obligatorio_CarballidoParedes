@@ -1,5 +1,15 @@
 from dao.db import get_connection
 
+# Obtener participantes
+def obtener_reservas(): 
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM reserva")
+            return cursor.fetchall()
+        
+# --------------------------------------------------- #
+
 # Salas más reservadas (puse top 3 pero se puede cambiar)
 def obtener_salas_mas_reservadas():
     conn = get_connection()
@@ -31,18 +41,71 @@ def obtener_reservas_por_carrera_facultad():
                 JOIN facultad f
                 ON pa.id_facultad=f.id_facultad
                 GROUP BY pa.nombre_programa, f.nombre
+                ORDER BY cant_reservas DESC
             """)
             return cursor.fetchall()
         
 # Cantidad de reservas y asistencias de profesores y alumnos (grado y posgrado)
-#...
+def obtener_asistencias_por_participante():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor: 
+            cursor.execute('''
+                SELECT p.ci, p.nombre, p.apellido, ppa.rol,
+                COUNT(rp.id_reserva) AS cant_reservas,
+                SUM(rp.asistencia = 1) AS cant_asistencias
+                FROM participante p
+                JOIN participante_programa_academico ppa 
+                ON p.ci = ppa.ci_participante
+                LEFT JOIN reserva_participante rp 
+                ON p.ci = rp.ci_participante
+                GROUP BY p.ci, p.nombre, p.apellido, ppa.rol
+                ORDER BY cant_reservas DESC;
+            ''')
+            return cursor.fetchall()
 
-# Extra
-def obtener_reservas(): 
+
+# Porcentaje de reservas efectivamente utilizadas vs. canceladas/no asistidas
+def obtener_porcentaje_asistencias():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM reserva")
+            cursor.execute('''
+                SELECT SUM(CASE WHEN r.estado = 'finalizada' 
+                AND EXISTS (
+                    SELECT 1 
+                    FROM reserva_participante rp 
+                    WHERE rp.id_reserva = r.id_reserva
+                    AND rp.asistencia = TRUE
+                )
+                THEN 1 ELSE 0 END) AS reservas_utilizadas,
+                SUM(CASE WHEN r.estado <> 'finalizada' OR 
+                NOT EXISTS (
+                    SELECT 1 
+                    FROM reserva_participante rp 
+                    WHERE rp.id_reserva = r.id_reserva
+                    AND rp.asistencia = TRUE
+                )
+                THEN 1 ELSE 0 END) AS reservas_no_utilizadas,
+                COUNT(*) AS total_reservas,
+                ROUND(SUM(CASE WHEN r.estado = 'finalizada'
+                AND EXISTS (
+                    SELECT 1 
+                    FROM reserva_participante rp 
+                    WHERE rp.id_reserva = r.id_reserva
+                    AND rp.asistencia = TRUE
+                )
+                THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS porcentaje_utilizadas,
+                ROUND(SUM(CASE WHEN r.estado <> 'finalizada' OR
+                NOT EXISTS (
+                    SELECT 1 
+                    FROM reserva_participante rp 
+                    WHERE rp.id_reserva = r.id_reserva
+                    AND rp.asistencia = TRUE
+                )
+                THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS porcentaje_no_utilizadas
+                FROM reserva r;
+            ''')
             return cursor.fetchall()
-
+        
 

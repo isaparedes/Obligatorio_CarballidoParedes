@@ -29,7 +29,7 @@ html, body, #root {
   color: rgb(5, 5, 71);
 
   margin: 0 auto;
-  padding: 20px 40px;
+  padding: 10px 40px;
 
   display: flex;
   justify-content: space-between;
@@ -41,12 +41,12 @@ html, body, #root {
 
 #barraBienvenida h1 {
   margin: 0;
-  font-size: 40px;
+  font-size: 30px;
   font-weight: 700;
 }
 
 #barraBienvenida img {
-  width: 160px;
+  width: 130px;
   height: auto;
 }
 

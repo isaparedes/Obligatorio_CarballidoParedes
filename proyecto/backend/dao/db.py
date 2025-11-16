@@ -1,4 +1,3 @@
-# db.py
 import os
 import pymysql
 from pymysql.err import OperationalError
@@ -16,7 +15,8 @@ def get_connection():
             port=3307,            
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True,
-            connect_timeout=5
+            connect_timeout=5,
+            charset="utf8mb4" 
         )
         print(f"Conexión exitosa a la base de datos en host: {host}")
         return connection

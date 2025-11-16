@@ -1,7 +1,17 @@
 from dao.db import get_connection
 
+# Obtener turnos
+def obtener_turnos():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM turno")
+            return cursor.fetchall()
+        
+# --------------------------------------------------- #
+
 # Turnos más demandados (puse top 3 pero se puede cambiar)
-def obtener_turnos_mas_demandados():
+def obtener_mas_demandados():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
@@ -14,8 +24,9 @@ def obtener_turnos_mas_demandados():
                 JOIN reserva r ON t.id_turno = r.id_turno
                 GROUP BY t.id_turno, t.hora_inicio, t.hora_fin
                 ORDER BY cant_reservas DESC
-                LIMIT 3;
+                LIMIT 3
             """)
             return cursor.fetchall()
         
+# --------------------------------------------------- #
 
