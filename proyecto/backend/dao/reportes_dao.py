@@ -197,3 +197,66 @@ def obtener_turnos_mas_demandados():
                 LIMIT 3
             """)
             return cursor.fetchall()
+        
+
+# Cantidad de reservas rechazadas por exceso de personas
+def obtener_cantidad_reservas_rechazadas_por_exceso_personas():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT COUNT(*) AS reservas_rechazadas_por_exceso
+                FROM (
+                    SELECT r.id_reserva
+                    FROM reserva r
+                    JOIN sala s 
+                        ON r.nombre_sala = s.nombre_sala 
+                       AND r.edificio = s.edificio
+                    JOIN reserva_participante rp 
+                        ON rp.id_reserva = r.id_reserva
+                    GROUP BY r.id_reserva
+                    HAVING COUNT(rp.ci_participante) > s.capacidad
+                ) AS sub;
+            """)
+            return cursor.fetchone()
+
+        
+# Las 5 personas con más inasistencias
+def obtener_5_personas_con_mas_inasistencias():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                    rp.ci_participante,
+                    p.nombre,
+                    p.apellido,
+                    COUNT(*) AS cantidad_inasistencias
+                FROM reserva_participante rp
+                JOIN participante p 
+                    ON rp.ci_participante = p.ci
+                WHERE rp.asistencia = FALSE
+                GROUP BY rp.ci_participante, p.nombre, p.apellido
+                ORDER BY cantidad_inasistencias DESC
+                LIMIT 5;
+            """)
+            return cursor.fetchall()
+
+
+        
+# Edificio con mayor cantidad de reservas
+def obtener_edificio_mayor_cantidad_reservas():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                    edificio AS nombre_edificio,
+                    COUNT(*) AS total_reservas
+                FROM reserva
+                GROUP BY edificio
+                ORDER BY total_reservas DESC
+                LIMIT 1;
+            """)
+            return cursor.fetchone()
+

@@ -39,3 +39,15 @@ def get_sanciones_por_participante():
 @reportes_bp.get("/turnos_mas_demandados")
 def get_turnos_mas_demandados():
     return jsonify(obtener_turnos_mas_demandados())
+
+@reportes_bp.get("/cantidad_reservas_rechazadas_por_exceso_personas")
+def get_turnos_mas_demandados():
+    return jsonify(obtener_cantidad_reservas_rechazadas_por_exceso_personas())
+
+@reportes_bp.get("/5_personas_con_mas_inasistencias")
+def get_turnos_mas_demandados():
+    return jsonify(obtener_5_personas_con_mas_inasistencias())
+
+@reportes_bp.get("/edificio_mayor_cantidad_reservas")
+def get_turnos_mas_demandados():
+    return jsonify(obtener_edificio_mayor_cantidad_reservas())
