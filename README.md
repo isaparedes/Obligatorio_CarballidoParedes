@@ -20,8 +20,7 @@
 - Backend:
     - [x] Consultas obligatorias métrica BI
     - [x] 3 consultas SQL extra para la métrica BI
-    - [x]
-    - [ ]  ABM de participantes
+    - [x]  ABM de participantes
     - [X] ABM de salas
     - [ ] ABM de reservas de salas
     - [ ] ABM de sanciones
