@@ -8,11 +8,11 @@ def get_connection():
 
     try:
         connection = pymysql.connect(
-            host=host,
+            host="localhost",
             user="root",         
-            password="rootpassword",     
+            password="Candykira2025_",     
             database="gestion_salas",
-            port=3307,            
+            port=3306,            
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True,
             connect_timeout=5,

@@ -1,16 +1,10 @@
-from dao.sala_dao import (
-    obtener_salas,
-    obtener_sala,
-    insertar_sala,
-    actualizar_sala,
-    eliminar_sala
-)
+from dao.sala_dao import (obtener_salas, obtener_sala, insertar_sala, actualizar_sala, eliminar_sala)
 
 # Listar todas las salas
 def service_obtener_salas():
     return obtener_salas()
 
-# Obtener sala
+# Obtener sala 
 def service_obtener_sala(nombre_sala, edificio):
     return obtener_sala(nombre_sala, edificio)
 
