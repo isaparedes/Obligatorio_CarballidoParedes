@@ -26,6 +26,28 @@ def crear_participante():
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
 
     data = request.get_json()
+
+    # Validaciones
+    campos_obligatorios = ["ci", "nombre", "apellido", "edad"]
+    faltantes = [c for c in campos_obligatorios if c not in data]
+    if faltantes:
+        return jsonify({
+            "error": "Faltan campos obligatorios",
+            "faltantes": faltantes
+        }), 400
+
+    if not isinstance(data["ci"], str) or len(data["ci"]) < 3:
+        return jsonify({"error": "CI inválida (debe ser string y mínimo 3 caracteres)"}), 400
+
+    if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
+        return jsonify({"error": "Nombre inválido"}), 400
+
+    if not isinstance(data["apellido"], str) or len(data["apellido"]) < 1:
+        return jsonify({"error": "Apellido inválido"}), 400
+
+    if not isinstance(data["edad"], int) or data["edad"] <= 0:
+        return jsonify({"error": "Edad debe ser un entero mayor a 0"}), 400
+
     nuevo, error, status = service_crear_participante(data)
 
     if error:
@@ -42,6 +64,22 @@ def editar_participante(ci):
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
 
     data = request.get_json()
+
+    #Validaciones:
+    if "ci" in data:
+        return jsonify({"error": "No se puede modificar la CI"}), 400
+
+    if "edad" in data:
+        if not isinstance(data["edad"], int) or data["edad"] <= 0:
+            return jsonify({"error": "Edad inválida"}), 400
+
+    if "nombre" in data:
+        if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
+            return jsonify({"error": "Nombre inválido"}), 400
+
+    if "apellido" in data:
+        if not isinstance(data["apellido"], str) or len(data["apellido"]) < 1:
+            return jsonify({"error": "Apellido inválido"}), 400
 
     actualizado, error, status = service_actualizar_participante(ci, data)
 
