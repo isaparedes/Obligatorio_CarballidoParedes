@@ -26,8 +26,8 @@
     - [ ] ABM de sanciones
     - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
     - [ ] Validación de campos
-    - [ ] .venv ?
-    - [ ] .env con DB_USER y DB_password ?
+    - [X] .venv ?
+    - [X] .env con DB_USER y DB_password ?
 
 - Frontend:
     - [ ] Pestaña inicial con formulario de login/sign up
