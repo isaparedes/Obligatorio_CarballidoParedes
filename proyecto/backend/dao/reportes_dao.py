@@ -178,7 +178,6 @@ def obtener_sanciones_por_participante():
                 ORDER BY cant_sanciones DESC
             ''')
             return cursor.fetchall()
-    
 
 # Turnos más demandados (puse top 3 pero se puede cambiar)
 def obtener_turnos_mas_demandados():
@@ -197,3 +196,74 @@ def obtener_turnos_mas_demandados():
                 LIMIT 3
             """)
             return cursor.fetchall()
+
+# ----------------------------------------------------- #
+
+# Top 3 días de la semana con más reservas
+def obtener_tres_dias_mas_demandados():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT DAYNAME(r.fecha) AS dia_semana, COUNT(*) AS cant_reservas
+                FROM reserva r
+                GROUP BY dia_semana
+                ORDER BY cant_reservas DESC
+                LIMIT 3;
+            """)
+            rows = cursor.fetchall()
+            ingles_a_es = {
+                'Sunday': 'Domingo',
+                'Monday': 'Lunes',
+                'Tuesday': 'Martes',
+                'Wednesday': 'Miércoles',
+                'Thursday': 'Jueves',
+                'Friday': 'Viernes',
+                'Saturday': 'Sábado'
+            }
+            resultado = []
+            for row in rows:
+                dia = row.get('dia_semana') if isinstance(row, dict) else row[0]
+                cant = row.get('cant_reservas') if isinstance(row, dict) else row[1]
+
+                resultado.append({
+                    'dia_semana': ingles_a_es.get(dia, dia),
+                    'cant_reservas': cant
+                })
+            return resultado
+
+# Las cinco personas con más inasistencias
+def obtener_cinco_personas_con_mas_inasistencias():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT rp.ci_participante, p.nombre, p.apellido,
+                COUNT(*) AS cantidad_inasistencias
+                FROM reserva_participante rp
+                JOIN participante p 
+                ON rp.ci_participante = p.ci
+                WHERE rp.asistencia = 0
+                GROUP BY rp.ci_participante, p.nombre, p.apellido
+                ORDER BY cantidad_inasistencias
+                DESC LIMIT 5;
+            """)
+            return cursor.fetchall()
+
+# Edificio con mayor cantidad de reservas
+def obtener_edificio_mayor_cantidad_reservas():
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                r.edificio AS nombre_edificio,
+                COUNT(*) AS total_reservas
+                FROM reserva r
+                GROUP BY r.edificio
+                ORDER BY total_reservas 
+                DESC LIMIT 1;
+            """)
+            row = cursor.fetchone()
+            return row if row else {}
+
