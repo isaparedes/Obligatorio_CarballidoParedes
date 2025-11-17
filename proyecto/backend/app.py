@@ -1,5 +1,7 @@
+import os
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv  
 from controllers.reportes_controller import reportes_bp
 from controllers.participante_controller import participante_bp
 from controllers.reserva_controller import reserva_bp
@@ -7,10 +9,14 @@ from controllers.turno_controller import turno_bp
 from controllers.sala_controller import sala_bp
 from controllers.sancion_controller import sancion_bp
 
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app)
 
+
 app.config['JSON_AS_ASCII'] = False
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY") 
 
 app.register_blueprint(participante_bp, url_prefix="/participantes")
 app.register_blueprint(reserva_bp, url_prefix="/reservas")

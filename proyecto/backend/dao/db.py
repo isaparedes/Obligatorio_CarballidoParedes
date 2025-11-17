@@ -1,22 +1,28 @@
 import os
 import pymysql
 from pymysql.err import OperationalError
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_connection():
-    running_in_docker = os.environ.get("DOCKER") == "1"
-    host = "mysql_container" if running_in_docker else "127.0.0.1"
+    host = os.getenv("DB_HOST")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    database = os.getenv("DB_NAME")
+    port = int(os.getenv("DB_PORT"))
 
     try:
         connection = pymysql.connect(
             host=host,
-            user="root",         
-            password="rootpassword",     
-            database="gestion_salas",
-            port=3307,            
+            user=user,
+            password=password,
+            database=database,
+            port=port,
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True,
             connect_timeout=5,
-            charset="utf8mb4" 
+            charset="utf8mb4"
         )
         print(f"Conexión exitosa a la base de datos en host: {host}")
         return connection
