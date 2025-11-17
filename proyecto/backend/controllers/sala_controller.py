@@ -1,47 +1,70 @@
+# sala_controller.py
+
 from flask import Blueprint, jsonify, request
-from dao.sala_dao import (obtener_salas, obtener_sala_por_id, insertar_sala, actualizar_sala,eliminar_sala)
+from services.sala_service import (
+    service_obtener_salas,
+    service_obtener_sala,
+    service_crear_sala,
+    service_actualizar_sala,
+    service_eliminar_sala
+)
 
 sala_bp = Blueprint("salas", __name__)
 
-# Listar todas
+# GET /salas
 @sala_bp.get("/")
 def get_salas():
-    return jsonify(obtener_salas())
+    return jsonify(service_obtener_salas())
 
-# Obtener una sala
-@sala_bp.get("/<int:id_sala>")
-def get_sala(id_sala):
-    sala = obtener_sala_por_id(id_sala)
+
+# GET /salas/<nombre>/<edificio>
+@sala_bp.get("/<string:nombre_sala>/<string:edificio>")
+def get_sala(nombre_sala, edificio):
+    sala = service_obtener_sala(nombre_sala, edificio)
     if not sala:
         return jsonify({"error": "Sala no encontrada"}), 404
     return jsonify(sala)
 
-# Crear
+
+# POST /salas
 @sala_bp.post("/")
 def crear_sala():
-    data = request.json
 
-    if not data:
-        return jsonify({"error": "Faltan datos"}), 400
+    if not request.is_json:
+        return jsonify({"error": "Content-Type debe ser application/json"}), 415
 
-    nueva = insertar_sala(
-        data.get("nombre_sala"),
-        data.get("edificio"),
-        data.get("capacidad"),
-        data.get("tipo_sala")
-    )
+    data = request.get_json()
+    nueva, error, status = service_crear_sala(data)
 
-    return jsonify(nueva), 201
+    if error:
+        return jsonify({"error": error}), status
 
-# Actualizar
-@sala_bp.put("/<int:id_sala>")
-def editar_sala(id_sala):
-    data = request.json
-    actualizada = actualizar_sala(id_sala, data)
-    return jsonify(actualizada)
+    return jsonify(nueva), status
 
-# Eliminar
-@sala_bp.delete("/<int:id_sala>")
-def borrar_sala(id_sala):
-    resultado = eliminar_sala(id_sala)
-    return jsonify(resultado)
+
+# PUT /salas/<nombre>/<edificio>
+@sala_bp.put("/<string:nombre_sala>/<string:edificio>")
+def editar_sala(nombre_sala, edificio):
+
+    if not request.is_json:
+        return jsonify({"error": "Content-Type debe ser application/json"}), 415
+
+    data = request.get_json()
+    actualizada, error, status = service_actualizar_sala(nombre_sala, edificio, data)
+
+    if error:
+        return jsonify({"error": error}), status
+
+    return jsonify(actualizada), status
+
+
+# DELETE /salas/<nombre>/<edificio>
+@sala_bp.delete("/<string:nombre_sala>/<string:edificio>")
+def borrar_sala(nombre_sala, edificio):
+
+    resultado, error, status = service_eliminar_sala(nombre_sala, edificio)
+
+    if error:
+        return jsonify({"error": error}), status
+
+    return jsonify(resultado), status

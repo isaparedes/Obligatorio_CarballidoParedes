@@ -1,12 +1,13 @@
 from dao.db import get_connection
 
-# Obtener salas
+# Obtener todas las salas
 def obtener_salas():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("SELECT * FROM sala")
             return cursor.fetchall()
+
 
 # Obtener salas disponibles
 def obtener_salas_disponibles(fecha_inicio, fecha_fin, cantidad):
@@ -31,65 +32,79 @@ def obtener_salas_disponibles(fecha_inicio, fecha_fin, cantidad):
             """, (cantidad, fecha_inicio, fecha_fin, fecha_inicio, fecha_fin))
             return cursor.fetchall()
 
-# Obtener sala por id
-def obtener_sala_por_id(id_sala):
+
+# Obtener sala por clave primaria (nombre_sala + edificio)
+def obtener_sala(nombre_sala, edificio):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM sala WHERE id_sala = %s", (id_sala,))
+            cursor.execute("""
+                SELECT *
+                FROM sala
+                WHERE nombre_sala = %s AND edificio = %s
+            """, (nombre_sala, edificio))
             return cursor.fetchone()
 
-# Alta: insertar sala
+
+# Insertar nueva sala
 def insertar_sala(nombre_sala, edificio, capacidad, tipo_sala):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 INSERT INTO sala (nombre_sala, edificio, capacidad, tipo_sala)
                 VALUES (%s, %s, %s, %s)
-                """,
-                (nombre_sala, edificio, capacidad, tipo_sala)
-            )
+            """, (nombre_sala, edificio, capacidad, tipo_sala))
+
             conn.commit()
 
-            nuevo_id = cursor.lastrowid
+            cursor.execute("""
+                SELECT *
+                FROM sala
+                WHERE nombre_sala = %s AND edificio = %s
+            """, (nombre_sala, edificio))
 
-            cursor.execute("SELECT * FROM sala WHERE id_sala = %s", (nuevo_id,))
             return cursor.fetchone()
 
-# Modificación: actualizar sala
-def actualizar_sala(id_sala, data):
+
+# Actualizar sala (clave primaria no cambia)
+def actualizar_sala(nombre_sala, edificio, data):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 UPDATE sala
-                SET nombre_sala = %s,
-                    edificio = %s,
-                    capacidad = %s,
+                SET capacidad = %s,
                     tipo_sala = %s
-                WHERE id_sala = %s
-                """,
-                (
-                    data.get("nombre_sala"),
-                    data.get("edificio"),
-                    data.get("capacidad"),
-                    data.get("tipo_sala"),
-                    id_sala
-                )
-            )
+                WHERE nombre_sala = %s AND edificio = %s
+            """, (
+                data.get("capacidad"),
+                data.get("tipo_sala"),
+                nombre_sala,
+                edificio
+            ))
+
             conn.commit()
 
-            cursor.execute("SELECT * FROM sala WHERE id_sala = %s", (id_sala,))
+            cursor.execute("""
+                SELECT *
+                FROM sala
+                WHERE nombre_sala = %s AND edificio = %s
+            """, (nombre_sala, edificio))
+
             return cursor.fetchone()
 
-# Baja: eliminar sala
-def eliminar_sala(id_sala):
+
+# Eliminar sala
+def eliminar_sala(nombre_sala, edificio):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            cursor.execute("DELETE FROM sala WHERE id_sala = %s", (id_sala,))
+            cursor.execute("""
+                DELETE FROM sala
+                WHERE nombre_sala = %s AND edificio = %s
+            """, (nombre_sala, edificio))
+
             conn.commit()
-            return {"deleted": id_sala}
+
+            return {"deleted": f"{nombre_sala} - {edificio}"}
