@@ -1,6 +1,6 @@
 # Obligatorio_CarballidoParedes
 
-# # Tareas:
+## Tareas:
 - Informe:
     - [ ] Fundamentación de decisiones de implementación
     - [ ] Mejoras implementadas o consideradas en el modelo de datos
@@ -21,9 +21,10 @@
     - [x] Consultas obligatorias métrica BI
     - [x] 3 consultas SQL extra para la métrica BI
     - [ ] ABM de participantes
-    - [ ] ABM de salas
+    - [X] ABM de salas
     - [ ] ABM de reservas de salas
     - [ ] ABM de sanciones
+    - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
     - [ ] Validación de campos
     - [ ] .venv ?
     - [ ] .env con DB_USER y DB_password ?
@@ -35,6 +36,7 @@
     - [ ] (acceso restringido) Pestaña con ABM de salas
     - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
     - [ ] (acceso restringido) Pestaña con ABM de sanciones
-    - [ ] endpoints necesarios para el funcionamiento del front
+    - [ ] Endpoints necesarios para el funcionamiento del front
+    - [ ] Validación de campos
 
 
