@@ -13,7 +13,7 @@
     - [ ] Dockerización de la aplicación
 
 - Base de datos:
-    - [ ] Insertar más datos
+    - [x] Insertar más datos
     - [ ] Restricciones de seguridad
     - [ ] Validación de campos
           
