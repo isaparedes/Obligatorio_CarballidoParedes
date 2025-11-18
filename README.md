@@ -22,8 +22,8 @@
     - [x] 3 consultas SQL extra para la métrica BI
     - [x]  ABM de participantes
     - [X] ABM de salas
-    - [ ] ABM de reservas de salas
-    - [ ] ABM de sanciones
+    - [X] ABM de reservas de salas
+    - [X] ABM de sanciones
     - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
     - [ ] Validación de campos
     - [X] .venv ?
