@@ -19,15 +19,16 @@
           
 - Backend:
     - [x] Consultas obligatorias métrica BI
-    - [x] 3 consultas SQL extra para la métrica BI
+    - [x] Tres consultas SQL extra para la métrica BI
     - [x] ABM de participantes
     - [X] ABM de salas
     - [X] ABM de reservas de salas
-    - [ ] ABM de sanciones
+    - [X] ABM de sanciones
     - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
-    - [ ] Validación de campos
-    - [X] .venv ?
-    - [X] .env con DB_USER y DB_password ?
+    - [X] Validación de campos
+    - [X] .venv
+    - [X] .env 
+    - [ ] Prueba: funcionamiento esperado de todos los endpoints
 
 - Frontend:
     - [ ] Pestaña inicial con formulario de login/sign up

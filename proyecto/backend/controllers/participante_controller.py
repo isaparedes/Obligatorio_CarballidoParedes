@@ -14,7 +14,6 @@ participante_bp = Blueprint("participantes", __name__)
 def get_participantes():
     return jsonify(service_obtener_participantes())
 
-
 # GET /participantes/<ci>
 @participante_bp.get("/<string:ci>")
 def get_participante(ci):
@@ -22,7 +21,6 @@ def get_participante(ci):
     if not participante:
         return jsonify({"error": "Participante no encontrado"}), 404
     return jsonify(participante)
-
 
 # POST /participantes
 @participante_bp.post("/")
@@ -33,8 +31,7 @@ def crear_participante():
 
     data = request.get_json()
 
-    # Validaciones
-    campos_obligatorios = ["ci", "nombre", "apellido", "edad"]
+    campos_obligatorios = ["ci", "nombre", "apellido", "email"]
     faltantes = [c for c in campos_obligatorios if c not in data]
     if faltantes:
         return jsonify({
@@ -43,7 +40,7 @@ def crear_participante():
         }), 400
 
     if not isinstance(data["ci"], str) or len(data["ci"]) < 8:
-        return jsonify({"error": "CI inválida (debe ser string y mínimo 8 caracteres)"}), 400
+        return jsonify({"error": "CI inválida (string, mín. 8 caracteres)"}), 400
 
     if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
         return jsonify({"error": "Nombre inválido"}), 400
@@ -51,8 +48,8 @@ def crear_participante():
     if not isinstance(data["apellido"], str) or len(data["apellido"]) < 1:
         return jsonify({"error": "Apellido inválido"}), 400
 
-    if not isinstance(data["edad"], int) or data["edad"] <= 0:
-        return jsonify({"error": "Edad debe ser un entero mayor a 0"}), 400
+    if not isinstance(data["email"], str) or "@ucu.edu.uy" not in data["email"]:
+        return jsonify({"error": "Email inválido: debe contener @ucu.edu.uy"}), 400
 
     nuevo, error, status = service_crear_participante(data)
 
@@ -60,7 +57,6 @@ def crear_participante():
         return jsonify({"error": error}), status
 
     return jsonify(nuevo), status
-
 
 # PUT /participantes/<ci>
 @participante_bp.put("/<string:ci>")
@@ -71,21 +67,17 @@ def editar_participante(ci):
 
     data = request.get_json()
 
-    #Validaciones:
     if "ci" in data:
         return jsonify({"error": "No se puede modificar la CI"}), 400
 
-    if "edad" in data:
-        if not isinstance(data["edad"], int) or data["edad"] <= 0:
-            return jsonify({"error": "Edad inválida"}), 400
+    if "email" in data and "@ucu.edu.uy" not in data["email"]:
+        return jsonify({"error": "Email inválido: debe contener @ucu.edu.uy"}), 400
 
-    if "nombre" in data:
-        if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
-            return jsonify({"error": "Nombre inválido"}), 400
+    if "nombre" in data and (not isinstance(data["nombre"], str) or len(data["nombre"]) < 1):
+        return jsonify({"error": "Nombre inválido"}), 400
 
-    if "apellido" in data:
-        if not isinstance(data["apellido"], str) or len(data["apellido"]) < 1:
-            return jsonify({"error": "Apellido inválido"}), 400
+    if "apellido" in data and (not isinstance(data["apellido"], str) or len(data["apellido"]) < 1):
+        return jsonify({"error": "Apellido inválido"}), 400
 
     actualizado, error, status = service_actualizar_participante(ci, data)
 
@@ -93,7 +85,6 @@ def editar_participante(ci):
         return jsonify({"error": error}), status
 
     return jsonify(actualizado), status
-
 
 # DELETE /participantes/<ci>
 @participante_bp.delete("/<string:ci>")

@@ -1,3 +1,4 @@
+# sancion_controller.py
 from flask import Blueprint, jsonify, request 
 from services.sancion_service import (
     service_obtener_sanciones, 
@@ -19,7 +20,7 @@ def get_sanciones():
 def get_sanciones_por_ci(ci_participante):
     sanciones = service_obtener_sanciones_participante(ci_participante)
     if not sanciones:
-        return jsonify({"error": "El usuario no tiene sanciones"}), 404
+        return jsonify({"error": "El participante no tiene sanciones"}), 404
     return jsonify(sanciones)
 
 # POST /sanciones
@@ -50,9 +51,9 @@ def crear_sancion():
 
     return jsonify(nuevo), status
 
-# PUT /sanciones/<ci_participante>
-@sancion_bp.put("/<string:ci_participante>")
-def editar_sancion(ci_participante):
+# PUT /sanciones/<id_sancion>
+@sancion_bp.put("/<int:id_sancion>")
+def editar_sancion(id_sancion):
 
     if not request.is_json:
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
@@ -62,18 +63,18 @@ def editar_sancion(ci_participante):
     if "ci_participante" in data:
         return jsonify({"error": "No se puede modificar la CI del participante"}), 400
     
-    actualizado, error, status = service_actualizar_sancion(ci_participante, data)
+    actualizado, error, status = service_actualizar_sancion(id_sancion, data)
 
     if error:
         return jsonify({"error": error}), status
 
     return jsonify(actualizado), status
 
-# DELETE /sanciones/<ci_participante>
-@sancion_bp.delete("/<string:ci_participante>")
-def eliminar_sancion(ci_participante):
+# DELETE /sanciones/<id_sancion>
+@sancion_bp.delete("/<int:id_sancion>")
+def eliminar_sancion(id_sancion):
 
-    borrado, error, status = service_eliminar_sancion(ci_participante)
+    borrado, error, status = service_eliminar_sancion(id_sancion)
 
     if error:
         return jsonify({"error": error}), status

@@ -1,39 +1,38 @@
 from dao.db import get_connection
 
-# Obtener sanciones
+# Obtener todas las sanciones
 def obtener_sanciones(): 
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("SELECT * FROM sancion_participante")
             return cursor.fetchall()
-        
-# Obtener las sanciones de un participante
+
+# Obtener sanciones por CI
 def obtener_sanciones_participante(ci):
     conn = get_connection()
     with conn: 
         with conn.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT *
-                FROM sanciones
+                FROM sancion_participante
                 WHERE ci_participante = %s
-            ''', (ci,))
+            """, (ci,))
             return cursor.fetchall()
-        
-# Obtener si el participante está sancionado
-def obtener_sancionado(ci):
+
+# Obtener sanción por ID
+def obtener_sancion_por_id(id_sancion):
     conn = get_connection()
-    with conn: 
+    with conn:
         with conn.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT *
-                FROM sanciones
-                WHERE ci_participante = %s
-                AND fecha_fin > CURDATE()
-            ''', (ci,))
+                FROM sancion_participante
+                WHERE id_sancion = %s
+            """, (id_sancion,))
             return cursor.fetchone()
-        
-# Insertar sancion
+
+# Insertar sanción
 def insertar_sancion(ci, fecha_inicio, fecha_fin):
     conn = get_connection()
     with conn:
@@ -51,18 +50,16 @@ def insertar_sancion(ci, fecha_inicio, fecha_fin):
                 WHERE ci_participante = %s AND fecha_inicio = %s
             """, (ci, fecha_inicio))
             return cursor.fetchone()
-        
-# Actualizar sanción por su ID
+
+# Actualizar sanción por ID
 def actualizar_sancion(id_sancion, data):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            
             cursor.execute("""
                 UPDATE sancion_participante
-                SET 
-                    fecha_inicio = %s,
-                    fecha_fin = %s,
+                SET fecha_inicio = %s,
+                    fecha_fin = %s
                 WHERE id_sancion = %s
             """, (
                 data.get("fecha_inicio"),
@@ -77,7 +74,6 @@ def actualizar_sancion(id_sancion, data):
                 FROM sancion_participante
                 WHERE id_sancion = %s
             """, (id_sancion,))
-
             return cursor.fetchone()
 
 # Eliminar sanción por ID
@@ -85,7 +81,6 @@ def eliminar_sancion(id_sancion):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
-            
             cursor.execute("""
                 DELETE FROM sancion_participante
                 WHERE id_sancion = %s

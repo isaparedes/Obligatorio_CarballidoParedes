@@ -11,7 +11,6 @@ from dao.reportes_dao import (
     obtener_tres_dias_mas_demandados,
     obtener_cinco_personas_con_mas_inasistencias, 
     obtener_edificio_mayor_cantidad_reservas
-
 )
 
 reportes_bp = Blueprint("reportes", __name__)

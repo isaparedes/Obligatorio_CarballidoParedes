@@ -1,6 +1,6 @@
 from dao.db import get_connection
 
-# Obtener todos
+# Obtener todos los participantes
 def obtener_participantes():
     conn = get_connection()
     with conn:
@@ -8,8 +8,7 @@ def obtener_participantes():
             cursor.execute("SELECT * FROM participante")
             return cursor.fetchall()
 
-
-# Obtener participante por clave primaria (CI)
+# Obtener participante por CI
 def obtener_participante(ci):
     conn = get_connection()
     with conn:
@@ -20,7 +19,6 @@ def obtener_participante(ci):
                 WHERE ci = %s
             """, (ci,))
             return cursor.fetchone()
-
 
 # Insertar participante
 def insertar_participante(ci, nombre, apellido, email):
@@ -41,24 +39,30 @@ def insertar_participante(ci, nombre, apellido, email):
             """, (ci,))
             return cursor.fetchone()
 
-
 # Actualizar participante
 def actualizar_participante(ci, data):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
+
+            cursor.execute("""
+                SELECT nombre, apellido, email
+                FROM participante
+                WHERE ci = %s
+            """, (ci,))
+            actual = cursor.fetchone()
+
+            nombre = data.get("nombre", actual["nombre"])
+            apellido = data.get("apellido", actual["apellido"])
+            email = data.get("email", actual["email"])
+
             cursor.execute("""
                 UPDATE participante
                 SET nombre = %s,
                     apellido = %s,
                     email = %s
                 WHERE ci = %s
-            """, (
-                data.get("nombre"),
-                data.get("apellido"),
-                data.get("email"),
-                ci
-            ))
+            """, (nombre, apellido, email, ci))
 
             conn.commit()
 
@@ -68,7 +72,6 @@ def actualizar_participante(ci, data):
                 WHERE ci = %s
             """, (ci,))
             return cursor.fetchone()
-
 
 # Eliminar participante
 def eliminar_participante(ci):
@@ -83,20 +86,3 @@ def eliminar_participante(ci):
             conn.commit()
 
             return {"deleted": ci}
-
-# ------------------------------------------------ #
-
-# Obtener rol (y programa) por ci
-def obtener_rol_programa(ci):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute('''
-                SELECT ppa.rol, pa.tipo
-                FROM participante_programa_academico ppa
-                JOIN programa_academico pa
-                ON ppa.nombre_programa=pa.nombre_programa
-                WHERE ppa.ci_participante = %s
-            ''', (ci,))
-            return cursor.fetchone()    
-

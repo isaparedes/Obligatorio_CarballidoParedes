@@ -1,9 +1,11 @@
+# sancion_service.py
 from dao.sancion_dao import (
     obtener_sanciones, 
     obtener_sanciones_participante, 
     insertar_sancion, 
     actualizar_sancion, 
-    eliminar_sancion
+    eliminar_sancion,
+    obtener_sancion_por_id
 )
 
 # Obtener todas
@@ -14,39 +16,33 @@ def service_obtener_sanciones():
 def service_obtener_sanciones_participante(ci):
     return obtener_sanciones_participante(ci)
 
-
 # Crear sanción
 def service_crear_sancion(data):
 
-    if ("ci" not in data or 
-        "fecha_inicio" not in data or 
-        "fecha_fin" not in data):
-        return None, "Faltan campos obligatorios", 400
-
     nueva = insertar_sancion(
-        data["ci"],
+        data["ci_participante"],
         data["fecha_inicio"],
         data["fecha_fin"]
     )
 
     return nueva, None, 201
 
-
 # Actualizar sanción
 def service_actualizar_sancion(id_sancion, data):
-
-    existente = actualizar_sancion(id_sancion, data)
+    
+    existente = obtener_sancion_por_id(id_sancion)
     if not existente:
         return None, "Sanción no encontrada", 404
 
-    return existente, None, 200
-
+    actualizada = actualizar_sancion(id_sancion, data)
+    return actualizada, None, 200
 
 # Eliminar sanción 
 def service_eliminar_sancion(id_sancion):
 
-    borrado = eliminar_sancion(id_sancion)
-    if not borrado:
+    existente = obtener_sancion_por_id(id_sancion)
+    if not existente:
         return None, "Sanción no encontrada", 404
 
+    borrado = eliminar_sancion(id_sancion)
     return borrado, None, 200

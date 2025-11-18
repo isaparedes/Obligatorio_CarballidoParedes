@@ -10,16 +10,12 @@ from dao.participante_dao import (
 def service_obtener_participantes():
     return obtener_participantes()
 
-# Obtener por cédula
+# Obtener por CI
 def service_obtener_participante(ci):
     return obtener_participante(ci)
 
-
 # Crear participante
 def service_crear_participante(data):
-
-    if ( "ci" not in data or "nombre" not in data or "apellido" not in data or "email" not in data):
-        return None, "Faltan campos obligatorios", 400
 
     if obtener_participante(data["ci"]):
         return None, "El participante ya existe", 409
@@ -41,7 +37,6 @@ def service_actualizar_participante(ci, data):
 
     actualizado = actualizar_participante(ci, data)
     return actualizado, None, 200
-
 
 # Eliminar participante 
 def service_eliminar_participante(ci):
