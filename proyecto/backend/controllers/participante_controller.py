@@ -42,8 +42,8 @@ def crear_participante():
             "faltantes": faltantes
         }), 400
 
-    if not isinstance(data["ci"], str) or len(data["ci"]) < 3:
-        return jsonify({"error": "CI inválida (debe ser string y mínimo 3 caracteres)"}), 400
+    if not isinstance(data["ci"], str) or len(data["ci"]) < 8:
+        return jsonify({"error": "CI inválida (debe ser string y mínimo 8 caracteres)"}), 400
 
     if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
         return jsonify({"error": "Nombre inválido"}), 400

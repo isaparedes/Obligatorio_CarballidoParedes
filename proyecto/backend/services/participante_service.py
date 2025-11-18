@@ -6,7 +6,6 @@ from dao.participante_dao import (
     eliminar_participante
 )
 
-
 # Obtener todos
 def service_obtener_participantes():
     return obtener_participantes()
