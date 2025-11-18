@@ -20,10 +20,10 @@
 - Backend:
     - [x] Consultas obligatorias métrica BI
     - [x] 3 consultas SQL extra para la métrica BI
-    - [x]  ABM de participantes
+    - [x] ABM de participantes
     - [X] ABM de salas
     - [X] ABM de reservas de salas
-    - [X] ABM de sanciones
+    - [ ] ABM de sanciones
     - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
     - [ ] Validación de campos
     - [X] .venv ?
