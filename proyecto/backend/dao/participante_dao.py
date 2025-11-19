@@ -85,4 +85,18 @@ def eliminar_participante(ci):
 
             conn.commit()
 
-            return {"deleted": ci}
+            return {"eliminado": ci}
+
+# Obtener rol (y programa) por ci
+def obtener_rol_programa(ci):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                SELECT ppa.rol, pa.tipo
+                FROM participante_programa_academico ppa
+                JOIN programa_academico pa
+                ON ppa.nombre_programa=pa.nombre_programa
+                WHERE ppa.ci_participante = %s
+            ''', (ci,))
+            return cursor.fetchone() 

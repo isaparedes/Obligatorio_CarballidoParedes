@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 from services.reserva_service import (
     service_obtener_reservas,
     service_obtener_reserva,
+    service_obtener_salas_disponibles,
     service_crear_reserva,
     service_actualizar_reserva,
     service_eliminar_reserva
@@ -34,7 +35,7 @@ def crear_reserva():
 
     data = request.get_json()
 
-    campos = ["nombre_sala", "edificio", "fecha", "id_turno", "estado"]
+    campos = ["nombre_sala", "edificio", "fecha", "id_turno", "participantes"]
     faltantes = [c for c in campos if c not in data]
 
     if faltantes:
@@ -50,9 +51,6 @@ def crear_reserva():
 
     if not isinstance(data["id_turno"], int):
         return jsonify({"error": "id_turno debe ser entero"}), 400
-
-    if data["estado"] not in ["pendiente", "confirmada", "cancelada"]:
-        return jsonify({"error": "Estado inválido"}), 400
 
     nueva, error, status = service_crear_reserva(data)
 
@@ -70,6 +68,9 @@ def editar_reserva(id_reserva):
 
     data = request.get_json()
 
+    if not data:
+        return jsonify({"error": "Debes ingresar algún cambio"}), 400
+
     if "id_reserva" in data:
         return jsonify({"error": "No se puede modificar el id_reserva"}), 400
 
@@ -83,7 +84,7 @@ def editar_reserva(id_reserva):
         return jsonify({"error": "id_turno debe ser entero"}), 400
 
     if "estado" in data:
-        if data["estado"] not in ["pendiente", "confirmada", "cancelada"]:
+        if data["estado"] not in ["activa", "finalizada", "cancelada"]:
             return jsonify({"error": "Estado inválido"}), 400
 
     actualizado, error, status = service_actualizar_reserva(id_reserva, data)
@@ -93,7 +94,7 @@ def editar_reserva(id_reserva):
 
     return jsonify(actualizado), status
 
-# DELETE /reservas/<id>
+# DELETE /reservas/<id> 
 @reserva_bp.delete("/<int:id_reserva>")
 def borrar_reserva(id_reserva):
 
@@ -103,3 +104,26 @@ def borrar_reserva(id_reserva):
         return jsonify({"error": error}), status
 
     return jsonify(borrado), status
+
+# POST /reservas/salas/disponibles
+@reserva_bp.post("/salas/disponibles")
+def get_salas_disponibles():
+    if not request.is_json:
+        return jsonify({"error": "Content-Type debe ser application/json"}), 415
+
+    data = request.get_json()
+    fecha = data.get("fecha")  
+    ci_reservante = data.get("ci_reservante")
+    lista_participantes = data.get("lista_participantes", [])
+
+    if not fecha or not ci_reservante:
+        return jsonify({"error": "Faltan campos obligatorios: fecha o ci_reservante"}), 400
+
+    salas, error, status = service_obtener_salas_disponibles(
+        fecha, ci_reservante, lista_participantes
+    )
+
+    if error:
+        return jsonify({"error": error}), status
+
+    return jsonify(salas), status

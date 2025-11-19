@@ -13,16 +13,27 @@ def obtener_reserva(id_reserva):
     with conn.cursor() as cursor:
         cursor.execute("SELECT * FROM reserva WHERE id_reserva = %s", (id_reserva,))
         return cursor.fetchone()
+    
+# Obtener reserva por todos sus datos
+def obtener_reserva_especifica(nombre_sala, edificio, fecha, id_turno):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.execute('''
+            SELECT * FROM reserva
+            WHERE nombre_sala = %s AND edificio = %s AND fecha = %s AND id_turno = %s
+        ''', (nombre_sala, edificio, fecha, id_turno))
+        return cursor.fetchone()
+
 
 # Insertar reserva 
-def insertar_reserva(nombre_sala, edificio, fecha, id_turno, estado):
+def insertar_reserva(nombre_sala, edificio, fecha, id_turno):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 INSERT INTO reserva (nombre_sala, edificio, fecha, id_turno, estado)
-                VALUES (%s, %s, %s, %s, %s)
-            """, (nombre_sala, edificio, fecha, id_turno, estado))
+                VALUES (%s, %s, %s, %s, "activa")
+            """, (nombre_sala, edificio, fecha, id_turno))
 
             conn.commit()
             new_id = cursor.lastrowid
@@ -62,16 +73,16 @@ def eliminar_reserva(id_reserva):
             return {"deleted": id_reserva}
 
 # Insertar reserva asociada a un participante
-def insertar_reserva_participante(id_reserva, ci):
+def insertar_reserva_participante(id_reserva, ci_participante, fecha_solicitud_reserva):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                INSERT INTO reserva_participante (id_reserva, ci) 
-                VALUES (%s, %s)
-            """, (id_reserva, ci))
+                INSERT INTO reserva_participante (id_reserva, ci_participante, fecha_solicitud_reserva, asistencia) 
+                VALUES (%s, %s, %s, 0)
+            """, (id_reserva, ci_participante, fecha_solicitud_reserva))
             conn.commit()
-            return {"id_reserva": id_reserva, "ci": ci}
+            return {"id_reserva": id_reserva, "ci_participante": ci_participante}
 
 # Eliminar reserva asociada a un participante
 def eliminar_reserva_participantes(id_reserva):
@@ -79,7 +90,39 @@ def eliminar_reserva_participantes(id_reserva):
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                DELETE FROM reserva_participante WHERE id_reserva=%s
+                DELETE FROM reserva_participante WHERE id_reserva = %s
             """, (id_reserva,))
             conn.commit()
             return {"deleted": id_reserva}
+
+# Obtener la cantidad de reservas que hizo un participante en un mismo día
+def obtener_reservas_del_dia(ci, fecha):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                SELECT COUNT(r.id_reserva) AS cant_reservas
+                FROM reserva r
+                JOIN reserva_participante rp
+                ON r.id_reserva = rp.id_reserva
+                WHERE r.fecha = %s AND rp.ci_participante = %s
+            ''', (fecha, ci))
+            resultado = cursor.fetchone()
+            return resultado["cant_reservas"] if resultado else 0
+
+# Obtener la cantidad de reservas activas que tiene un participante en una semana determinada
+def obtener_reservas_semanales(ci, fecha):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                SELECT COUNT(r.id_reserva) AS cant_reservas
+                FROM reserva r
+                JOIN reserva_participante rp
+                ON r.id_reserva = rp.id_reserva
+                WHERE rp.ci_participante = %s
+                AND YEARWEEK(r.fecha, 1) = YEARWEEK(%s, 1)
+                AND r.estado = "activa"
+            ''', (ci, fecha))
+            resultado = cursor.fetchone()
+            return resultado["cant_reservas"] if resultado else 0

@@ -67,6 +67,9 @@ def editar_participante(ci):
 
     data = request.get_json()
 
+    if not data:
+        return jsonify({"error": "Debes ingresar algún cambio"}), 400
+
     if "ci" in data:
         return jsonify({"error": "No se puede modificar la CI"}), 400
 

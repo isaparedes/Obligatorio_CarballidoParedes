@@ -1,12 +1,15 @@
-# sancion_service.py
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 from dao.sancion_dao import (
     obtener_sanciones, 
     obtener_sanciones_participante, 
     insertar_sancion, 
-    actualizar_sancion, 
     eliminar_sancion,
-    obtener_sancion_por_id
+    obtener_sancion
 )
+
+from dao.participante_dao import obtener_participante
 
 # Obtener todas
 def service_obtener_sanciones():
@@ -14,35 +17,39 @@ def service_obtener_sanciones():
 
 # Obtener sanciones por CI
 def service_obtener_sanciones_participante(ci):
-    return obtener_sanciones_participante(ci)
+    if not obtener_participante(ci):
+        return None, "Participante no encontrado", 404
+    
+    return obtener_sanciones_participante(ci), None, 200
 
 # Crear sanción
 def service_crear_sancion(data):
 
+    if not obtener_participante(data["ci_participante"]):
+        return None, "Participante no encontrado", 404
+    
+    fecha_inicio = datetime.fromisoformat(data["fecha_inicio"]) 
+    fecha_fin = fecha_inicio + relativedelta(months=2)
+
+    if obtener_sancion(data["ci_participante"], fecha_inicio, fecha_fin):
+        return None, "La sanción ya existe", 409
+
     nueva = insertar_sancion(
         data["ci_participante"],
-        data["fecha_inicio"],
-        data["fecha_fin"]
+        fecha_inicio,
+        fecha_fin
     )
 
     return nueva, None, 201
 
-# Actualizar sanción
-def service_actualizar_sancion(id_sancion, data):
-    
-    existente = obtener_sancion_por_id(id_sancion)
-    if not existente:
-        return None, "Sanción no encontrada", 404
-
-    actualizada = actualizar_sancion(id_sancion, data)
-    return actualizada, None, 200
+# No se puede actualizar porque los 3 atributos son la PRIMARY KEY
 
 # Eliminar sanción 
-def service_eliminar_sancion(id_sancion):
+def service_eliminar_sancion(ci_participante, fecha_inicio, fecha_fin):
 
-    existente = obtener_sancion_por_id(id_sancion)
+    existente = obtener_sancion(ci_participante, fecha_inicio, fecha_fin)
     if not existente:
         return None, "Sanción no encontrada", 404
 
-    borrado = eliminar_sancion(id_sancion)
+    borrado = eliminar_sancion(ci_participante, fecha_inicio, fecha_fin)
     return borrado, None, 200

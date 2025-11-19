@@ -1,10 +1,8 @@
-# sancion_controller.py
 from flask import Blueprint, jsonify, request 
 from services.sancion_service import (
     service_obtener_sanciones, 
     service_obtener_sanciones_participante, 
     service_crear_sancion,
-    service_actualizar_sancion, 
     service_eliminar_sancion
 )
 
@@ -18,7 +16,9 @@ def get_sanciones():
 # GET /sanciones/<ci_participante>
 @sancion_bp.get("/<string:ci_participante>")
 def get_sanciones_por_ci(ci_participante):
-    sanciones = service_obtener_sanciones_participante(ci_participante)
+    sanciones, error, status = service_obtener_sanciones_participante(ci_participante)
+    if error:
+        return jsonify({"error": error}), status
     if not sanciones:
         return jsonify({"error": "El participante no tiene sanciones"}), 404
     return jsonify(sanciones)
@@ -32,7 +32,7 @@ def crear_sancion():
 
     data = request.get_json()
 
-    campos_obligatorios = ["ci_participante", "fecha_inicio", "fecha_fin"]
+    campos_obligatorios = ["ci_participante", "fecha_inicio"]
     faltantes = [c for c in campos_obligatorios if c not in data]
 
     if faltantes:
@@ -51,30 +51,11 @@ def crear_sancion():
 
     return jsonify(nuevo), status
 
-# PUT /sanciones/<id_sancion>
-@sancion_bp.put("/<int:id_sancion>")
-def editar_sancion(id_sancion):
+# DELETE /sanciones/<ci_participante>/<fecha_inicio>/<fecha_fin>
+@sancion_bp.delete("/<string:ci_participante>/<string:fecha_inicio>/<string:fecha_fin>")
+def eliminar_sancion(ci_participante, fecha_inicio, fecha_fin):
 
-    if not request.is_json:
-        return jsonify({"error": "Content-Type debe ser application/json"}), 415
-
-    data = request.get_json()
-
-    if "ci_participante" in data:
-        return jsonify({"error": "No se puede modificar la CI del participante"}), 400
-    
-    actualizado, error, status = service_actualizar_sancion(id_sancion, data)
-
-    if error:
-        return jsonify({"error": error}), status
-
-    return jsonify(actualizado), status
-
-# DELETE /sanciones/<id_sancion>
-@sancion_bp.delete("/<int:id_sancion>")
-def eliminar_sancion(id_sancion):
-
-    borrado, error, status = service_eliminar_sancion(id_sancion)
+    borrado, error, status = service_eliminar_sancion(ci_participante, fecha_inicio, fecha_fin)
 
     if error:
         return jsonify({"error": error}), status

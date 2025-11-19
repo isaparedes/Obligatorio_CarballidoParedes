@@ -20,27 +20,27 @@ def obtener_sanciones_participante(ci):
             """, (ci,))
             return cursor.fetchall()
 
-# Obtener sanción por ID
-def obtener_sancion_por_id(id_sancion):
+# Obtener sanción por su clave primaria (ci_participante, fecha_inicio, fecha_fin)
+def obtener_sancion(ci_participante, fecha_inicio, fecha_fin):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 SELECT *
                 FROM sancion_participante
-                WHERE id_sancion = %s
-            """, (id_sancion,))
+                WHERE ci_participante = %s AND fecha_inicio = %s AND fecha_fin = %s
+            """, (ci_participante, fecha_inicio, fecha_fin))
             return cursor.fetchone()
 
 # Insertar sanción
-def insertar_sancion(ci, fecha_inicio, fecha_fin):
+def insertar_sancion(ci_participante, fecha_inicio, fecha_fin):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 INSERT INTO sancion_participante (ci_participante, fecha_inicio, fecha_fin)
                 VALUES (%s, %s, %s)
-            """, (ci, fecha_inicio, fecha_fin))
+            """, (ci_participante, fecha_inicio, fecha_fin))
 
             conn.commit()
 
@@ -48,44 +48,32 @@ def insertar_sancion(ci, fecha_inicio, fecha_fin):
                 SELECT *
                 FROM sancion_participante
                 WHERE ci_participante = %s AND fecha_inicio = %s
-            """, (ci, fecha_inicio))
-            return cursor.fetchone()
-
-# Actualizar sanción por ID
-def actualizar_sancion(id_sancion, data):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("""
-                UPDATE sancion_participante
-                SET fecha_inicio = %s,
-                    fecha_fin = %s
-                WHERE id_sancion = %s
-            """, (
-                data.get("fecha_inicio"),
-                data.get("fecha_fin"),
-                id_sancion
-            ))
-
-            conn.commit()
-
-            cursor.execute("""
-                SELECT *
-                FROM sancion_participante
-                WHERE id_sancion = %s
-            """, (id_sancion,))
+            """, (ci_participante, fecha_inicio))
             return cursor.fetchone()
 
 # Eliminar sanción por ID
-def eliminar_sancion(id_sancion):
+def eliminar_sancion(ci_participante, fecha_inicio, fecha_fin):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
                 DELETE FROM sancion_participante
-                WHERE id_sancion = %s
-            """, (id_sancion,))
+                WHERE ci_participante = %s AND fecha_inicio = %s AND fecha_fin = %s
+            """, (ci_participante, fecha_inicio, fecha_fin))
 
             conn.commit()
 
-            return {"deleted": id_sancion}
+            return {"deleted": f"CI: {ci_participante} ({fecha_inicio} - {fecha_fin})"}
+
+# Obtener participante sancionado
+def obtener_sancionado(ci):
+    conn = get_connection()
+    with conn: 
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                SELECT *
+                FROM sancion_participante
+                WHERE ci_participante = %s
+                AND fecha_fin > CURDATE()
+            ''', (ci,))
+            return cursor.fetchone()
