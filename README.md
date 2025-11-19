@@ -3,6 +3,8 @@
 
 ### Activar en venv + requeriments:
 
+cd proyecto
+
 cd backend 
 
 python -m venv venv
