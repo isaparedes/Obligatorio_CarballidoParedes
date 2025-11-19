@@ -24,11 +24,11 @@
     - [X] ABM de salas
     - [X] ABM de reservas de salas
     - [X] ABM de sanciones
-    - [ ] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
+    - [X] login/sign up (preguntar por lo de borrar cuenta/cambiar contraseña)
     - [X] Validación de campos
     - [X] .venv
     - [X] .env 
-    - [ ] Prueba: funcionamiento esperado de todos los endpoints
+    - [X] Prueba: funcionamiento esperado de todos los endpoints
 
 - Frontend:
     - [ ] Pestaña inicial con formulario de login/sign up

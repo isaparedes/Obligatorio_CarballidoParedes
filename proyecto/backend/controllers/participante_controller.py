@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from utils.session import require_auth
 from services.participante_service import (
     service_obtener_participantes, 
     service_obtener_participante, 
@@ -11,11 +12,13 @@ participante_bp = Blueprint("participantes", __name__)
 
 # GET /participantes
 @participante_bp.get("/")
+# @require_auth
 def get_participantes():
     return jsonify(service_obtener_participantes())
 
 # GET /participantes/<ci>
 @participante_bp.get("/<string:ci>")
+# @require_auth
 def get_participante(ci):
     participante = service_obtener_participante(ci)
     if not participante:
@@ -24,6 +27,7 @@ def get_participante(ci):
 
 # POST /participantes
 @participante_bp.post("/")
+# @require_auth
 def crear_participante():
 
     if not request.is_json:
@@ -60,6 +64,7 @@ def crear_participante():
 
 # PUT /participantes/<ci>
 @participante_bp.put("/<string:ci>")
+# @require_auth
 def editar_participante(ci):
 
     if not request.is_json:
@@ -91,6 +96,7 @@ def editar_participante(ci):
 
 # DELETE /participantes/<ci>
 @participante_bp.delete("/<string:ci>")
+# @require_auth
 def borrar_participante(ci):
 
     borrado, error, status = service_eliminar_participante(ci)

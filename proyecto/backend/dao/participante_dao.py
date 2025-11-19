@@ -1,4 +1,4 @@
-from dao.db import get_connection
+from database.db import get_connection
 
 # Obtener todos los participantes
 def obtener_participantes():

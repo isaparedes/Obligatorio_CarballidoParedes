@@ -1,4 +1,6 @@
 from flask import Blueprint, jsonify, request 
+from utils.session import require_auth
+
 from services.sancion_service import (
     service_obtener_sanciones, 
     service_obtener_sanciones_participante, 
@@ -10,11 +12,13 @@ sancion_bp = Blueprint("sanciones", __name__)
 
 # GET /sanciones
 @sancion_bp.get("/")
+# @require_auth
 def get_sanciones():
     return jsonify(service_obtener_sanciones())
 
 # GET /sanciones/<ci_participante>
 @sancion_bp.get("/<string:ci_participante>")
+# @require_auth
 def get_sanciones_por_ci(ci_participante):
     sanciones, error, status = service_obtener_sanciones_participante(ci_participante)
     if error:
@@ -25,6 +29,7 @@ def get_sanciones_por_ci(ci_participante):
 
 # POST /sanciones
 @sancion_bp.post("/")
+# @require_auth
 def crear_sancion():
 
     if not request.is_json:
@@ -53,6 +58,7 @@ def crear_sancion():
 
 # DELETE /sanciones/<ci_participante>/<fecha_inicio>/<fecha_fin>
 @sancion_bp.delete("/<string:ci_participante>/<string:fecha_inicio>/<string:fecha_fin>")
+# @require_auth
 def eliminar_sancion(ci_participante, fecha_inicio, fecha_fin):
 
     borrado, error, status = service_eliminar_sancion(ci_participante, fecha_inicio, fecha_fin)

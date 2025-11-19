@@ -1,4 +1,4 @@
-from dao.db import get_connection
+from database.db import get_connection
 
 # Salas más reservadas (puse top 3 pero se puede cambiar)
 def obtener_salas_mas_reservadas():
