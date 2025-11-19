@@ -36,7 +36,7 @@ def servicio_iniciar_sesion(data):
         return None, "Usuario no encontrado", 401
     
     if not verify_password(contrasena, usuario["contrasena"]):
-        return None, "Credenciales inválidas", 401
+        return None, "Contraseña incorrecta", 401
     
     token = generate_jwt(correo)
 

@@ -13,6 +13,12 @@ auth_bp = Blueprint("auth", __name__)
 def registrar_sesion():
     data = request.get_json()
 
+    if not isinstance(data["correo"], str) or "@ucu.edu.uy" not in data["correo"]:
+        return jsonify({"error": "Correo inválido: debe contener @ucu.edu.uy"}), 400
+    
+    if not isinstance(data["contrasena"], str) or len(data["contrasena"]) < 8:
+        return jsonify({"error": "Contraseña con mínimo 8 caracteres"}), 400
+
     usuario, error, status = servicio_registrar_sesion(data)
     if error:
         return jsonify({"error": error}), status

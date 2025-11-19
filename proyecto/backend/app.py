@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv  
+from controllers.auth_controller import auth_bp
 from controllers.reportes_controller import reportes_bp
 from controllers.participante_controller import participante_bp
 from controllers.reserva_controller import reserva_bp
@@ -18,6 +19,7 @@ CORS(app)
 app.config['JSON_AS_ASCII'] = False
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY") 
 
+app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(participante_bp, url_prefix="/participantes")
 app.register_blueprint(reserva_bp, url_prefix="/reservas")
 app.register_blueprint(turno_bp, url_prefix="/turnos")
