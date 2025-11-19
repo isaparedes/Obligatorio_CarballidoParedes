@@ -37,7 +37,7 @@
     - [ ] (acceso restringido) Pestaña con ABM de salas
     - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
     - [ ] (acceso restringido) Pestaña con ABM de sanciones
-    - [ ] Endpoints necesarios para el funcionamiento del front
+    - [X] Endpoints necesarios para el funcionamiento del front
     - [ ] Validación de campos
 
 

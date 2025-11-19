@@ -38,6 +38,26 @@ def insertar_participante(ci, nombre, apellido, email):
                 WHERE ci = %s
             """, (ci,))
             return cursor.fetchone()
+        
+# Insertar participante con su programa académico
+def insertar_participante_programa(ci_participante, nombre_programa, rol):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                INSERT INTO participante_programa_academico (ci_participante, nombre_programa, rol)
+                VALUES (%s, %s, %s, %s)
+            """, (ci_participante, nombre_programa, rol))
+
+            conn.commit()
+
+            cursor.execute("""
+                SELECT *
+                FROM participante_programa_academico
+                WHERE ci_participante = %s
+                AND nombre_programa = %s
+            """, (ci_participante, nombre_programa))
+            return cursor.fetchone()
 
 # Actualizar participante
 def actualizar_participante(ci, data):
