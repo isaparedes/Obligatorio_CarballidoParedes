@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className="inicio">
       <h1>Bienvenido al sistema de gestión de salas</h1>
-      <button onClick={() => navigate("/login")} className="small-button">Iniciar Sesión</button>
+      <button onClick={() => navigate("/login")} className="small-button">Iniciar sesión</button>
       <button onClick={() => navigate("/signup")} className="small-button">Registrarse</button>
     </div>
   );

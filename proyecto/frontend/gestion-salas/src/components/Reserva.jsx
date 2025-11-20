@@ -5,11 +5,13 @@ export default function Reserva() {
   const [salas, setSalas] = useState([]);
   const [salaSeleccionada, setSalaSeleccionada] = useState(null);
 
+  {/*
   useEffect(() => {
     fetch("http://localhost:5000/salas")
       .then(res => res.json())
       .then(data => setSalas(data));
   }, []);
+  */}
 
   return (
     <div className="inicio">
@@ -36,11 +38,13 @@ export default function Reserva() {
               }}
             >
               <option value="">Seleccione una sala</option>
+              {/*
               {salas.map((s, i) => (
                 <option key={i} value={s.nombre_sala}>
                   {s.nombre_sala} — {s.edificio} — Capacidad {s.capacidad}
                 </option>
               ))}
+              */}
             </select>
           </p>
 
@@ -76,14 +80,15 @@ export default function Reserva() {
           <button type="submit">Enviar</button>
         </form>
 
-        {/* Info de salas */}
+        {/* Info de salas 
         {salas.length > 0 && (
           <div>
             {salas.map((s, i) => (
               <p key={i}>{s.nombre_sala}, {s.edificio}, {s.capacidad}</p>
             ))}
           </div>
-        )}
+        */}
+        
       </div>
     </div>
   );
