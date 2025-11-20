@@ -6,6 +6,7 @@ from dao.auth_dao import (
 )
 
 from dao.participante_dao import (
+    obtener_participante,
     insertar_participante,
     insertar_participante_programa
 )
@@ -27,6 +28,10 @@ def servicio_registrar_sesion(data):
     
     if get_usuario_por_correo(correo):
         return None, "El correo ya está registrado", 409
+    
+    if obtener_participante(ci):
+        return None, "Dicha cédula ya está registrada", 409
+        
 
     hashed = hash_password(contrasena)
 

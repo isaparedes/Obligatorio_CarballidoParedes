@@ -33,6 +33,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setRegistro("");
 
     if (ci.length < 8) {
       setError("La cédula debe tener al menos 8 números.");
@@ -50,18 +51,19 @@ export default function SignUp() {
     }
 
     if (contrasena.length < 8) {
-      setError("La contraseña debe contener al menos 8 dígitos")
+      setError("La contraseña debe contener al menos 8 dígitos");
+      return;
     }
 
     try {
       const usuario = await handleSignup(ci, nombre, apellido, programa, rol, correo, contrasena);
-      setRegistro("Usuario registrado: " + usuario.user.usuario.correo);
+      setRegistro("Usuario registrado correctamente");
     } catch (err) {
       setError(err.message);
     }
 
-    if (error === "") {
-      await delay(4000);
+    if (error === "" && registro != "") {
+      await delay(3000);
       navigate("/reserva")
     }
   };
