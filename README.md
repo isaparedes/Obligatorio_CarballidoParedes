@@ -1,5 +1,5 @@
-# Obligatorio_CarballidoParedes
 # Obligatorio Base de Datos I
+## Vanesa Carballido e Isabela Paredes
 
 ## Instructivo:
 
