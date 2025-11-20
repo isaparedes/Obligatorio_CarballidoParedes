@@ -16,11 +16,12 @@
     - source venv/bin/activate (Linux/macOS)
 - Instalar dependencias: pip install -r requirements.txt
 - Crear archivo .env en la carpeta backend con este contenido:
-    SECRET_KEY=key
-    DB_HOST=localhost
-    DB_USER=user
-    DB_PASSWORD=password
-    DB_NAME=db
+    SECRET_KEY=secret_key # Ver esto!!
+    DB_HOST=127.0.0.1
+    DB_PORT=3307
+    DB_USER=root
+    DB_PASSWORD=rootpassword
+    DB_NAME=gestion_salas
 - Inicializar el proyecto:
     - 1. Ir a ruta: cd backend
     - 2. Correr proyecto: python app.py
@@ -31,6 +32,3 @@
 - Instalar dependencias: npm i
 - Correr proyecto: npm run dev
 
-cd backend
-
-python app.py 
