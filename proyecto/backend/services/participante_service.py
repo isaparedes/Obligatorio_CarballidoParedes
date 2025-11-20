@@ -2,6 +2,7 @@ from dao.participante_dao import (
     obtener_participantes, 
     obtener_participante, 
     insertar_participante, 
+    insertar_participante_programa,
     actualizar_participante, 
     eliminar_participante
 )
@@ -18,13 +19,27 @@ def service_obtener_participante(ci):
 def service_crear_participante(data):
 
     if obtener_participante(data["ci"]):
-        return None, "El participante ya existe", 409
+        return None, "Ya existe un usuario con dicha cédula", 409
 
     nuevo = insertar_participante(
         data["ci"],
         data["nombre"],
         data["apellido"],
-        data["email"]
+        data["correo"]
+    )
+
+    return nuevo, None, 201
+
+# Crear participante con su programa
+def service_crear_participante_programa(data):
+
+    if obtener_participante(data["ci"]):
+        return None, "Ya existe un usuario con dicha cédula", 409
+
+    nuevo = insertar_participante_programa(
+        data["ci"],
+        data["nombre_programa"],
+        data["rol"]
     )
 
     return nuevo, None, 201
@@ -46,3 +61,4 @@ def service_eliminar_participante(ci):
 
     borrado = eliminar_participante(ci)
     return borrado, None, 200
+

@@ -14,13 +14,13 @@ sala_bp = Blueprint("salas", __name__)
 
 # GET /salas
 @sala_bp.get("/")
-# @require_auth
+@require_auth
 def get_salas():
     return jsonify(service_obtener_salas())
 
 # GET /salas/<nombre_sala>/<edificio>
 @sala_bp.get("/<string:nombre_sala>/<string:edificio>")
-# @require_auth
+@require_auth
 def get_sala(nombre_sala, edificio):
     sala = service_obtener_sala(nombre_sala, edificio)
     if not sala:
@@ -29,7 +29,7 @@ def get_sala(nombre_sala, edificio):
 
 # POST /salas
 @sala_bp.post("/")
-# @require_auth
+@require_auth
 def crear_sala():
 
     if not request.is_json:
@@ -67,7 +67,7 @@ def crear_sala():
 
 # PUT /salas/<nombre>/<edificio>
 @sala_bp.put("/<string:nombre_sala>/<string:edificio>")
-# @require_auth
+@require_auth
 def editar_sala(nombre_sala, edificio):
 
     if not request.is_json:
@@ -98,7 +98,7 @@ def editar_sala(nombre_sala, edificio):
 
 # DELETE /salas/<nombre>/<edificio>
 @sala_bp.delete("/<string:nombre_sala>/<string:edificio>")
-# @require_auth
+@require_auth
 def borrar_sala(nombre_sala, edificio):
 
     resultado, error, status = service_eliminar_sala(nombre_sala, edificio)
@@ -110,7 +110,7 @@ def borrar_sala(nombre_sala, edificio):
 
 # GET /salas/turnos/disponibles
 @sala_bp.get("/turnos/disponibles")
-# @require_auth
+@require_auth
 def obtener_turnos_disponibles_controller():
     nombre_sala = request.args.get("nombre_sala")
     edificio = request.args.get("edificio")

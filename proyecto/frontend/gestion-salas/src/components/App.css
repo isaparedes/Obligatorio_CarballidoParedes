@@ -1,41 +1,31 @@
-html, body, #root {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  background: #f6f6f6;
+  height: 100%;       /* ocupa exactamente el viewport */
+  overflow-x: hidden; /* evita scroll horizontal */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f6f6f6;
 }
 
 .inicio {
   width: 100%;
-  max-width: 100%;
-  min-height: 100vh;
-
+  height: 100%; /* 👈 en vez de 100vh */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
   background: #f6f6f6;
-  padding-bottom: 40px;
 }
 
 #barraBienvenida {
   width: 100%;
-
   background-color: rgb(211, 254, 213);
   color: rgb(5, 5, 71);
-
-  margin: 0 auto;
   padding: 10px 40px;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-sizing: border-box;
-
   border-radius: 0 0 12px 12px;
 }
 
@@ -50,21 +40,14 @@ html, body, #root {
   height: auto;
 }
 
-
 #formulario {
   background: white;
-  margin-top: 40px;
+  margin-top: 20px;
   padding: 30px 40px;
-
   width: 100%;
   max-width: 450px;
-
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-
-  margin-left: auto;
-  margin-right: auto;
-
   color: rgb(5, 5, 71);
   font-size: 20px;
   text-align: left;
@@ -98,7 +81,7 @@ html, body, #root {
 }
 
 .datos input::placeholder {
-  color: #000000;
+  color: #6f6f6f;
 }
 
 .datos input:focus {
@@ -111,12 +94,10 @@ button {
   padding: 12px;
   background-color: rgb(211, 254, 213);
   color: rgb(5, 5, 71);
-
   border: none;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
-
   cursor: pointer;
   transition: 0.3s;
 }
@@ -124,6 +105,10 @@ button {
 button:hover {
   background-color: rgb(5, 5, 71);
   color: rgb(211, 254, 213);
+}
+
+.small-button {
+  width: 150px;
 }
 
 #reservas {
@@ -156,4 +141,3 @@ button:hover {
 #reservas div:hover p {
   color: rgb(211, 254, 213);
 }
-

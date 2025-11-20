@@ -1,3 +1,5 @@
+from database.db import get_connection
+
 from dao.auth_dao import (
     get_usuario_por_correo,
     crear_usuario
@@ -15,7 +17,7 @@ from utils.session import (
 )
 
 def servicio_registrar_sesion(data):
-    ci = data.get("ci"),
+    ci = data.get("ci")
     nombre = data.get("nombre")
     apellido = data.get("apellido")
     nombre_programa = data.get("nombre_programa")
@@ -28,11 +30,18 @@ def servicio_registrar_sesion(data):
 
     hashed = hash_password(contrasena)
 
-    usuario = crear_usuario(correo, hashed)
-    insertar_participante(ci, nombre, apellido, correo)
-    insertar_participante_programa(ci, nombre_programa, rol)
-    
-    return usuario, None, 201
+    conn = get_connection()
+    try:
+        with conn:
+            with conn.cursor() as cursor:
+                usuario = crear_usuario(correo, hashed, cursor)
+                participante = insertar_participante(ci, nombre, apellido, correo, cursor)
+                participante_programa = insertar_participante_programa(ci, nombre_programa, rol, cursor)
+
+        return usuario, None, 201
+
+    except Exception as e:
+        return None, f"Error al registrar sesión: {str(e)}", 500
 
 
 def servicio_iniciar_sesion(data):
@@ -48,4 +57,4 @@ def servicio_iniciar_sesion(data):
     
     token = generate_jwt(correo)
 
-    return token, None, 200
+    return {"token": token, "user": correo}, None, 200

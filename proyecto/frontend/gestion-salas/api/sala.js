@@ -1,6 +1,6 @@
 // GET /salas
 const getSalas = async (accessToken) => {
-  const url = "https://localhost:5000/salas";
+  const url = "http://localhost:5000/salas";
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -33,7 +33,7 @@ const getSalas = async (accessToken) => {
 
 // GET /salas/:nombre_sala/:edificio
 const getSala = async (accessToken, nombre_sala, edificio) => {
-  const url = `https://localhost:5000/salas/${nombre_sala}/${edificio}`;
+  const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
   try {
     const response = await fetch(url, {
       method: "GET",

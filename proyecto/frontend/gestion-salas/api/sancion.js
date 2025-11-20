@@ -1,6 +1,6 @@
 // GET /sanciones
 const getSanciones = async (accessToken) => {
-  const url = "https://localhost:5000/sanciones";
+  const url = "http://localhost:5000/sanciones";
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -33,7 +33,7 @@ const getSanciones = async (accessToken) => {
 
 // GET /sanciones/:ci_participante
 const getSancionesPorCI = async (accessToken, ci_participante) => {
-  const url = `https://localhost:5000/sanciones/${ci_participante}`;
+  const url = `http://localhost:5000/sanciones/${ci_participante}`;
   try {
     const response = await fetch(url, {
       method: "GET",

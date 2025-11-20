@@ -22,7 +22,10 @@ def registrar_sesion():
         }), 400
 
     if not isinstance(data["ci"], str) or len(data["ci"]) < 8:
-        return jsonify({"error": "CI inválida (string, mín. 8 caracteres)"}), 400
+        return jsonify({"error": "Cédula inválida (string, mín. 8 caracteres)"}), 400
+    
+    if not data["ci"].isdigit():
+        return jsonify({"error": "La cédula debe contener solo dígitos numéricos"}), 400
 
     if not isinstance(data["nombre"], str) or len(data["nombre"]) < 1:
         return jsonify({"error": "Nombre inválido"}), 400
@@ -61,8 +64,8 @@ def iniciar_sesion():
     if not isinstance(data["contrasena"], str) or len(data["contrasena"]) < 8:
         return jsonify({"error": "Contraseña inválida"}), 400
     
-    token, error, status = servicio_iniciar_sesion(data)
+    token_data, error, status = servicio_iniciar_sesion(data)
     if error:
         return jsonify({"error": error}), status
     
-    return jsonify({"token": token}), 200
+    return jsonify(token_data), 200

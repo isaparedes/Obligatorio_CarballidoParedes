@@ -1,5 +1,5 @@
 // POST /signup
-const handleSignup = async (ci, name, last_name, program_name, role, email, password) => {
+export const handleSignup = async (ci, name, last_name, program_name, role, email, password) => {
   const url = "http://localhost:5000/auth/signup";
 
   const body = {
@@ -29,8 +29,8 @@ const handleSignup = async (ci, name, last_name, program_name, role, email, pass
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else {
       const errorData = await response.json();
-      console.error(`Error ${response.status}:`, errorData.message);
-      throw new Error(`Fallo al registrar el usuario: ${errorData.message}`);
+      console.error(`Error ${response.status}:`, errorData.error);
+      throw new Error(`${errorData.error}`);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);
@@ -39,7 +39,7 @@ const handleSignup = async (ci, name, last_name, program_name, role, email, pass
 };
 
 // POST /login
-const handleLogin = async (email, password) => {
+export const handleLogin = async (email, password) => {
   const url = "http://localhost:5000/auth/login";
 
   const body = {

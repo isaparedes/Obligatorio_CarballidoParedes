@@ -9,6 +9,7 @@ from controllers.reserva_controller import reserva_bp
 from controllers.turno_controller import turno_bp
 from controllers.sala_controller import sala_bp
 from controllers.sancion_controller import sancion_bp
+from controllers.programa_controller import programa_bp
 
 load_dotenv()
 
@@ -26,6 +27,7 @@ app.register_blueprint(turno_bp, url_prefix="/turnos")
 app.register_blueprint(sala_bp, url_prefix="/salas")
 app.register_blueprint(sancion_bp, url_prefix="/sanciones")
 app.register_blueprint(reportes_bp, url_prefix="/reportes")
+app.register_blueprint(programa_bp, url_prefix="/programas")
 
 @app.route("/")
 def index():

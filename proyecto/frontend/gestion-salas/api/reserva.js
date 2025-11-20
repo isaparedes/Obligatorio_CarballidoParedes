@@ -1,6 +1,6 @@
 // GET /reservas
 const getSalasMasReservadas = async (accessToken) => {
-  const url = "https://localhost:5000/reservas";
+  const url = "http://localhost:5000/reservas";
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -33,7 +33,7 @@ const getSalasMasReservadas = async (accessToken) => {
 
 // GET /reservas/:id
 const getReserva = async (accessToken, id) => {
-  const url = `https://localhost:5000/reservas/${id}`;
+  const url = `http://localhost:5000/reservas/${id}`;
   try {
     const response = await fetch(url, {
       method: "GET",

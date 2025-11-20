@@ -5,8 +5,7 @@ from dao.turno_dao import obtener_turnos
 
 turno_bp = Blueprint("turnos", __name__)
 
-# Consulta básica: 
-
+# GET /turnos
 @turno_bp.get("/")
 # @require_auth
 def get_turnos():

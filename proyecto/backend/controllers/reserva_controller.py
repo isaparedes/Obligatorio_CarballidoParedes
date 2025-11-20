@@ -16,13 +16,13 @@ reserva_bp = Blueprint("reservas", __name__)
 
 # GET /reservas
 @reserva_bp.get("/")
-# @require_auth
+@require_auth
 def get_reservas():
     return jsonify(service_obtener_reservas())
 
 # GET /reservas/<id>
 @reserva_bp.get("/<int:id_reserva>")
-# @require_auth
+@require_auth
 def get_reserva(id_reserva):
     reserva = service_obtener_reserva(id_reserva)
     if not reserva:
@@ -31,7 +31,7 @@ def get_reserva(id_reserva):
 
 # POST /reservas
 @reserva_bp.post("/")
-# @require_auth
+@require_auth
 def crear_reserva():
 
     if not request.is_json:
@@ -65,7 +65,7 @@ def crear_reserva():
 
 # PUT /reservas/<id>
 @reserva_bp.put("/<int:id_reserva>")
-# @require_auth
+@require_auth
 def editar_reserva(id_reserva):
 
     if not request.is_json:
@@ -101,7 +101,7 @@ def editar_reserva(id_reserva):
 
 # DELETE /reservas/<id> 
 @reserva_bp.delete("/<int:id_reserva>")
-# @require_auth
+@require_auth
 def borrar_reserva(id_reserva):
 
     borrado, error, status = service_eliminar_reserva(id_reserva)
@@ -113,7 +113,7 @@ def borrar_reserva(id_reserva):
 
 # POST /reservas/salas/disponibles
 @reserva_bp.post("/salas/disponibles")
-# @require_auth
+@require_auth
 def get_salas_disponibles():
     if not request.is_json:
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
