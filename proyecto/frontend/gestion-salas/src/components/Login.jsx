@@ -1,14 +1,19 @@
 import { useState } from 'react';
-import "./App.css"
+import "./App.css";
+import delay from 'delay';
 import { handleLogin } from '../../api/auth';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState("");
+  const [sesion, setSesion] = useState("");
 
   const { login } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +22,9 @@ export default function Login() {
     try {
       const data = await handleLogin(correo, contrasena);
       login(data.user, data.token); 
-      alert("Bienvenido " + data.user);
+      setSesion("Bienvenido " + data.user);
+      delay(2000)
+      navigate("/reserva")
     } catch (err) {
       setError(err.message);
     }
@@ -28,6 +35,7 @@ export default function Login() {
       <h1>Iniciar sesión</h1>
 
       {error && <p className="error">{error}</p>}
+      {sesion && <p>{sesion}</p>}
       <form className="datos" onSubmit={handleSubmit}> 
         <p className="titulo">
           Email

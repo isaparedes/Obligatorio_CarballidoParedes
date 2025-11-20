@@ -1,5 +1,7 @@
+const accessToken = localStorage.getItem("token");
+
 // GET /reservas
-const getSalasMasReservadas = async (accessToken) => {
+const getReservas = async (accessToken) => {
   const url = "http://localhost:5000/reservas";
   try {
     const response = await fetch(url, {

@@ -1,3 +1,5 @@
+const accessToken = localStorage.getItem("token");
+
 // GET /reportes/salas_mas_reservadas
 const getSalasMasReservadas = async (accessToken) => {
   const url = "http://localhost:5000/reportes/salas_mas_reservadas";

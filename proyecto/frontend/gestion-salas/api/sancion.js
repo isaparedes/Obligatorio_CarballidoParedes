@@ -1,3 +1,5 @@
+const accessToken = localStorage.getItem("token");
+
 // GET /sanciones
 const getSanciones = async (accessToken) => {
   const url = "http://localhost:5000/sanciones";

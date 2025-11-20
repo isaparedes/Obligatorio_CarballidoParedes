@@ -1,3 +1,5 @@
+const accessToken = localStorage.getItem("token");
+
 // GET /participantes
 const getParticipantes = async (accessToken) => {
   const url = "http://localhost:5000/participantes";

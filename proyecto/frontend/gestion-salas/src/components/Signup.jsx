@@ -58,14 +58,12 @@ export default function SignUp() {
     try {
       const usuario = await handleSignup(ci, nombre, apellido, programa, rol, correo, contrasena);
       setRegistro("Usuario registrado correctamente");
+      await delay(2000);
+      navigate("/login")
     } catch (err) {
       setError(err.message);
     }
 
-    if (error === "" && registro != "") {
-      await delay(3000);
-      navigate("/reserva")
-    }
   };
 
   return (
