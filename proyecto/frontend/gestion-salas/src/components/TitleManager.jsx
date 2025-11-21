@@ -10,8 +10,8 @@ export default function TitleManager() {
       "/login": "Login | Gestión de salas",
       "/signup": "Registro | Gestión de salas",
       "/reserva/form": "Reserva sala | Gestión de salas",
-      "/adminABM": "Administración | Gestión de salas",
-      "/metricaBI": "Métricas | Gestión de salas"
+      "/admin": "Administración | Gestión de salas",
+      "/metrica": "Métricas | Gestión de salas"
     };
 
     document.title = titles[location.pathname] || "Gestión de salas";

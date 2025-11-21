@@ -1,20 +1,21 @@
 from database.db import get_connection
 
-# Salas más reservadas (puse top 3 pero se puede cambiar)
+# Salas más reservadas AGREGAR EDIFICIO
 def obtener_salas_mas_reservadas():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                SELECT nombre_sala, COUNT(*) AS cant_reservas 
-                FROM reserva 
-                GROUP BY nombre_sala 
-                ORDER BY cant_reservas
-                DESC LIMIT 3
+                SELECT edificio, nombre_sala, COUNT(*) AS cant_reservas
+                FROM reserva
+                GROUP BY edificio, nombre_sala
+                ORDER BY cant_reservas DESC
+                LIMIT 3
             """)
             return cursor.fetchall()
+
         
-# Cantidad de reservas por carrera y facultad
+# Cantidad de reservas por carrera y facultad 
 def obtener_reservas_por_carrera_facultad(): 
     conn = get_connection()
     with conn:
@@ -35,26 +36,27 @@ def obtener_reservas_por_carrera_facultad():
             """)
             return cursor.fetchall()
         
-# Cantidad de reservas y asistencias de profesores y alumnos (grado y posgrado)
+# Cantidad de reservas y asistencias de profesores y alumnos (grado y posgrado) 
 def obtener_reservas_asistencias_por_participante():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor: 
             cursor.execute('''
                 SELECT p.ci, p.nombre, p.apellido, ppa.rol,
-                COUNT(rp.id_reserva) AS cant_reservas,
-                SUM(rp.asistencia = 1) AS cant_asistencias
+                       COUNT(rp.id_reserva) AS cant_reservas,
+                       SUM(rp.asistencia = 1) AS cant_asistencias
                 FROM participante p
                 JOIN participante_programa_academico ppa 
-                ON p.ci = ppa.ci_participante
+                    ON p.ci = ppa.ci_participante
+                   AND ppa.rol <> 'admin'
                 LEFT JOIN reserva_participante rp 
-                ON p.ci = rp.ci_participante
+                    ON p.ci = rp.ci_participante
                 GROUP BY p.ci, p.nombre, p.apellido, ppa.rol
                 ORDER BY cant_reservas DESC;
             ''')
             return cursor.fetchall()
 
-# Porcentaje de reservas efectivamente utilizadas vs. canceladas/no asistidas
+# Porcentaje de reservas efectivamente utilizadas vs. canceladas/no asistidas 
 def obtener_reservas_porcentaje_asistencias():
     conn = get_connection()
     with conn:

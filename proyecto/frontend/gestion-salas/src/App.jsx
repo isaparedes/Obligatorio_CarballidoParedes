@@ -27,7 +27,7 @@ export default function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="/metricaBI" element={
+          <Route path="/metrica" element={
             <ProtectedRoute rol="admin">
               <Metrica />
             </ProtectedRoute>

@@ -4,6 +4,7 @@ import delay from 'delay';
 import { handleLogin } from '../../api/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { getParticipantePorEmail } from '../../api/participante';
 
 export default function Login() {
   const [correo, setCorreo] = useState("");
@@ -23,12 +24,16 @@ export default function Login() {
       const data = await handleLogin(correo, contrasena);
       login(data.user, data.token); 
       setSesion("Bienvenido/a");
+      const usuario = await getParticipantePorEmail(correo);
+      localStorage.setItem("ci", usuario["ci"])
       await delay(2000)
       navigate("/reserva/form")
     } catch (err) {
       setError(err.message);
     }
   };
+
+
 
   return (
     <div className="inicio">

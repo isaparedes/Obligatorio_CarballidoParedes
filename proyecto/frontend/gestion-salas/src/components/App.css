@@ -159,3 +159,38 @@ button:hover {
 #reservas div:hover p {
   color: rgb(211, 254, 213);
 }
+
+
+.metrica-card {
+  width: 90%;
+  max-width: 900px;
+  background: white;
+  border: 2px solid rgb(211, 254, 213); 
+  border-radius: 12px;
+  padding: 20px 25px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.metrica-card h2 {
+  color: rgb(5, 5, 71); 
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.metrica-card ul {
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+.metrica-card li, .li {
+  padding: 10px 12px;
+  margin: 6px 0;
+  border-left: 4px solid rgb(211, 254, 213); 
+  background: #f9f9f9;
+  border-radius: 8px;
+  color: rgb(5, 5, 71);
+  font-size: 15px;
+  text-align: center;
+}
