@@ -11,7 +11,7 @@ from services.sancion_service import (
 sancion_bp = Blueprint("sanciones", __name__)
 
 # GET /sanciones
-@sancion_bp.get("/")
+@sancion_bp.get("")
 @require_auth
 def get_sanciones():
     return jsonify(service_obtener_sanciones())

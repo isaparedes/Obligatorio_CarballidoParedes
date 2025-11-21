@@ -1,5 +1,5 @@
 // GET /reservas
-const getReservas = async () => {
+export const getReservas = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reservas";
   try {
@@ -107,7 +107,7 @@ export const createReserva = async (newReservaData) => {
 };
 
 // PUT /reservas/:id
-const editReserva = async (id, changedReservaData) => {
+export const editReserva = async (id, changedReservaData) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/reservas/${id}`;
 
@@ -145,7 +145,7 @@ const editReserva = async (id, changedReservaData) => {
 };
 
 // DELETE /reservas/:id
-const deleteReserva = async (id) => {
+export const deleteReserva = async (id) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/reservas/${id}`;
 

@@ -1,0 +1,198 @@
+import { useState, useEffect } from "react";
+import {
+  createParticipante,
+  editParticipante,
+  deleteParticipante,
+} from "../../api/participante";
+
+export default function ParticipanteABM({ participantes }) {
+  const [mensaje, setMensaje] = useState("");
+  const [participantesState, setParticipantesState] = useState(participantes);
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [participanteEditando, setParticipanteEditando] = useState(null);
+  const [formData, setFormData] = useState({
+    ci: "",
+    nombre: "",
+    apellido: "",
+    email: "",
+  });
+
+  // sincronizar con el padre
+  useEffect(() => {
+    setParticipantesState(participantes);
+  }, [participantes]);
+
+  // manejar inputs
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // reset form
+  const resetForm = () => {
+    setFormData({
+      ci: "",
+      nombre: "",
+      apellido: "",
+      email: "",
+    });
+    setParticipanteEditando(null);
+    setModoEdicion(false);
+  };
+
+  // agregar participante
+  const handleAddParticipante = async (e) => {
+    e.preventDefault();
+    try {
+      const participanteCreado = await createParticipante(formData);
+      setMensaje("Participante creado exitosamente");
+      setParticipantesState((prev) => [...prev, participanteCreado]);
+      resetForm();
+    } catch (e) {
+      setMensaje("Error al crear el participante");
+    }
+  };
+
+  // editar participante
+  const handleEditParticipante = async (e) => {
+    e.preventDefault();
+    try {
+      const participanteEditado = await editParticipante(formData.ci, formData);
+      setMensaje("Participante editado correctamente");
+      setParticipantesState((prev) =>
+        prev.map((p) => (p.ci === formData.ci ? { ...p, ...participanteEditado } : p))
+      );
+      resetForm();
+    } catch (e) {
+      setMensaje("Error al editar el participante");
+    }
+  };
+
+  // eliminar participante
+  const handleDeleteParticipante = async (ci) => {
+    try {
+      const statusCode = await deleteParticipante(ci);
+      if (statusCode === 204) {
+        setMensaje(`Participante con CI ${ci} eliminado correctamente.`);
+        setParticipantesState((prev) => prev.filter((p) => p.ci !== ci));
+      }
+    } catch (e) {
+      setMensaje(`Error al eliminar el participante con CI ${ci}.`);
+    }
+  };
+
+  // seleccionar participante para editar
+  const seleccionarParticipanteParaEditar = (p) => {
+    setParticipanteEditando(p);
+    setFormData({
+      ci: p.ci,
+      nombre: p.nombre,
+      apellido: p.apellido,
+      email: p.email,
+    });
+    setModoEdicion(true);
+  };
+
+  return !modoEdicion ? (
+    <div className="list-box">
+      <h2>Participantes</h2>
+      {mensaje && <p>{mensaje}</p>}
+      <ul className="no-padding">
+        {participantesState
+          .filter((p) => p.ci !== "000000000")
+          .map((p, i) => (
+            <div key={i} className="item-container">
+              <li className="item">
+                <span>
+                  {p.ci} - {p.nombre} {p.apellido} | {p.email}
+                </span>
+              </li>
+              <div className="button-row">
+                <button
+                  className="small-button small-btn"
+                  onClick={() => seleccionarParticipanteParaEditar(p)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="small-button small-btn"
+                  onClick={() => handleDeleteParticipante(p.ci)}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          ))}
+      </ul>
+      <button className="small-button" onClick={() => setModoEdicion(true)}>
+        Agregar participante
+      </button>
+    </div>
+  ) : (
+    <div className="list-box">
+      <h2>{participanteEditando ? "Editar Participante" : "Agregar Participante"}</h2>
+      {mensaje && <p>{mensaje}</p>}
+      <form onSubmit={participanteEditando ? handleEditParticipante : handleAddParticipante}>
+        <div className="form-group">
+          <label htmlFor="ci">CI</label>
+          <input
+            type="text"
+            id="ci"
+            name="ci"
+            value={formData.ci}
+            onChange={handleInputChange}
+            required
+            disabled={!!participanteEditando}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="apellido">Apellido</label>
+          <input
+            type="text"
+            id="apellido"
+            name="apellido"
+            value={formData.apellido}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            disabled={!!participanteEditando}
+          />
+        </div>
+
+        <button type="submit" className="small-button">
+          {participanteEditando ? "Guardar cambios" : "Guardar"}
+        </button>
+        <button type="button" className="small-button" onClick={resetForm}>
+          Cancelar
+        </button>
+      </form>
+    </div>
+  );
+}

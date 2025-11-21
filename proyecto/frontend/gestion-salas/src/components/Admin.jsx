@@ -1,31 +1,47 @@
 import { useEffect, useState } from "react";
-import "./App.css"
+import "./App.css";
+import { getSalas} from "../../api/sala";
+import { getParticipantes} from "../../api/participante";
+import { getReservas} from "../../api/reserva";
+import { getSanciones} from "../../api/sancion";
+import SalaABM from "./SalaABM";
+import ParticipanteABM from "./ParticipanteABM";
+import ReservaABM from "./ReservaABM";
+import SancionABM from "./SancionABM";
 
 export default function Admin() {
-  const [salas, setSalas] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/salas")
-      .then((res) => res.json())
-        .then((data) => setSalas(data));
-    }, []);
+  const [salas, setSalas] = useState([]);
+  const [participantes, setParticipantes] = useState([]);
+  const [reservas, setReservas] = useState([]);
+  const [sanciones, setSanciones] = useState([]);
+
+   useEffect(() => {
+    const fetchData = async () => {
+      const [lista_salas, lista_participantes, lista_reservas, lista_sanciones] =
+        await Promise.all([
+          getSalas(),
+          getParticipantes(),
+          getReservas(),
+          getSanciones()
+        ]);
+      setSalas(lista_salas);
+      setParticipantes(lista_participantes);
+      setReservas(lista_reservas);
+      setSanciones(lista_sanciones);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="inicio">
-      <h1>Administrador de salas:</h1>
+      <h1>Administración</h1>
+      <SalaABM salas={salas}/>
+      <ParticipanteABM participantes={participantes}/>
+      <ReservaABM reservas={reservas}/>
+      <SancionABM sanciones={sanciones}/>
 
-      <h2>Salas registradas</h2>
-      <ul>
-        {salas.map((s, i) => (
-          <li key={i}>
-            {s.nombre_sala} - cap {s.capacidad} - {s.edificio}
-          </li>
-        ))}
-      </ul>
-
-      <button>Agregar sala</button>
-      <button>Editar sala</button>
-      <button>Eliminar sala</button>
     </div>
   );
 }

@@ -6,9 +6,11 @@ def obtener_salas_mas_reservadas():
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                SELECT nombre_sala, COUNT(*) AS cant_reservas 
-                FROM reserva 
-                GROUP BY nombre_sala 
+                SELECT r.nombre_sala, s.edificio, COUNT(*) AS cant_reservas 
+                FROM reserva r
+                JOIN sala s 
+                ON r.nombre_sala=s.nombre_sala
+                GROUP BY r.nombre_sala, s.edificio 
                 ORDER BY cant_reservas
                 DESC LIMIT 3
             """)
@@ -104,17 +106,19 @@ def obtener_promedio_participantes_por_sala():
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                SELECT r.nombre_sala,
-                AVG(sub.cant_participantes) AS promedio_participantes
+                SELECT r.nombre_sala, s.edificio,
+                       ROUND(AVG(sub.cant_participantes), 2) AS promedio_participantes
                 FROM reserva r
+                JOIN sala s ON r.nombre_sala = s.nombre_sala
                 JOIN (
                     SELECT rp.id_reserva, COUNT(rp.ci_participante) AS cant_participantes
                     FROM reserva_participante rp
                     GROUP BY rp.id_reserva
                 ) AS sub ON r.id_reserva = sub.id_reserva
-                GROUP BY r.nombre_sala
+                GROUP BY r.nombre_sala, s.edificio
             """)
             return cursor.fetchall()
+
         
 '''
 def obtener_promedio_participantes_por_sala():
@@ -161,7 +165,7 @@ def obtener_porcentaje_ocupacion_salas_por_edificio():
             """)
             return cursor.fetchall()
         
-# Cantidad de sanciones para profesores y alumnos (grado y posgrado)
+# Cantidad de sanciones para profesores y alumnos (grado y posgrado) (historial de sanciones)
 def obtener_sanciones_por_participante(): 
     conn = get_connection()
     with conn:
@@ -179,7 +183,7 @@ def obtener_sanciones_por_participante():
             ''')
             return cursor.fetchall()
 
-# Turnos más demandados (puse top 3 pero se puede cambiar)
+# Turnos más demandados (puse top 5 pero se puede cambiar)
 def obtener_turnos_mas_demandados():
     conn = get_connection()
     with conn:
@@ -193,7 +197,7 @@ def obtener_turnos_mas_demandados():
                 JOIN reserva r ON t.id_turno = r.id_turno
                 GROUP BY t.id_turno, t.hora_inicio, t.hora_fin
                 ORDER BY cant_reservas DESC
-                LIMIT 3
+                LIMIT 5
             """)
             return cursor.fetchall()
 
@@ -232,20 +236,24 @@ def obtener_tres_dias_mas_demandados():
                 })
             return resultado
 
-# Las cinco personas con más inasistencias
+# Las cinco personas con más inasistencias (reservas finalizadas)
 def obtener_cinco_personas_con_mas_inasistencias():
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute("""
-                SELECT rp.ci_participante, p.nombre, p.apellido,
-                COUNT(*) AS cantidad_inasistencias
+                SELECT rp.ci_participante, p.nombre, p.apellido, ppa.rol,
+                COUNT(*) AS cant_inasistencias
                 FROM reserva_participante rp
                 JOIN participante p 
                 ON rp.ci_participante = p.ci
-                WHERE rp.asistencia = 0
-                GROUP BY rp.ci_participante, p.nombre, p.apellido
-                ORDER BY cantidad_inasistencias
+                JOIN reserva r
+                ON rp.id_reserva = r.id_reserva
+                JOIN participante_programa_academico ppa
+                ON p.ci = ppa.ci_participante
+                WHERE rp.asistencia = FALSE AND r.estado = 'finalizada'
+                GROUP BY rp.ci_participante, p.nombre, p.apellido, ppa.rol
+                ORDER BY cant_inasistencias
                 DESC LIMIT 5;
             """)
             return cursor.fetchall()
@@ -257,10 +265,10 @@ def obtener_edificio_mayor_cantidad_reservas():
         with conn.cursor() as cursor:
             cursor.execute("""
                 SELECT 
-                r.edificio AS nombre_edificio,
+                edificio,
                 COUNT(*) AS total_reservas
-                FROM reserva r
-                GROUP BY r.edificio
+                FROM reserva 
+                GROUP BY edificio
                 ORDER BY total_reservas 
                 DESC LIMIT 1;
             """)

@@ -22,6 +22,10 @@ h1 {
   color: rgb(5, 5, 71);
 }
 
+h2 {
+  color: rgb(5, 5, 71);
+}
+
 #barraBienvenida {
   width: 100%;
   background-color: rgb(211, 254, 213);
@@ -158,4 +162,48 @@ button:hover {
 
 #reservas div:hover p {
   color: rgb(211, 254, 213);
+}
+
+.list-box {
+  border: 5px solid rgba(5, 5, 71);
+  border-radius: 12px;
+  padding: 20px;
+  width: 720px;
+  margin-bottom: 30px;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  background-color: rgba(231, 245, 231, 1);
+  padding: 15px 20px;
+  border-radius: 12px;
+  width: 100%;
+  font-size: 17px;
+  color: rgb(5, 5, 71);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  margin-top: -4px;
+}
+
+.small-btn {
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
 }

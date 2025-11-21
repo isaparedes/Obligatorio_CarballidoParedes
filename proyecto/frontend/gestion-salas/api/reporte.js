@@ -100,6 +100,40 @@ export const getAsistenciasPorParticipante = async () => {
   }
 };
 
+// GET /reportes/reservas_porcentaje_asistencias
+export const getPorcentajeAsistenciasReservas = async () => {
+  const accessToken = localStorage.getItem("token");
+  const url = "http://localhost:5000/reportes/reservas_porcentaje_asistencias";
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Porcentajes de asistencias por participante obtenidos:", data);
+      return data[0];
+    } else if (response.status === 401) {
+      console.error("Error 401: Token Bearer no válido o ausente.");
+      throw new Error("No autorizado. Por favor, vuelve a iniciar sesión.");
+    } else {
+      const errorData = await response.json();
+      console.error(
+        `Error HTTP ${response.status}:`,
+        errorData.message || "Error desconocido"
+      );
+      throw new Error(`Fallo al obtener el porcentaja de asistencias por participante: ${errorData.message}`);
+    }
+  } catch (error) {
+    console.error("Error de red o del servidor:", error);
+    throw error;
+  }
+};
+
 // GET /reportes/promedio_participantes_por_sala
 export const getPromedioParticipantesPorSala = async () => {
   const accessToken = localStorage.getItem("token");

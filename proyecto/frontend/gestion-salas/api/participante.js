@@ -118,7 +118,7 @@ export const getRolPrograma = async (ci) => {
 };
 
 // POST /participantes
-const createParticipante = async (newParticipanteData) => {
+export const createParticipante = async (newParticipanteData) => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/participantes";
 
@@ -157,7 +157,7 @@ const createParticipante = async (newParticipanteData) => {
 };
 
 // PUT /participantes/:ci
-const editParticipante = async (ci, changedParticipanteData) => {
+export const editParticipante = async (ci, changedParticipanteData) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/participantes/${ci}`;
 
@@ -195,7 +195,7 @@ const editParticipante = async (ci, changedParticipanteData) => {
 };
 
 // DELETE /participantes/:ci
-const deleteParticipante = async (ci) => {
+export const deleteParticipante = async (ci) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/participantes/${ci}`;
 

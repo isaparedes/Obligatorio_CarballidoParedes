@@ -28,10 +28,10 @@ def get_sala(nombre_sala, edificio):
     return jsonify(sala)
 
 # POST /salas
-@sala_bp.post("/")
+@sala_bp.post("")
 @require_auth
 def crear_sala():
-
+    
     if not request.is_json:
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
 
@@ -100,13 +100,12 @@ def editar_sala(nombre_sala, edificio):
 @sala_bp.delete("/<string:nombre_sala>/<string:edificio>")
 @require_auth
 def borrar_sala(nombre_sala, edificio):
-
     resultado, error, status = service_eliminar_sala(nombre_sala, edificio)
 
     if error:
         return jsonify({"error": error}), status
 
-    return jsonify(resultado), status
+    return "", 204
 
 # GET /salas/turnos/disponibles
 @sala_bp.get("/turnos/disponibles")

@@ -1,5 +1,5 @@
 // GET /sanciones
-const getSanciones = async () => {
+export const getSanciones = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/sanciones";
   try {
@@ -67,7 +67,7 @@ const getSancionesPorCI = async (ci_participante) => {
 };
 
 // POST /sanciones
-const createSancion = async (newSancionData) => {
+export const createSancion = async (newSancionData) => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/sanciones";
 
@@ -104,7 +104,7 @@ const createSancion = async (newSancionData) => {
 };
 
 // DELETE /sanciones/:ci_participante/:fecha_inicio/:fecha_fin
-const deleteParticipante = async (ci_participante, fecha_inicio, fecha_fin) => {
+export const deleteSancion = async (ci_participante, fecha_inicio, fecha_fin) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/sanciones/${ci_participante}/${fecha_inicio}/${fecha_fin}`;
 
@@ -117,21 +117,27 @@ const deleteParticipante = async (ci_participante, fecha_inicio, fecha_fin) => {
     });
 
     if (response.status === 204) {
-      console.log(
-        `Sanción de participante ${ci_participante} (${fecha_inicio} - ${fecha_fin}) eliminada exitosamente (204 No Content).`
-      );
+      console.log(`Sanción de participante ${ci_participante} eliminada exitosamente (204 No Content).`);
       return response.status;
+    } else if (response.status === 200) {
+      const data = await response.json();
+      console.log("Sanción eliminada exitosamente:", data);
+      return response.status; // ✅ tratar 200 como éxito
     } else if (response.status === 401) {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else if (response.status === 404) {
-      throw new Error(`Sanción con CI ${ci} no encontrado.`);
+      throw new Error(`Sanción con CI ${ci_participante} no encontrada.`);
     } else {
-      const errorData = await response.json();
-      console.error(
-        `Error ${response.status}:`,
-        errorData.message || "Error desconocido"
+      let errorText = "";
+      try {
+        const errorData = await response.json();
+        errorText = errorData.message || JSON.stringify(errorData);
+      } catch {
+        errorText = "Error desconocido";
+      }
+      throw new Error(
+        `Fallo al eliminar la sanción del participante ${ci_participante} (${fecha_inicio} - ${fecha_fin}): ${errorText}`
       );
-      throw new Error(`Fallo al eliminar la sanción del participante ${ci_participante} (${fecha_inicio} - ${fecha_fin}): ${errorData.message}`);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);

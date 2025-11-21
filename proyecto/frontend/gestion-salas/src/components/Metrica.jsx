@@ -4,6 +4,7 @@ import {
   getSalasMasReservadas, 
   getReservasPorCarreraFacultad, 
   getAsistenciasPorParticipante, 
+  getPorcentajeAsistenciasReservas,
   getPromedioParticipantesPorSala,
   getPorcentajeOcupacionSalasPorEdificio,
   getSancionesPorParticipante,
@@ -11,12 +12,13 @@ import {
   getTresDiasMasDemandados,
   getCincoPersonasConMasInasistencias,
   getEdificioConMasReservas
-} from "../../api/reportes";
+} from "../../api/reporte";
 
 export default function Metrica() {
   const [salasMasReservadas, setSalasMasReservadas] = useState([]);
   const [reservasPorCarreraFacultad, setReservasPorCarreraFacultad] = useState([]);
   const [asistenciasPorParticipante, setAsistenciasPorParticipante] = useState([]);
+  const [porcentajeAsistenciasReservas, setPorcentajeAsistenciasReservas] = useState([]);
   const [promedioParticipantesPorSala, setPromedioParticipantesPorSala] = useState([]);
   const [porcentajeOcupacionSalasPorEdificio, setPorcentajeOcupacionSalasPorEdificio] = useState([]);
   const [sancionesPorParticipante, setSancionesPorParticipante] = useState([]);
@@ -37,6 +39,7 @@ export default function Metrica() {
           salas,
           reservasCarrera,
           asistencias,
+          porcentajeAsistencias,
           promedioSala,
           ocupacionEdificio,
           sanciones,
@@ -48,6 +51,7 @@ export default function Metrica() {
           getSalasMasReservadas(),
           getReservasPorCarreraFacultad(),
           getAsistenciasPorParticipante(),
+          getPorcentajeAsistenciasReservas(),
           getPromedioParticipantesPorSala(),
           getPorcentajeOcupacionSalasPorEdificio(),
           getSancionesPorParticipante(),
@@ -60,6 +64,7 @@ export default function Metrica() {
         setSalasMasReservadas(salas);
         setReservasPorCarreraFacultad(reservasCarrera);
         setAsistenciasPorParticipante(asistencias);
+        setPorcentajeAsistenciasReservas(porcentajeAsistencias);
         setPromedioParticipantesPorSala(promedioSala);
         setPorcentajeOcupacionSalasPorEdificio(ocupacionEdificio);
         setSancionesPorParticipante(sanciones);
@@ -86,36 +91,57 @@ export default function Metrica() {
     <div className="inicio">
       <h1>Métricas del Sistema</h1>
 
-      <h2>Salas Más Reservadas</h2>
-      <ul>{salasMasReservadas.map((s, i) => <li key={i}>Sala: {s.nombre_sala} - {/*agregar s.edificio en dao */}. Cantidad reservas: {s.cant_reservas}</li>)}</ul>
+      <h2>Top 3 salas más reservadas</h2>
+      <ul>{salasMasReservadas.map((s, i) => <li key={i}><strong>{i+1+")"} {s.nombre_sala} ({s.edificio}): </strong>{s.cant_reservas} reserva/s</li>)}</ul>
 
-      <h2>Reservas por Carrera y Facultad</h2>
-      <ul>{reservasPorCarreraFacultad.map((r, i) => <li key={i}>{r.nombre_programa} ({r.nombre}). Cantidad reservas: {r.cant_reservas}</li>)}</ul>
+      <h2>Reservas por carrera y facultad</h2>
+      <ul>{reservasPorCarreraFacultad.map((r, i) => <li key={i}><strong>{r.nombre_programa} ({r.nombre}): </strong>{r.cant_reservas} reserva/s</li>)}</ul>
 
-      <h2>Asistencias por Participante</h2>
-      {/*NO TRAER RESERVAS/ASISTENCIAS ADMIN */}
-      <ul>{asistenciasPorParticipante.map((a, i) => <li key={i}>{a.ci} | {a.nombre} {a.apellido} ({a.rol}). Cantidad reservas: {a.cant_reservas}. Asistencias: {a.cant_asistencias}</li>)}</ul>
+      <h2>Asistencias por participante</h2>
+     <ul>
+      {asistenciasPorParticipante
+        .filter(a => a.ci !== "000000000")
+        .map((a, i) => (
+          <li key={i}>
+            <strong>{a.ci} | {a.nombre} {a.apellido} ({a.rol}):</strong> {a.cant_reservas} reserva/s - {a.cant_asistencias} asistencia/s
+          </li>
+        ))}
+    </ul>
 
-      <h2>Promedio de Participantes por Sala</h2>
-      <ul>{promedioParticipantesPorSala.map((p, i) => <li key={i}>{p.sala}: {p.promedio}</li>)}</ul>
+      <h2>Asistencias en reservas</h2>
+      <ul>
+        <li><strong>Total de reservas: </strong>{porcentajeAsistenciasReservas.total_reservas}</li>
+        <li><strong>Reservas utilizadas (por lo menos 1 participante asistió): </strong>{porcentajeAsistenciasReservas.reservas_utilizadas}</li>
+        <li><strong>Porcentaje utilizadas:</strong> {porcentajeAsistenciasReservas.porcentaje_utilizadas}%</li>
+        <li><strong>Reservas no utilizadas (ninguna asistencia):</strong> {porcentajeAsistenciasReservas.reservas_no_utilizadas}</li>
+        <li><strong>Porcentaje no utilizadas:</strong> {porcentajeAsistenciasReservas.porcentaje_no_utilizadas}%</li>
+      </ul>
 
-      <h2>Porcentaje de Ocupación de Salas por Edificio</h2>
-      <ul>{porcentajeOcupacionSalasPorEdificio.map((p, i) => <li key={i}>{p.edificio}: {p.porcentaje}%</li>)}</ul>
+      <h2>Promedio de participantes por sala</h2>
+      <ul>{promedioParticipantesPorSala.map((p, i) => <li key={i}><strong>{p.nombre_sala} ({p.edificio}):</strong> {p.promedio_participantes} participantes</li>)}</ul>
 
-      <h2>Sanciones por Participante</h2>
-      <ul>{sancionesPorParticipante.map((s, i) => <li key={i}>{s.participante}: {s.sanciones}</li>)}</ul>
+      <h2>Porcentaje de ocupación de salas por edificio</h2>
+      <ul>{porcentajeOcupacionSalasPorEdificio.map((p, i) => <li key={i}><strong>{p.nombre_sala} ({p.edificio}):</strong> {p.porcentaje_ocupacion}%</li>)}</ul>
 
-      <h2>Turnos Más Demandados</h2>
-      <ul>{turnosMasDemandados.map((t, i) => <li key={i}>{t.turno}: {t.cantidad_reservas}</li>)}</ul>
+      <h2>Sanciones por participante</h2>
+      <ul>{sancionesPorParticipante.filter(s => s.ci !== "000000000")
+        .map((s, i) => (
+          <li key={i}>
+            <strong>{s.ci} | {s.nombre} {s.apellido} ({s.rol}):</strong> {s.cant_sanciones} sancion/es
+          </li>
+        ))}</ul>
 
-      <h2>3 Días Más Demandados</h2>
-      <ul>{tresDiasMasDemandados.map((d, i) => <li key={i}>{d.dia}: {d.cantidad_reservas}</li>)}</ul>
+      <h2>Top 5 turnos más demandados</h2>
+      <ul>{turnosMasDemandados.map((t, i) => <li key={i}><strong>{i+1+")"} {t.hora_inicio} - {t.hora_fin}:</strong> {t.cant_reservas} reserva/s</li>)}</ul>
 
-      <h2>5 Personas con Más Inasistencias</h2>
-      <ul>{cincoPersonasConMasInasistencias.map((p, i) => <li key={i}>{p.participante}: {p.inasistencias}</li>)}</ul>
+      <h2>Top 3 días más demandados</h2>
+      <ul>{tresDiasMasDemandados.map((d, i) => <li key={i}><strong>{i+1+")"} {d.dia_semana}:</strong> {d.cant_reservas} reserva/s</li>)}</ul>
 
-      <h2>Edificio con Mayor Cantidad de Reservas</h2>
-      <p>{edificioConMasReservas?.edificio}: {edificioConMasReservas?.cantidad_reservas}</p>
+      <h2>Top 5 personas con más inasistencias</h2>
+      <ul>{cincoPersonasConMasInasistencias.map((p, i) => <li key={i}><strong>{i+1+")"} {p.ci_participante} | {p.nombre} {p.apellido} ({p.rol}):</strong> {p.cant_inasistencias} inasistencia/s</li>)}</ul>
+
+      <h2>Edificio con mayor cantidad de reservas</h2>
+      <p><strong>{edificioConMasReservas.edificio}:</strong> {edificioConMasReservas.total_reservas} reserva/s</p>
     </div>
   );
 }

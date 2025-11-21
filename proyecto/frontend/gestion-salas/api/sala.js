@@ -1,7 +1,7 @@
 // GET /salas
-const getSalas = async () => {
+export const getSalas = async () => {
   const accessToken = localStorage.getItem("token");
-  const url = "http://localhost:5000/salas";
+  const url = "http://localhost:5000/salas/";
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -33,7 +33,7 @@ const getSalas = async () => {
 };
 
 // GET /salas/:nombre_sala/:edificio
-const getSala = async (nombre_sala, edificio) => {
+export const getSala = async (nombre_sala, edificio) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
   try {
@@ -67,7 +67,7 @@ const getSala = async (nombre_sala, edificio) => {
 };
 
 // POST /salas
-const createSala = async (newSalaData) => {
+export const createSala = async (newSalaData) => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/salas";
 
@@ -96,8 +96,8 @@ const createSala = async (newSalaData) => {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else {
       const errorData = await response.json();
-      console.error(`Error ${response.status}:`, errorData.message);
-      throw new Error(`Fallo al crear la sala: ${errorData.message}`);
+      console.error(`Error ${response.status}:`, errorData.error);
+      throw new Error(`Fallo al crear la sala: ${errorData.error}`);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);
@@ -106,7 +106,7 @@ const createSala = async (newSalaData) => {
 };
 
 // PUT /salas/:nombre_sala/:edificio
-const editSala = async (nombre_sala, edificio, changedSalaData) => {
+export const editSala = async (nombre_sala, edificio, changedSalaData) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
 
@@ -143,7 +143,7 @@ const editSala = async (nombre_sala, edificio, changedSalaData) => {
 };
 
 // DELETE /salas/:nombre_sala/:edificio
-const deleteSala = async (nombre_sala, edificio) => {
+export const deleteSala = async (nombre_sala, edificio) => {
   const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
 
