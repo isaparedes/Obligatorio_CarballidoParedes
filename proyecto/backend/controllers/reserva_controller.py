@@ -30,7 +30,7 @@ def get_reserva(id_reserva):
     return jsonify(reserva)
 
 # POST /reservas
-@reserva_bp.post("/")
+@reserva_bp.post("")
 @require_auth
 def crear_reserva():
 
@@ -117,6 +117,8 @@ def borrar_reserva(id_reserva):
 def get_salas_disponibles():
     if not request.is_json:
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
+    
+    print("DEBUG BODY:", request.json) # borrar
 
     data = request.get_json()
     fecha = data.get("fecha")  

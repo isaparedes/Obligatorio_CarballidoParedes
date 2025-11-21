@@ -19,6 +19,19 @@ def obtener_participante(ci):
                 WHERE ci = %s
             """, (ci,))
             return cursor.fetchone()
+        
+# Obtener nombre de participante por su email
+def obtener_participante_por_email(email):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute("""
+                SELECT ci, nombre, apellido, email
+                FROM participante
+                WHERE TRIM(email) = %s
+            """, (email,))
+            return cursor.fetchone()  
+
 
 # Insertar participante
 def insertar_participante(ci, nombre, apellido, email, cursor):

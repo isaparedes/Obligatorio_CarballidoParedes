@@ -1,8 +1,7 @@
-const accessToken = localStorage.getItem("token");
-
 // GET /participantes
-const getParticipantes = async (accessToken) => {
-  const url = "http://localhost:5000/participantes";
+export const getParticipantes = async () => {
+  const accessToken = localStorage.getItem("token");
+  const url = "http://localhost:5000/participantes/";
   try {
     const response = await fetch(url, {
       method: "GET",
@@ -34,7 +33,7 @@ const getParticipantes = async (accessToken) => {
 };
 
 // GET /participantes/:ci
-const getParticipante = async (accessToken, ci) => {
+export const getParticipante = async (accessToken, ci) => {
   const url = `http://localhost:5000/participantes/${ci}`;
   try {
     const response = await fetch(url, {
@@ -65,6 +64,25 @@ const getParticipante = async (accessToken, ci) => {
     throw error;
   }
 };
+
+// GET /participantes?email=usuario@ucu.edu.uy
+export const getParticipantePorEmail = async (email) => {
+  const accessToken = localStorage.getItem("token");
+  const url = `http://localhost:5000/participantes?email=${encodeURIComponent(email)}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) throw new Error("Error al obtener participante");
+  return await response.json();
+};
+
+
 
 // POST /participantes
 const createParticipante = async (accessToken, newParticipanteData) => {

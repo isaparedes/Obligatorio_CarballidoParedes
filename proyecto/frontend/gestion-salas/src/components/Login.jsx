@@ -22,9 +22,9 @@ export default function Login() {
     try {
       const data = await handleLogin(correo, contrasena);
       login(data.user, data.token); 
-      setSesion("Bienvenido " + data.user);
-      delay(2000)
-      navigate("/reserva")
+      setSesion("Bienvenido");
+      await delay(2000)
+      navigate("/reserva/form")
     } catch (err) {
       setError(err.message);
     }

@@ -3,6 +3,7 @@ from utils.session import require_auth
 from services.participante_service import (
     service_obtener_participantes, 
     service_obtener_participante, 
+    service_obtener_participante_por_email,
     service_crear_participante,
     service_actualizar_participante, 
     service_eliminar_participante
@@ -24,6 +25,23 @@ def get_participante(ci):
     if not participante:
         return jsonify({"error": "Participante no encontrado"}), 404
     return jsonify(participante)
+
+# GET /participantes?email=usuario@correo.ucu.edu.uy
+@participante_bp.get("")
+@require_auth
+def get_participante_por_email():
+    email = request.args.get("email")
+    if not email:
+        return jsonify({"error": "Debe proporcionar un email"}), 400
+
+    participante = service_obtener_participante_por_email(email.strip())
+    if not participante:
+        return jsonify({"error": "Participante no encontrado"}), 404
+
+    return jsonify(participante)
+
+
+
 
 # POST /participantes
 @participante_bp.post("/")

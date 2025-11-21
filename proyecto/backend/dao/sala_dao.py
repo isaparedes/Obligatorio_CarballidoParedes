@@ -121,26 +121,33 @@ def sala_esta_disponible(nombre_sala, edificio, fecha, cant_turnos):
 
             return cantidad < cant_turnos
 
-# Obtener los turnos disponibles que tiene una sala en determinada fecha       
+# Obtener los turnos disponibles que tiene una sala en determinada fecha
 def obtener_turnos_disponibles(nombre_sala, edificio, fecha):
     conn = get_connection()
     with conn:
         with conn.cursor() as cursor:
     
-            cursor.execute("SELECT id_turno FROM turnos ORDER BY id_turno")
-            todos = [t["id_turno"] for t in cursor.fetchall()]
+            cursor.execute("SELECT * FROM turno ORDER BY id_turno")
+            todos = cursor.fetchall()
 
             cursor.execute("""
                 SELECT id_turno
                 FROM reserva
                 WHERE nombre_sala = %s
-                  AND edificio = %s
-                  AND fecha = %s
-                  AND estado = "activa"
+                AND edificio = %s
+                AND fecha = %s
+                AND estado = "activa"
             """, (nombre_sala, edificio, fecha))
 
             ocupados = {r["id_turno"] for r in cursor.fetchall()}
 
-            disponibles = [t for t in todos if t not in ocupados]
+            disponibles = []
+            for t in todos:
+                if t["id_turno"] not in ocupados:
+                    disponibles.append({
+                        "id_turno": t["id_turno"],
+                        "hora_inicio": str(t["hora_inicio"]),
+                        "hora_fin": str(t["hora_fin"])
+                    })
 
             return disponibles

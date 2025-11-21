@@ -1,5 +1,3 @@
-const accessToken = localStorage.getItem("token");
-
 // GET /salas
 const getSalas = async (accessToken) => {
   const url = "http://localhost:5000/salas";
@@ -176,7 +174,8 @@ const deleteSala = async (accessToken, nombre_sala, edificio) => {
 };
 
 // GET /salas/turnos/disponibles
-const getTurnosDisponiblesSegunSala = async (accessToken, nombreSala, edificio, fecha) => {
+export const getTurnosDisponiblesSegunSala = async (nombreSala, edificio, fecha) => {
+  const accessToken = localStorage.getItem("token");
   const fechaStr = fecha instanceof Date ? fecha.toISOString() : fecha;
 
   const url = `http://localhost:5000/salas/turnos/disponibles?nombre_sala=${encodeURIComponent(nombreSala)}&edificio=${encodeURIComponent(edificio)}&fecha=${encodeURIComponent(fechaStr)}`;

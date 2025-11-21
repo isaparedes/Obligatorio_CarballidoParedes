@@ -1,12 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-// 👉 1. Crear el contexto
 const AuthContext = createContext();
 
-// 👉 2. Hook para usar el contexto en cualquier componente
 export const useAuth = () => useContext(AuthContext);
 
-// 👉 3. Provider que envuelve tu aplicación
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);  
   const [token, setToken] = useState(null);
@@ -22,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
     if (storedUser && storedUser !== "undefined") {
       try {
-        setUser(JSON.parse(storedUser));
+        setUser(storedUser);
       } catch (err) {
         console.error("Error al parsear usuario:", err);
         localStorage.removeItem("user"); 
@@ -32,20 +29,17 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-
-  // 👇 función para guardar login
   const login = (userData, tokenData) => {
     setUser(userData);
     setToken(tokenData);
     if (userData) {
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("user", userData);
     }
     if (tokenData) {
       localStorage.setItem("token", tokenData);
     }
   };
 
-  // 👇 función para cerrar sesión
   const logout = () => {
     setUser(null);
     setToken(null);

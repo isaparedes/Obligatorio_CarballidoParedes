@@ -78,8 +78,15 @@ def service_eliminar_reserva(id_reserva):
 # Obtener salas disponibles
 def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes):
 
+    if (lista_participantes[0] == ''):
+        lista_participantes = []
+
     todos = lista_participantes.copy() 
     todos.append(ci_reservante)
+
+    print("DEBUG -> fecha:", fecha) # borrar
+    print("DEBUG -> reservante:", ci_reservante)
+    print("DEBUG -> participantes:", todos)
 
     if (len(todos) != len(set(todos))):
         return None, "No puedes repetir participantes", 400
@@ -90,11 +97,14 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
 
     
     if obtener_sancionado(ci_reservante):
+        print("DEBUG -> reservante sancionado") # borrar
         return None, "Quién desea reservar está sancionado", 403
-        
+    
     for ci in lista_participantes:
         if obtener_sancionado(ci):
-            return None, f"El participante con la cédula {ci} está sancionado", 403
+            print(f"DEBUG -> participante sancionado: {ci}") # borrar
+            return None, f"El participante con la cédula {ci} está sancionado/a", 403
+
 
     rol_programa = obtener_rol_programa(ci_reservante)
     if rol_programa:

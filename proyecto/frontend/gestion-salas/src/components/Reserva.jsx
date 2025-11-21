@@ -1,95 +1,148 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import delay from 'delay';
+import { getParticipantePorEmail, getParticipantes } from "../../api/participante";
+import { getSalasDisponibles } from "../../api/reserva";
+import ReservaSala from "./ReservaSala";
 
 export default function Reserva() {
-  const [salas, setSalas] = useState([]);
-  const [salaSeleccionada, setSalaSeleccionada] = useState(null);
+  const [ciReservante, setCiReservante] = useState("");
+  const [nombreUsuario, setNombreUsuario] = useState("");
+  const [fechaSeleccionada, setFechaSeleccionada] = useState("");
+  const [participantesDisponibles, setParticipantesDisponibles] = useState([]);
+  const [participantesSeleccionados, setParticipantesSeleccionados] = useState([""]);
+  const [error, setError] = useState("");
 
-  {/*
+  const [salasDisp, setSalasDisp] = useState([]);
+
+  const [reserva, setReserva] = useState(false)
+
+  // Cargar usuario y lista de participantes
   useEffect(() => {
-    fetch("http://localhost:5000/salas")
-      .then(res => res.json())
-      .then(data => setSalas(data));
+    const email = localStorage.getItem("user");
+
+    getParticipantePorEmail(email)
+      .then((usuario) => {
+        setCiReservante(usuario.ci);
+        setNombreUsuario(usuario.nombre);
+      })
+      .catch((error) => console.error("Error obteniendo participante:", error));
+
+    getParticipantes()
+      .then((participantes) => {
+        setParticipantesDisponibles(participantes);
+      })
+      .catch((error) => console.error("Error obteniendo participantes:", error));
   }, []);
-  */}
 
-  return (
-    <div className="inicio">
+  // Quitar al usuario logueado cuando ya exista en ambos
+  useEffect(() => {
+    if (!ciReservante || participantesDisponibles.length === 0) return;
+
+    setParticipantesDisponibles((prev) =>
+      prev.filter((p) => p.ci !== ciReservante)
+    );
+  }, [ciReservante, participantesDisponibles.length]);
+
+  const agregarParticipante = () => {
+    if (participantesSeleccionados.length >= 40) return;
+    setParticipantesSeleccionados([...participantesSeleccionados, ""]);
+  };
+
+  const actualizarParticipante = (index, value) => {
+    const nuevos = [...participantesSeleccionados];
+    nuevos[index] = value;
+    setParticipantesSeleccionados(nuevos);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const datos = {
+        fecha: fechaSeleccionada,
+        ci_reservante: ciReservante,
+        lista_participantes: participantesSeleccionados
+      } 
       
+      const salas = await getSalasDisponibles(datos);
+      setSalasDisp(salas);
+      await delay(2000);
+      setReserva(true);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
-      <div id="formulario">
-        <h1>Reserva de Sala de Estudio</h1>
+    return (
+    <div className="inicio">
+      {!reserva ? (
+        <div id="formulario">
+          {error && <p className="error">{error}</p>}
 
-        <form className="datos">
-          {/* Nombre */}
-          <p className="titulo">
-            Nombre y apellido
-            <input type="text" placeholder="Ej: María Pérez" required />
-          </p>
+          <h1>Reserva de Sala de Estudio</h1>
+          {nombreUsuario && <p>Hola, {nombreUsuario}</p>}
 
-          {/* Select de salas */}
-          <p className="titulo">
-            Salón a reservar  
-            <select
-              required
-              onChange={(e) => {
-                const sala = salas.find(s => s.nombre_sala === e.target.value);
-                setSalaSeleccionada(sala);
-              }}
-            >
-              <option value="">Seleccione una sala</option>
-              {/*
-              {salas.map((s, i) => (
-                <option key={i} value={s.nombre_sala}>
-                  {s.nombre_sala} — {s.edificio} — Capacidad {s.capacidad}
-                </option>
-              ))}
-              */}
-            </select>
-          </p>
-
-          {/* Select de fechas disponibles SOLO si hay sala seleccionada */}
-          {salaSeleccionada && (
+          <form className="datos" onSubmit={handleSubmit}>
             <p className="titulo">
-              Fecha disponible
-              <select required>
-                <option value="">Seleccione una fecha</option>
-                {salaSeleccionada.fechas_disponibles?.map((f, i) => (
-                  <option key={i} value={f}>{f}</option>
-                ))}
-              </select>
+              Elige una fecha
+              <input
+                type="date"
+                required
+                value={fechaSeleccionada}
+                onChange={(e) => setFechaSeleccionada(e.target.value)}
+              />
             </p>
-          )}
 
-          <p className="titulo">
-            Hora
-            <input type="time" required />
-          </p>
+            <p className="titulo">¿Con quién/es quieres reservar?</p>
 
-          {/* Participantes */}
-          <p className="titulo">
-            Participantes
-            <input
-              type="number"
-              min="1"
-              placeholder="Cantidad de personas"
-              required
-            />
-          </p>
+            {participantesSeleccionados.map((p, i) => (
+              <div key={i} style={{ display: "flex", gap: "8px", marginBottom: "8px" }}>
+                <select
+                  value={p}
+                  onChange={(e) => actualizarParticipante(i, e.target.value)}
+                  style={{ borderWidth: 1, borderRadius: 8 }}
+                >
+                  <option value="">Seleccione un participante</option>
 
-          <button type="submit">Enviar</button>
-        </form>
+                  {participantesDisponibles
+                    .filter(
+                      (part) => part.ci === p || !participantesSeleccionados.includes(part.ci)
+                    )
+                    .map((part) => (
+                      <option key={part.ci} value={part.ci}>
+                        {part.nombre} {part.apellido}{" "}
+                        {part.email.includes("@ucu.edu.uy") ? "(docente)" : "(alumno)"}
+                      </option>
+                    ))}
+                </select>
 
-        {/* Info de salas 
-        {salas.length > 0 && (
-          <div>
-            {salas.map((s, i) => (
-              <p key={i}>{s.nombre_sala}, {s.edificio}, {s.capacidad}</p>
+                {i === participantesSeleccionados.length - 1 && (
+                  <button type="button" onClick={agregarParticipante}>+</button>
+                )}
+              </div>
             ))}
-          </div>
-        */}
-        
-      </div>
+
+            {salasDisp &&
+              salasDisp.map((s, i) => (
+                <p key={i}>
+                  Sala: {s.nombre_sala} de {s.edificio}. Capacidad: {s.capacidad}
+                </p>
+              ))}
+
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+      ) : (
+        <ReservaSala
+          fecha={fechaSeleccionada}
+          ci_reservante={ciReservante}
+          participantes={participantesSeleccionados}
+          salas_disponibles={salasDisp} 
+        />
+      )}
     </div>
   );
+
 }

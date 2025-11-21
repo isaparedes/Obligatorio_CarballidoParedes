@@ -64,9 +64,9 @@ export const handleLogin = async (email, password) => {
       const errorData = await response.json();
       console.error(
         "Error de login:",
-        errorData.message || "Credenciales inválidas"
+        errorData.error || "Credenciales inválidas"
       );
-      throw new Error(errorData.message || "Fallo de autenticación");
+      throw new Error(errorData.error || "Fallo en la autenticación");
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);

@@ -67,14 +67,15 @@ const getReserva = async (accessToken, id) => {
 };
 
 // POST /reservas
-const createReserva = async (accessToken, newReservaData) => {
+export const createReserva = async (newReservaData) => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reservas";
 
   const body = {
     nombre_sala: newReservaData.nombre_sala,
     edificio: newReservaData.edificio,
-    fecha: newReservaData.fecha.toISOString(),
-    turno: newReservaData.turno,
+    fecha: newReservaData.fecha,
+    id_turno: newReservaData.id_turno,
     participantes: newReservaData.participantes
   };
 
@@ -178,11 +179,12 @@ const deleteReserva = async (accessToken, id) => {
 }; 
 
 // POST /reservas/salas/disponibles
-const getSalasDisponibles = async (accessToken, requestedReservaData) => {
+export const getSalasDisponibles = async (requestedReservaData) => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reservas/salas/disponibles";
 
   const body = {
-    fecha: requestedReservaData.fecha.toISOString(),
+    fecha: requestedReservaData.fecha,
     ci_reservante: requestedReservaData.ci_reservante,
     lista_participantes: requestedReservaData.lista_participantes
   };
@@ -205,8 +207,8 @@ const getSalasDisponibles = async (accessToken, requestedReservaData) => {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else {
       const errorData = await response.json();
-      console.error(`Error ${response.status}:`, errorData.message);
-      throw new Error(`Error al obtener salas disponibles: ${errorData.message}`);
+      console.error(`Error ${response.status}:`, errorData.error);
+      throw new Error(`${errorData.error}`);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);

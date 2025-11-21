@@ -74,6 +74,6 @@ def obtener_sancionado(ci):
                 SELECT *
                 FROM sancion_participante
                 WHERE ci_participante = %s
-                AND fecha_fin > CURDATE()
+                AND fecha_fin >= CURDATE()
             ''', (ci,))
             return cursor.fetchone()
