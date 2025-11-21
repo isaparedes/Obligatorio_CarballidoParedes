@@ -103,6 +103,7 @@ CREATE TABLE sancion_participante (
 
 Datos agregados:
 INSERT INTO login (correo, contrasena) VALUES
+('admin@ucu.edu.uy', 'claveadmin123'),
 ('ana@ucu.edu.uy', 'claveAna123'),
 ('juan@ucu.edu.uy', 'claveJuan456'),
 ('maria@ucu.edu.uy', 'claveMaria789'),
