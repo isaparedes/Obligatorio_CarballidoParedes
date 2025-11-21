@@ -22,7 +22,7 @@ export default function Login() {
     try {
       const data = await handleLogin(correo, contrasena);
       login(data.user, data.token); 
-      setSesion("Bienvenido");
+      setSesion("Bienvenido/a");
       await delay(2000)
       navigate("/reserva/form")
     } catch (err) {
@@ -38,21 +38,21 @@ export default function Login() {
       {sesion && <p>{sesion}</p>}
       <form className="datos" onSubmit={handleSubmit}> 
         <p className="titulo">
-          Email
           <input
             type="text"
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}
+            placeholder='email'
             required
           />
         </p>
 
         <p className="titulo">
-          Contraseña
           <input
             type="password"
             value={contrasena}
             onChange={(e) => setContrasena(e.target.value)}
+            placeholder='contraseña'
             required
           />
         </p>

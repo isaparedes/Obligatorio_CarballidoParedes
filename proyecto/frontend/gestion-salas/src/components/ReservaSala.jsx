@@ -32,9 +32,10 @@ export default function ReservaSala({ fecha, ci_reservante, participantes, salas
                 id_turno: turno.id_turno,
                 participantes: todos
             } 
-    
             const reserva = await createReserva(datos);
             setReserva(reserva);
+            await delay(2000)
+            // ver que hacemos
         }
         catch (e) {
             console.log('Error al reservar')
@@ -47,9 +48,9 @@ export default function ReservaSala({ fecha, ci_reservante, participantes, salas
             <>
                 <h2>Elija una sala disponible</h2>
                 {salas_disponibles && salas_disponibles.length > 0 ? (
-                <div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                     {salas_disponibles.map((s, i) => (
-                    <button key={i} onClick={() => handleObtenerTurnos(s)}>
+                    <button key={i} style={{ width: 250 }} onClick={() => handleObtenerTurnos(s)}>
                         <strong>{s.nombre_sala} — {s.edificio}</strong> (Capacidad: {s.capacidad})
                     </button>
                     ))}

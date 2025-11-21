@@ -33,7 +33,8 @@ export const getParticipantes = async () => {
 };
 
 // GET /participantes/:ci
-export const getParticipante = async (accessToken, ci) => {
+export const getParticipante = async (ci) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/participantes/${ci}`;
   try {
     const response = await fetch(url, {
@@ -85,7 +86,8 @@ export const getParticipantePorEmail = async (email) => {
 
 
 // POST /participantes
-const createParticipante = async (accessToken, newParticipanteData) => {
+const createParticipante = async (newParticipanteData) => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/participantes";
 
   const body = {
@@ -123,7 +125,8 @@ const createParticipante = async (accessToken, newParticipanteData) => {
 };
 
 // PUT /participantes/:ci
-const editParticipante = async (accessToken, ci, changedParticipanteData) => {
+const editParticipante = async (ci, changedParticipanteData) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/participantes/${ci}`;
 
   const body = {
@@ -160,7 +163,8 @@ const editParticipante = async (accessToken, ci, changedParticipanteData) => {
 };
 
 // DELETE /participantes/:ci
-const deleteParticipante = async (accessToken, ci) => {
+const deleteParticipante = async (ci) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/participantes/${ci}`;
 
   try {

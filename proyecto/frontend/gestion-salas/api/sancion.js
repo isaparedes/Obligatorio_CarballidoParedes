@@ -1,7 +1,6 @@
-const accessToken = localStorage.getItem("token");
-
 // GET /sanciones
-const getSanciones = async (accessToken) => {
+const getSanciones = async () => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/sanciones";
   try {
     const response = await fetch(url, {
@@ -34,7 +33,8 @@ const getSanciones = async (accessToken) => {
 };
 
 // GET /sanciones/:ci_participante
-const getSancionesPorCI = async (accessToken, ci_participante) => {
+const getSancionesPorCI = async (ci_participante) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/sanciones/${ci_participante}`;
   try {
     const response = await fetch(url, {
@@ -67,7 +67,8 @@ const getSancionesPorCI = async (accessToken, ci_participante) => {
 };
 
 // POST /sanciones
-const createSancion = async (accessToken, newSancionData) => {
+const createSancion = async (newSancionData) => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/sanciones";
 
   const body = {
@@ -103,7 +104,8 @@ const createSancion = async (accessToken, newSancionData) => {
 };
 
 // DELETE /sanciones/:ci_participante/:fecha_inicio/:fecha_fin
-const deleteParticipante = async (accessToken, ci_participante, fecha_inicio, fecha_fin) => {
+const deleteParticipante = async (ci_participante, fecha_inicio, fecha_fin) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/sanciones/${ci_participante}/${fecha_inicio}/${fecha_fin}`;
 
   try {

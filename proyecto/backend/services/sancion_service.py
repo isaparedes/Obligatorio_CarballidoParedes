@@ -42,7 +42,7 @@ def service_crear_sancion(data):
 
     return nueva, None, 201
 
-# No se puede actualizar porque los 3 atributos son la PRIMARY KEY
+# No se puede actualizar porque los 3 atributos son la PRIMARY KEY preguntar esto
 
 # Eliminar sanción 
 def service_eliminar_sancion(ci_participante, fecha_inicio, fecha_fin):

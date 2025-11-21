@@ -1,5 +1,6 @@
 // GET /salas
-const getSalas = async (accessToken) => {
+const getSalas = async () => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/salas";
   try {
     const response = await fetch(url, {
@@ -32,7 +33,8 @@ const getSalas = async (accessToken) => {
 };
 
 // GET /salas/:nombre_sala/:edificio
-const getSala = async (accessToken, nombre_sala, edificio) => {
+const getSala = async (nombre_sala, edificio) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
   try {
     const response = await fetch(url, {
@@ -65,7 +67,8 @@ const getSala = async (accessToken, nombre_sala, edificio) => {
 };
 
 // POST /salas
-const createSala = async (accessToken, newSalaData) => {
+const createSala = async (newSalaData) => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/salas";
 
   const body = {
@@ -103,7 +106,8 @@ const createSala = async (accessToken, newSalaData) => {
 };
 
 // PUT /salas/:nombre_sala/:edificio
-const editSala = async (accessToken, nombre_sala, edificio, changedSalaData) => {
+const editSala = async (nombre_sala, edificio, changedSalaData) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
 
   const body = {
@@ -139,7 +143,8 @@ const editSala = async (accessToken, nombre_sala, edificio, changedSalaData) => 
 };
 
 // DELETE /salas/:nombre_sala/:edificio
-const deleteSala = async (accessToken, nombre_sala, edificio) => {
+const deleteSala = async (nombre_sala, edificio) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/salas/${nombre_sala}/${edificio}`;
 
   try {

@@ -1,5 +1,6 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
 
+import TitleManager from './components/TitleManager';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -11,8 +12,12 @@ import Metrica from './components/Metrica';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
+
+
+
   return (
     <BrowserRouter>
+      <TitleManager/>
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />

@@ -17,7 +17,6 @@ export default function Reserva() {
 
   const [reserva, setReserva] = useState(false)
 
-  // Cargar usuario y lista de participantes
   useEffect(() => {
     const email = localStorage.getItem("user");
 
@@ -35,7 +34,6 @@ export default function Reserva() {
       .catch((error) => console.error("Error obteniendo participantes:", error));
   }, []);
 
-  // Quitar al usuario logueado cuando ya exista en ambos
   useEffect(() => {
     if (!ciReservante || participantesDisponibles.length === 0) return;
 
@@ -124,13 +122,14 @@ export default function Reserva() {
               </div>
             ))}
 
+            {/*
             {salasDisp &&
               salasDisp.map((s, i) => (
                 <p key={i}>
                   Sala: {s.nombre_sala} de {s.edificio}. Capacidad: {s.capacidad}
                 </p>
               ))}
-
+            */}
             <button type="submit">Enviar</button>
           </form>
         </div>

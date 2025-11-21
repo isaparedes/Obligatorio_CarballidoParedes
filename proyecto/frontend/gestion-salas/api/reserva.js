@@ -1,7 +1,6 @@
-const accessToken = localStorage.getItem("token");
-
 // GET /reservas
-const getReservas = async (accessToken) => {
+const getReservas = async () => {
+  const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reservas";
   try {
     const response = await fetch(url, {
@@ -34,7 +33,8 @@ const getReservas = async (accessToken) => {
 };
 
 // GET /reservas/:id
-const getReserva = async (accessToken, id) => {
+const getReserva = async (id) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/reservas/${id}`;
   try {
     const response = await fetch(url, {
@@ -107,7 +107,8 @@ export const createReserva = async (newReservaData) => {
 };
 
 // PUT /reservas/:id
-const editReserva = async (accessToken, id, changedReservaData) => {
+const editReserva = async (id, changedReservaData) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/reservas/${id}`;
 
   const body = {
@@ -144,7 +145,8 @@ const editReserva = async (accessToken, id, changedReservaData) => {
 };
 
 // DELETE /reservas/:id
-const deleteReserva = async (accessToken, id) => {
+const deleteReserva = async (id) => {
+  const accessToken = localStorage.getItem("token");
   const url = `http://localhost:5000/reservas/${id}`;
 
   try {

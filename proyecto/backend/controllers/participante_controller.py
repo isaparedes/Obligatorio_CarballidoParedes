@@ -40,9 +40,6 @@ def get_participante_por_email():
 
     return jsonify(participante)
 
-
-
-
 # POST /participantes
 @participante_bp.post("/")
 @require_auth

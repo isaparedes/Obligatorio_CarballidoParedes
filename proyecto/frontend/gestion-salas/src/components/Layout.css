@@ -1,17 +1,17 @@
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;       /* ocupa toda la pantalla */
-  overflow: hidden;    /* evita scroll global innecesario */
+  height: 100vh;      
+  overflow: hidden;   
 }
 
 .barraBienvenida {
-  flex-shrink: 0;      /* altura fija */
+  flex-shrink: 0;     
 }
 
 .contenido {
-  flex: 1;             /* ocupa el resto del espacio */
-  overflow-y: auto;    /* scroll solo si el contenido excede */
+  flex: 1;            
+  overflow-y: auto;  
   margin: 0;
   padding: 0;
 }
