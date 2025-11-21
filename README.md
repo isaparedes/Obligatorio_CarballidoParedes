@@ -28,7 +28,7 @@
 
 ### Frontend: 
 - Ir a ruta: cd frontend
-- Ir a ruta: cd gestion_salas
+- Ir a ruta: cd gestion-salas
 - Instalar dependencias: npm i
 - Correr proyecto: npm run dev
 
