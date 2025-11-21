@@ -2,7 +2,9 @@
 ## Vanesa Carballido e Isabela Paredes
 
 ## Instructivo:
-
+mail admin@ucu.edu.uy
+contra: vanisa123
+cedula 000000000
 ### Proyecto:
 - docker-compose up?? Ver esto
 
