@@ -3,9 +3,9 @@
 ## Tareas:
 - Informe:
     - [ ] Fundamentación de decisiones de implementación
-    - [ ] Mejoras implementadas o consideradas en el modelo de datos
-    - [ ] Bitácora del trabajo realizado
-    - [ ] Bibliografía
+    - [X] Mejoras implementadas o consideradas en el modelo de datos
+    - [X] Bitácora del trabajo realizado
+    - [X] Bibliografía
 
 - Otro:
     - [X] Uso de repositorio GitHub
@@ -31,13 +31,13 @@
     - [X] Prueba: funcionamiento esperado de todos los endpoints
 
 - Frontend:
-    - [ ] Pestaña inicial con formulario de login/sign up
-    - [ ] Pestaña con formulario de reservas
+    - [X] Pestaña inicial con formulario de login/sign up
+    - [X] Pestaña con formulario de reservas
     - [ ] (acceso restringido) Pestaña con métrica BI
     - [ ] (acceso restringido) Pestaña con ABM de salas
     - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
     - [ ] (acceso restringido) Pestaña con ABM de sanciones
     - [X] Endpoints necesarios para el funcionamiento del front
-    - [ ] Validación de campos
+    - [X] Validación de campos
 
 
