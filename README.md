@@ -16,7 +16,7 @@
     - source venv/bin/activate (Linux/macOS)
 - Instalar dependencias: pip install -r requirements.txt
 - Crear archivo .env en la carpeta backend con este contenido:
-    SECRET_KEY=secret_key # Ver esto!!
+    SECRET_KEY="secret_key"
     DB_HOST=127.0.0.1
     DB_PORT=3307
     DB_USER=root
