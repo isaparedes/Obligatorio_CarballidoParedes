@@ -1,6 +1,6 @@
 from database.db import get_connection
 
-# Salas más reservadas AGREGAR EDIFICIO
+# Salas más reservadas 
 def obtener_salas_mas_reservadas():
     conn = get_connection()
     with conn:
