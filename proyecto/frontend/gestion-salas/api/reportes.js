@@ -1,5 +1,5 @@
 // GET /reportes/salas_mas_reservadas
-const getSalasMasReservadas = async () => {
+export const getSalasMasReservadas = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/salas_mas_reservadas";
   try {
@@ -33,7 +33,7 @@ const getSalasMasReservadas = async () => {
 };
 
 // GET /reportes/reservas_por_carrera_facultad
-const getReservasPorCarreraFacultad = async () => {
+export const getReservasPorCarreraFacultad = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/reservas_por_carrera_facultad";
   try {
@@ -67,7 +67,7 @@ const getReservasPorCarreraFacultad = async () => {
 };
 
 // GET /reportes/reservas_asistencias_por_participante
-const getAsistenciasPorParticipante = async () => {
+export const getAsistenciasPorParticipante = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/reservas_asistencias_por_participante";
   try {
@@ -101,7 +101,7 @@ const getAsistenciasPorParticipante = async () => {
 };
 
 // GET /reportes/promedio_participantes_por_sala
-const getPromedioParticipantesPorSala = async () => {
+export const getPromedioParticipantesPorSala = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/promedio_participantes_por_sala";
   try {
@@ -135,7 +135,7 @@ const getPromedioParticipantesPorSala = async () => {
 };
 
 // GET /reportes/porcentaje_ocupacion_salas_por_edificio
-const getPorcentajeOcupacionSalasPorEdificio = async () => {
+export const getPorcentajeOcupacionSalasPorEdificio = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/porcentaje_ocupacion_salas_por_edificio";
   try {
@@ -169,7 +169,7 @@ const getPorcentajeOcupacionSalasPorEdificio = async () => {
 };
 
 // GET /reportes/sanciones_por_participante
-const getSancionesPorParticipante = async () => {
+export const getSancionesPorParticipante = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/sanciones_por_participante";
   try {
@@ -203,7 +203,7 @@ const getSancionesPorParticipante = async () => {
 };
 
 // GET /reportes/turnos_mas_demandados
-const getTurnosMasDemandados = async () => {
+export const getTurnosMasDemandados = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/turnos_mas_demandados";
   try {
@@ -237,7 +237,7 @@ const getTurnosMasDemandados = async () => {
 };
 
 // GET /reportes/tres_dias_mas_demandados
-const getTresDiasMasDemandados = async () => {
+export const getTresDiasMasDemandados = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/tres_dias_mas_demandados";
   try {
@@ -271,7 +271,7 @@ const getTresDiasMasDemandados = async () => {
 };
 
 // GET /reportes/cinco_personas_con_mas_inasistencias
-const getCincoPersonasConMasInasistencias = async () => {
+export const getCincoPersonasConMasInasistencias = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/cinco_personas_con_mas_inasistencias";
   try {
@@ -305,7 +305,7 @@ const getCincoPersonasConMasInasistencias = async () => {
 };
 
 // GET /reportes/edificio_mayor_cantidad_reservas
-const getEdificioConMasReservas = async () => {
+export const getEdificioConMasReservas = async () => {
   const accessToken = localStorage.getItem("token");
   const url = "http://localhost:5000/reportes/edificio_mayor_cantidad_reservas";
   try {

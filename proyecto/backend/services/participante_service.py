@@ -2,6 +2,7 @@ from dao.participante_dao import (
     obtener_participantes, 
     obtener_participante, 
     obtener_participante_por_email,
+    obtener_rol_programa,
     insertar_participante, 
     insertar_participante_programa,
     actualizar_participante, 
@@ -19,6 +20,10 @@ def service_obtener_participante(ci):
 # Obtener por email
 def service_obtener_participante_por_email(email):
     return obtener_participante_por_email(email)
+
+# Obtener rol y programa por CI
+def service_obtener_rol_programa(ci):
+    return obtener_rol_programa(ci)
 
 # Crear participante
 def service_crear_participante(data):

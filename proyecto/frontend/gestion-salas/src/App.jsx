@@ -6,14 +6,11 @@ import Home from './components/Home';
 import Login from './components/Login';
 import SignUp from './components/Signup';
 import Reserva from './components/Reserva';
-import ReservaSala from './components/ReservaSala';
 import Admin from './components/Admin';
 import Metrica from './components/Metrica';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
-
-
 
   return (
     <BrowserRouter>
@@ -24,13 +21,13 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/reserva/form" element={<Reserva />} />
-          <Route path="/adminABM" element={
+          <Route path="/admin" element={
             <ProtectedRoute rol="admin">
               <Admin />
             </ProtectedRoute>
           } />
 
-          <Route path="/metricaBI" element={
+          <Route path="/metrica" element={
             <ProtectedRoute rol="admin">
               <Metrica />
             </ProtectedRoute>

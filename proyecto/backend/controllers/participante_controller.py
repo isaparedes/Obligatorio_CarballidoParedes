@@ -4,6 +4,7 @@ from services.participante_service import (
     service_obtener_participantes, 
     service_obtener_participante, 
     service_obtener_participante_por_email,
+    service_obtener_rol_programa,
     service_crear_participante,
     service_actualizar_participante, 
     service_eliminar_participante
@@ -39,6 +40,16 @@ def get_participante_por_email():
         return jsonify({"error": "Participante no encontrado"}), 404
 
     return jsonify(participante)
+
+# GET /participantes/rol-programa/<ci>
+@participante_bp.get("/rol-programa/<string:ci>")
+@require_auth
+def get_rol_participante(ci):
+    rol_participante = service_obtener_rol_programa(ci)
+    if not rol_participante:
+        return jsonify({"error": "Rol no encontrado"}), 404
+    return jsonify(rol_participante)
+
 
 # POST /participantes
 @participante_bp.post("/")
