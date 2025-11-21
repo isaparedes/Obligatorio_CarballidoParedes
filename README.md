@@ -1,6 +1,5 @@
 # Obligatorio Base de Datos I
-## Vanesa Carballido e Isabela Paredes
-
+### Vanesa Carballido e Isabela Paredes
 
 ## Instructivo para correr la aplicación de forma local:
   
@@ -41,9 +40,9 @@
       
         DB_NAME=gestion_salas
   
-  - Correr backend:
+- Correr backend:
     
-            python app.py   
+      python app.py   
 
    
 ## ✨ Inicializar frontend:
@@ -51,7 +50,7 @@
 
       cd frontend
   
-  - Ir a la ruta gestion-salas:
+- Ir a la ruta gestion-salas:
 
         cd gestion-salas
     
