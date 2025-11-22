@@ -89,7 +89,7 @@ def editar_reserva(id_reserva):
         return jsonify({"error": "id_turno debe ser entero"}), 400
 
     if "estado" in data:
-        if data["estado"] not in ["activa", "finalizada", "cancelada"]:
+        if data["estado"] not in ["activa", "finalizada", "sin_asistencia", "cancelada"]:
             return jsonify({"error": "Estado inválido"}), 400
 
     actualizado, error, status = service_actualizar_reserva(id_reserva, data)
@@ -103,13 +103,12 @@ def editar_reserva(id_reserva):
 @reserva_bp.delete("/<int:id_reserva>")
 @require_auth
 def borrar_reserva(id_reserva):
-
     borrado, error, status = service_eliminar_reserva(id_reserva)
 
     if error:
         return jsonify({"error": error}), status
 
-    return jsonify(borrado), status
+    return "", 204
 
 # POST /reservas/salas/disponibles
 @reserva_bp.post("/salas/disponibles")

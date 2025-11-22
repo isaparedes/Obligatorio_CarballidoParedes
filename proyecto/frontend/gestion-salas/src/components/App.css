@@ -121,7 +121,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
-  margin: 5px
+  margin: 5px;
 }
 
 button:hover {
@@ -165,7 +165,7 @@ button:hover {
 }
 
 .list-box {
-  border: 5px solid rgba(5, 5, 71);
+  border: 5px solid rgb(211, 254, 213);
   border-radius: 12px;
   padding: 20px;
   width: 720px;
@@ -206,4 +206,76 @@ button:hover {
   padding: 7px 12px;
   font-size: 13px;
   font-weight: 600;
+}
+
+.navbar {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  background-color: #f5f5f5;
+  padding: 0.8rem;
+  border-radius: 8px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background-color: #e0e0e0;
+}
+
+.nav-button {
+  background-color: rgba(5, 5, 71);
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;   /* 👈 menos padding */
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  width: auto;              /* 👈 no se expande */
+  display: inline-block;    /* 👈 se ajusta al contenido */
+}
+
+.nav-button:hover {
+  background-color: rgb(211, 254, 213);
+}
+
+.metrica-card {
+  width: 90%;
+  max-width: 900px;
+  background: white;
+  border: 2px solid rgb(211, 254, 213); 
+  border-radius: 12px;
+  padding: 20px 25px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.metrica-card h2 {
+  color: rgb(5, 5, 71); 
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.metrica-card ul {
+  list-style: none;
+  padding-left: 0;
+  text-align: center;
+}
+
+.metrica-card li, .li {
+  padding: 10px 12px;
+  margin: 6px 0;
+  border-left: 4px solid rgb(211, 254, 213); 
+  background: #f9f9f9;
+  border-radius: 8px;
+  color: rgb(5, 5, 71);
+  font-size: 15px;
+  text-align: center;
 }

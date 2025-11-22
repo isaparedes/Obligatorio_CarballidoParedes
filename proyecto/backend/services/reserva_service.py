@@ -1,4 +1,5 @@
 import datetime
+from database.db import get_connection
 
 from dao.reserva_dao import (
     obtener_reservas,
@@ -9,8 +10,7 @@ from dao.reserva_dao import (
     insertar_reserva,
     actualizar_reserva,
     eliminar_reserva,
-    insertar_reserva_participante,
-    eliminar_reserva_participantes
+    insertar_reserva_participante
 )
 
 from dao.participante_dao import (
@@ -57,11 +57,27 @@ def service_crear_reserva(data):
 
 # Actualizar reserva
 def service_actualizar_reserva(id_reserva, data):
-
     if not obtener_reserva(id_reserva):
         return None, "Reserva no encontrada", 404
-
+    
     actualizado = actualizar_reserva(id_reserva, data)
+
+    if "estado" in data:
+        conn = get_connection()
+        with conn:
+            with conn.cursor() as cursor:
+                if data["estado"] == "finalizada":
+                    cursor.execute(
+                        "UPDATE reserva_participante SET asistencia=TRUE WHERE id_reserva=%s",
+                        (id_reserva,)
+                    )
+                elif data["estado"] == "sin_asistencia":
+                    cursor.execute(
+                        "UPDATE reserva_participante SET asistencia=FALSE WHERE id_reserva=%s",
+                        (id_reserva,)
+                    )
+                conn.commit()
+
     return actualizado, None, 200
 
 # Eliminar reserva
@@ -70,7 +86,6 @@ def service_eliminar_reserva(id_reserva):
     if not obtener_reserva(id_reserva):
         return None, "Reserva no encontrada", 404
 
-    eliminar_reserva_participantes(id_reserva)
     eliminar_reserva(id_reserva)
 
     return {"deleted": id_reserva}, None, 200

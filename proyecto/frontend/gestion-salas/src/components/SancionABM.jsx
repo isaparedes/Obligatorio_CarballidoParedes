@@ -85,7 +85,7 @@ export default function SancionABM({ sanciones }) {
   return !modoEdicion ? (
     <div className="list-box">
       <h2>Sanciones</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <ul className="no-padding">
         {sancionesState
           .filter((s) => s.ci_participante !== "000000000")
@@ -122,7 +122,7 @@ export default function SancionABM({ sanciones }) {
   ) : (
     <div className="list-box">
       <h2>Agregar Sanción</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <form onSubmit={handleAddSancion}>
         <div className="form-group">
           <label htmlFor="ci_participante">CI Participante</label>

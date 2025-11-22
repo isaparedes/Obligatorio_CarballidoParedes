@@ -77,7 +77,7 @@ export default function Reserva() {
     <div className="inicio">
       {!reserva ? (
         <div id="formulario">
-          {error && <p className="error">{error}</p>}
+          {error && <p style={{fontSize: 15}}>{error}</p>}
 
           <h1>Reserva de Sala de Estudio</h1>
           {nombreUsuario && <p>Hola, {nombreUsuario}</p>}
@@ -131,6 +131,7 @@ export default function Reserva() {
           ci_reservante={ciReservante}
           participantes={participantesSeleccionados}
           salas_disponibles={salasDisp} 
+          setReserva={setReserva}
         />
       )}
     </div>

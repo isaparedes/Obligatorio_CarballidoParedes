@@ -39,8 +39,8 @@ export default function Login() {
     <div className="inicio">
       <h1>Iniciar sesión</h1>
 
-      {error && <p className="error">{error}</p>}
-      {sesion && <p>{sesion}</p>}
+      {error && <p style={{fontSize: 15}}>{error}</p>}
+      {sesion && <p style={{fontSize: 15}}>{sesion}</p>}
       <form className="datos" onSubmit={handleSubmit}> 
         <p className="titulo">
           <input
@@ -62,7 +62,9 @@ export default function Login() {
           />
         </p>
 
-        <button type="submit">Ingresar</button>
+        <div className="inicio">
+          <button type="submit" className="login-button">Ingresar</button>
+        </div>
       </form>
     </div>
   );

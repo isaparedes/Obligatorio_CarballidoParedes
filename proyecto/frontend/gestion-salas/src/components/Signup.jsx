@@ -70,8 +70,8 @@ export default function SignUp() {
     <div className='inicio'>
       <h1>Ingrese sus datos:</h1>
 
-      {error && <p className="error">{error}</p>}
-      {registro && <p>{registro}</p>}
+      {error && <p style={{fontSize: 15}}>{error}</p>}
+      {registro && <p style={{fontSize: 15}}>{registro}</p>}
       <form className="datos" onSubmit={handleSubmit}>
         <p className="titulo">Nombre
           <input type="text" value={nombre} placeholder="Ej: Ana" onChange={(e) => setNombre(e.target.value)} required />
@@ -107,7 +107,9 @@ export default function SignUp() {
           </select>
         </p>
 
-        <button type="submit">Registrarse</button>
+        <div className='inicio'>
+          <button type="submit">Registrarse</button>
+        </div>
       </form>
     </div>
   );

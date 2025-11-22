@@ -69,6 +69,7 @@ def crear_participante():
             "faltantes": faltantes
         }), 400
 
+    # Validaciones básicas
     if not isinstance(data["ci"], str) or len(data["ci"]) < 8:
         return jsonify({"error": "Cédula inválida (string, mín. 8 caracteres)"}), 400
 
@@ -78,16 +79,28 @@ def crear_participante():
     if not isinstance(data["apellido"], str) or len(data["apellido"]) < 1:
         return jsonify({"error": "Apellido inválido"}), 400
 
-    if (not isinstance(data["email"], str) or 
-        ("@ucu.edu.uy" not in data["email"] and "@correo.ucu.edu.uy" not in data["email"])):
+    if not isinstance(data["email"], str):
+        return jsonify({"error": "Email inválido"}), 400
+
+    # Validar que el email tenga alguno de los dominios permitidos
+    if not (data["email"].endswith("@ucu.edu.uy") or data["email"].endswith("@correo.ucu.edu.uy")):
         return jsonify({"error": "Email inválido: debe contener @ucu.edu.uy o @correo.ucu.edu.uy"}), 400
 
+    # Validar rol
     if data["rol"] not in ["alumno", "docente"]:
         return jsonify({"error": "Rol inválido: debe ser 'alumno' o 'docente'"}), 400
+
+    # Validar combinación rol-email
+    if data["rol"] == "alumno" and data["email"].endswith("@ucu.edu.uy"):
+        return jsonify({"error": "Un alumno no puede tener email @ucu.edu.uy"}), 400
+
+    if data["rol"] == "docente" and data["email"].endswith("@correo.ucu.edu.uy"):
+        return jsonify({"error": "Un docente no puede tener email @correo.ucu.edu.uy"}), 400
 
     if not isinstance(data["nombre_programa"], str) or len(data["nombre_programa"]) < 1:
         return jsonify({"error": "Programa académico inválido"}), 400
 
+    # Crear participante y programa
     participante, error1, status1 = service_crear_participante(data)
     if error1:
         return jsonify({"error": error1}), status1
@@ -100,9 +113,7 @@ def crear_participante():
         "participante": participante,
         "programa": programa
     }
-
     return jsonify(nuevo), 201
-
 
 # PUT /participantes/<ci>
 @participante_bp.put("/<string:ci>")
@@ -137,13 +148,12 @@ def editar_participante(ci):
     return jsonify(actualizado), status
 
 # DELETE /participantes/<ci>
-@participante_bp.delete("/<string:ci>")
+@participante_bp.delete("/<ci>")
 @require_auth
 def borrar_participante(ci):
-
     borrado, error, status = service_eliminar_participante(ci)
 
     if error:
         return jsonify({"error": error}), status
 
-    return jsonify(borrado), status
+    return "", 204

@@ -31,7 +31,6 @@ def servicio_registrar_sesion(data):
     
     if obtener_participante(ci):
         return None, "Dicha cédula ya está registrada", 409
-        
 
     hashed = hash_password(contrasena)
 
@@ -39,15 +38,19 @@ def servicio_registrar_sesion(data):
     try:
         with conn:
             with conn.cursor() as cursor:
-                usuario = crear_usuario(correo, hashed, cursor)
+                # 👇 primero participante
                 participante = insertar_participante(ci, nombre, apellido, correo, cursor)
+
+                # 👇 luego login
+                usuario = crear_usuario(correo, hashed, cursor)
+
+                # 👇 finalmente programa académico
                 participante_programa = insertar_participante_programa(ci, nombre_programa, rol, cursor)
 
         return usuario, None, 201
 
     except Exception as e:
         return None, f"Error al registrar sesión: {str(e)}", 500
-
 
 def servicio_iniciar_sesion(data):
     correo = data.get("correo")

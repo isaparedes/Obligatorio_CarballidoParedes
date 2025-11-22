@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { createReserva } from '../../api/reserva';
 
 
-export default function ReservaSala({ fecha, ci_reservante, participantes, salas_disponibles }) {
+export default function ReservaSala({ fecha, ci_reservante, participantes, salas_disponibles, setReserva }) {
 
     const [sala, setSala] = useState("");
     const [turnos, setTurnos] = useState(null);
-    const [reserva, setReserva] = useState(null);
+
+    const [mensaje, setMensaje] = useState("")
 
     const handleObtenerTurnos = async (sala) => {
         try {
@@ -33,17 +34,21 @@ export default function ReservaSala({ fecha, ci_reservante, participantes, salas
                 participantes: todos
             } 
             const reserva = await createReserva(datos);
-            setReserva(reserva);
+            setMensaje("Reserva creada correctamente")
             await delay(2000)
+            setMensaje("");
+            setReserva(false);
             // ver que hacemos
         }
         catch (e) {
+            setMensaje("Error al reservar")
             console.log('Error al reservar')
         }
     }
 
     return (
         <div>
+            {mensaje != "" && <p style={{fontSize: 15}}>{mensaje}</p>}
             {!turnos ? (
             <>
                 <h2>Elija una sala disponible</h2>

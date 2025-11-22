@@ -31,8 +31,7 @@ def obtener_participante_por_email(email):
                 WHERE TRIM(email) = %s
             """, (email,))
             return cursor.fetchone()  
-
-
+        
 # Insertar participante
 def insertar_participante(ci, nombre, apellido, email, cursor):
     cursor.execute("""

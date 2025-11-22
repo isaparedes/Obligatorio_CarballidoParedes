@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getEdificios } from "../../api/edificio";
-import { createSala, deleteSala, editSala } from "../../api/sala";
+import { getSalas, createSala, deleteSala, editSala } from "../../api/sala";
 
 export default function SalaABM({ salas }) {
   const [mensaje, setMensaje] = useState("");
@@ -19,6 +19,16 @@ export default function SalaABM({ salas }) {
   useEffect(() => {
     setSalasState(salas);
   }, [salas]);
+
+  // refrescar salas desde BD
+  const refreshSalas = async () => {
+    try {
+      const salasObtenidas = await getSalas();
+      setSalasState(salasObtenidas);
+    } catch (e) {
+      console.error("Error refrescando salas", e);
+    }
+  };
 
   // obtener edificios
   useEffect(() => {
@@ -66,9 +76,9 @@ export default function SalaABM({ salas }) {
         ...formData,
         capacidad: parseInt(formData.capacidad, 10),
       };
-      const salaCreada = await createSala(dataConCapacidadNumerica);
+      await createSala(dataConCapacidadNumerica);
       setMensaje("Sala creada");
-      setSalasState((prev) => [...prev, salaCreada]);
+      await refreshSalas(); // 👈 refrescar lista
       resetForm();
     } catch (e) {
       setMensaje("Error al crear la sala. Ya existe una sala con dichas credenciales.");
@@ -83,15 +93,9 @@ export default function SalaABM({ salas }) {
         capacidad: parseInt(formData.capacidad, 10),
         tipo_sala: formData.tipo_sala,
       };
-      const salaEditada = await editSala(formData.nombre_sala, formData.edificio, dataConCapacidadNumerica);
+      await editSala(formData.nombre_sala, formData.edificio, dataConCapacidadNumerica);
       setMensaje("Sala editada correctamente");
-      setSalasState((prev) =>
-        prev.map((s) =>
-          s.nombre_sala === formData.nombre_sala && s.edificio === formData.edificio
-            ? { ...s, ...salaEditada }
-            : s
-        )
-      );
+      await refreshSalas(); // 👈 refrescar lista
       resetForm();
     } catch (e) {
       setMensaje("Error al editar la sala");
@@ -102,11 +106,9 @@ export default function SalaABM({ salas }) {
   const handleDeleteSala = async (nombre_sala, edificio) => {
     try {
       const statusCode = await deleteSala(nombre_sala, edificio);
-      if (statusCode === 204) {
+      if (statusCode === 204 || statusCode === 200) {
         setMensaje(`${nombre_sala} del ${edificio} eliminada correctamente.`);
-        setSalasState((prev) =>
-          prev.filter((s) => !(s.nombre_sala === nombre_sala && s.edificio === edificio))
-        );
+        await refreshSalas(); // 👈 refrescar lista
       }
     } catch (e) {
       setMensaje(`Error al eliminar la ${nombre_sala} del ${edificio}. Tiene reservas asociadas.`);
@@ -128,7 +130,7 @@ export default function SalaABM({ salas }) {
   return !modoEdicion ? (
     <div className="list-box">
       <h2>Salas</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <ul className="no-padding">
         {salasState.map((s, i) => (
           <div key={i} className="item-container">
@@ -161,7 +163,7 @@ export default function SalaABM({ salas }) {
   ) : (
     <div className="list-box">
       <h2>{salaEditando ? "Editar Sala" : "Agregar Sala"}</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <form onSubmit={salaEditando ? handleEditSala : handleAddSala}>
         <div className="form-group">
           <label htmlFor="nombre_sala">Nombre de la Sala</label>
@@ -172,7 +174,7 @@ export default function SalaABM({ salas }) {
             value={formData.nombre_sala}
             onChange={handleInputChange}
             required
-            disabled={!!salaEditando} // nombre no editable
+            disabled={!!salaEditando}
           />
         </div>
         <div className="form-group">
@@ -208,7 +210,7 @@ export default function SalaABM({ salas }) {
             value={formData.edificio}
             onChange={handleInputChange}
             required
-            disabled={!!salaEditando} // edificio no editable
+            disabled={!!salaEditando}
           >
             <option value="">Seleccione un Edificio</option>
             {edificios.map((edificio, i) => (

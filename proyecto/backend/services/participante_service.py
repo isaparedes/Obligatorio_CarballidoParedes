@@ -29,7 +29,6 @@ def service_obtener_rol_programa(ci):
     return obtener_rol_programa(ci)
 
 # Crear participante
-
 def service_crear_participante(data):
     if obtener_participante(data["ci"]):
         return None, "Ya existe un usuario con dicha cédula", 409

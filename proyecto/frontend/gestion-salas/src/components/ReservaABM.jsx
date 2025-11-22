@@ -194,8 +194,8 @@ export default function ReservasABM() {
           </div>
         ))}
       </ul>
-      {mensaje && <p>{mensaje}</p>}
-      {error && <p className="error">{error}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
+      {error && <p style={{fontSize: 15}}>{error}</p>}
       {/* Alta de reserva */}
       {!reservaEditando && (
         <>
@@ -261,6 +261,7 @@ export default function ReservasABM() {
           >
             <option value="activa">Activa</option>
             <option value="cancelada">Cancelada</option>
+            <option value="sin_asistencia">Sin asistencia</option>
             <option value="finalizada">Finalizada</option>
           </select>
           <button type="submit">Guardar cambios</button>

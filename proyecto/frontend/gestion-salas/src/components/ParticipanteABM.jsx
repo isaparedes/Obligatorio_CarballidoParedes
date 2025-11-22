@@ -3,6 +3,7 @@ import {
   createParticipante,
   editParticipante,
   deleteParticipante,
+  getParticipantes,   // 👈 importar también el getParticipantes
 } from "../../api/participante";
 import { getProgramas } from "../../api/programa";
 
@@ -18,8 +19,8 @@ export default function ParticipanteABM({ participantes }) {
     nombre: "",
     apellido: "",
     email: "",
-    rol: "alumno", // default
-    nombre_programa: "", // default vacío
+    rol: "alumno",
+    nombre_programa: "",
   });
 
   // sincronizar con el padre
@@ -30,21 +31,24 @@ export default function ParticipanteABM({ participantes }) {
   // cargar programas académicos
   useEffect(() => {
     getProgramas()
-      .then((programas_academicos) => {
-        setProgramas(programas_academicos);
-      })
-      .catch((err) => {
-        console.error("Error al cargar programas académicos:", err);
-      });
+      .then((programas_academicos) => setProgramas(programas_academicos))
+      .catch((err) => console.error("Error al cargar programas académicos:", err));
   }, []);
+
+  // refrescar participantes desde BD
+  const refreshParticipantes = async () => {
+    try {
+      const participantesObtenidos = await getParticipantes();
+      setParticipantesState(participantesObtenidos);
+    } catch (e) {
+      console.error("Error refrescando participantes", e);
+    }
+  };
 
   // manejar inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   // reset form
@@ -65,24 +69,23 @@ export default function ParticipanteABM({ participantes }) {
   const handleAddParticipante = async (e) => {
     e.preventDefault();
     try {
-      const participanteCreado = await createParticipante(formData);
+      await createParticipante(formData);
       setMensaje("Participante creado exitosamente");
-      setParticipantesState((prev) => [...prev, participanteCreado]);
+      await refreshParticipantes();
       resetForm();
     } catch (e) {
-      setMensaje("Error al crear el participante");
+      setMensaje(e.message || "Error al crear el participante");
     }
   };
+
 
   // editar participante
   const handleEditParticipante = async (e) => {
     e.preventDefault();
     try {
-      const participanteEditado = await editParticipante(formData.ci, formData);
+      await editParticipante(formData.ci, formData);
       setMensaje("Participante editado correctamente");
-      setParticipantesState((prev) =>
-        prev.map((p) => (p.ci === formData.ci ? { ...p, ...participanteEditado } : p))
-      );
+      await refreshParticipantes(); // 👈 refrescar lista
       resetForm();
     } catch (e) {
       setMensaje("Error al editar el participante");
@@ -93,9 +96,9 @@ export default function ParticipanteABM({ participantes }) {
   const handleDeleteParticipante = async (ci) => {
     try {
       const statusCode = await deleteParticipante(ci);
-      if (statusCode === 204) {
+      if (statusCode === 204 || statusCode === 200) {
         setMensaje(`Participante con CI ${ci} eliminado correctamente.`);
-        setParticipantesState((prev) => prev.filter((p) => p.ci !== ci));
+        await refreshParticipantes(); // 👈 refrescar lista
       }
     } catch (e) {
       setMensaje(`Error al eliminar el participante con CI ${ci}.`);
@@ -119,7 +122,7 @@ export default function ParticipanteABM({ participantes }) {
   return !modoEdicion ? (
     <div className="list-box">
       <h2>Participantes</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <ul className="no-padding">
         {participantesState
           .filter((p) => p.ci !== "000000000")
@@ -154,7 +157,7 @@ export default function ParticipanteABM({ participantes }) {
   ) : (
     <div className="list-box">
       <h2>{participanteEditando ? "Editar Participante" : "Agregar Participante"}</h2>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       <form onSubmit={participanteEditando ? handleEditParticipante : handleAddParticipante}>
         <div className="form-group">
           <label htmlFor="ci">CI</label>
@@ -214,6 +217,7 @@ export default function ParticipanteABM({ participantes }) {
             value={formData.rol}
             onChange={handleInputChange}
             required
+            disabled={!!participanteEditando}
           >
             <option value="alumno">Alumno</option>
             <option value="docente">Docente</option>

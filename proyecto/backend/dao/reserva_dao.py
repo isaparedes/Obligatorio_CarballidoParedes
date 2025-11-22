@@ -84,17 +84,6 @@ def insertar_reserva_participante(id_reserva, ci_participante, fecha_solicitud_r
             conn.commit()
             return {"id_reserva": id_reserva, "ci_participante": ci_participante}
 
-# Eliminar reserva asociada a un participante
-def eliminar_reserva_participantes(id_reserva):
-    conn = get_connection()
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute("""
-                DELETE FROM reserva_participante WHERE id_reserva = %s
-            """, (id_reserva,))
-            conn.commit()
-            return {"deleted": id_reserva}
-
 # Obtener la cantidad de reservas que hizo un participante en un mismo día
 def obtener_reservas_del_dia(ci, fecha):
     conn = get_connection()
