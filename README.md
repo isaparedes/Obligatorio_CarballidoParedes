@@ -6,11 +6,11 @@
 ## ✨ Inicializar backend:
 - En la terminal del proyecto ir a la ruta backend:
     
-        cd backend
+      cd backend
         
 - Instalar entorno virtual:
   
-         python -m venv venv
+      python -m venv venv
 
 - Activar entorno virtual según SO:
   
@@ -20,25 +20,25 @@
   
   - En Linux/macOS:
     
-            source venv/bin/activate
+          source venv/bin/activate
 
 - Instalar dependencias:
   
-        pip install -r requirements.txt
+      pip install -r requirements.txt
         
-- Crear archivo **.env** en la carpeta **backend** con este contenido:
+- Crear archivo **.env** en la carpeta **backend** con los datos de la base de datos:
         
-        SECRET_KEY="secret_key"
+      SECRET_KEY="secret_key"
       
-        DB_HOST=127.0.0.1
+      DB_HOST=127.0.0.1
       
-        DB_PORT=3307
+      DB_PORT=3307
       
-        DB_USER=root
+      DB_USER=root
       
-        DB_PASSWORD=rootpassword
+      DB_PASSWORD=rootpassword
       
-        DB_NAME=gestion_salas
+      DB_NAME=gestion_salas
   
 - Correr backend:
     
@@ -52,13 +52,13 @@
   
 - Ir a la ruta gestion-salas:
 
-        cd gestion-salas
+      cd gestion-salas
     
 - Instalar dependencias:
 
       npm i
 
-- Correr proyecto (asegurarse de tener el backend corriendo para que funcione correctamente):
+- Correr proyecto (asegurarse de tener el backend y la base de datos corriendo para que funcione correctamente):
 
       npm run dev
 
