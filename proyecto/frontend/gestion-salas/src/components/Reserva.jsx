@@ -38,7 +38,7 @@ export default function Reserva() {
     if (!ciReservante || participantesDisponibles.length === 0) return;
 
     setParticipantesDisponibles((prev) =>
-      prev.filter((p) => p.ci !== ciReservante)
+      prev.filter((p) => p.ci !== ciReservante && p.ci !== '000000000')
     );
   }, [ciReservante, participantesDisponibles.length]);
 
@@ -122,14 +122,6 @@ export default function Reserva() {
               </div>
             ))}
 
-            {/*
-            {salasDisp &&
-              salasDisp.map((s, i) => (
-                <p key={i}>
-                  Sala: {s.nombre_sala} de {s.edificio}. Capacidad: {s.capacidad}
-                </p>
-              ))}
-            */}
             <button type="submit">Enviar</button>
           </form>
         </div>

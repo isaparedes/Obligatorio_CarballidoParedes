@@ -71,7 +71,7 @@ export default function SalaABM({ salas }) {
       setSalasState((prev) => [...prev, salaCreada]);
       resetForm();
     } catch (e) {
-      setMensaje("Error al crear la sala");
+      setMensaje("Error al crear la sala. Ya existe una sala con dichas credenciales.");
     }
   };
 
@@ -109,7 +109,7 @@ export default function SalaABM({ salas }) {
         );
       }
     } catch (e) {
-      setMensaje(`Error al eliminar la sala ${nombre_sala} del ${edificio}.`);
+      setMensaje(`Error al eliminar la ${nombre_sala} del ${edificio}. Tiene reservas asociadas.`);
     }
   };
 

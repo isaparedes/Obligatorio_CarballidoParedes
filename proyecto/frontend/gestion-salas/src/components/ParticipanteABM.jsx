@@ -4,23 +4,39 @@ import {
   editParticipante,
   deleteParticipante,
 } from "../../api/participante";
+import { getProgramas } from "../../api/programa";
 
 export default function ParticipanteABM({ participantes }) {
   const [mensaje, setMensaje] = useState("");
   const [participantesState, setParticipantesState] = useState(participantes);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [participanteEditando, setParticipanteEditando] = useState(null);
+  const [programas, setProgramas] = useState([]);
+
   const [formData, setFormData] = useState({
     ci: "",
     nombre: "",
     apellido: "",
     email: "",
+    rol: "alumno", // default
+    nombre_programa: "", // default vacío
   });
 
   // sincronizar con el padre
   useEffect(() => {
     setParticipantesState(participantes);
   }, [participantes]);
+
+  // cargar programas académicos
+  useEffect(() => {
+    getProgramas()
+      .then((programas_academicos) => {
+        setProgramas(programas_academicos);
+      })
+      .catch((err) => {
+        console.error("Error al cargar programas académicos:", err);
+      });
+  }, []);
 
   // manejar inputs
   const handleInputChange = (e) => {
@@ -38,6 +54,8 @@ export default function ParticipanteABM({ participantes }) {
       nombre: "",
       apellido: "",
       email: "",
+      rol: "alumno",
+      nombre_programa: "",
     });
     setParticipanteEditando(null);
     setModoEdicion(false);
@@ -92,6 +110,8 @@ export default function ParticipanteABM({ participantes }) {
       nombre: p.nombre,
       apellido: p.apellido,
       email: p.email,
+      rol: p.rol || "alumno",
+      nombre_programa: p.nombre_programa || "",
     });
     setModoEdicion(true);
   };
@@ -184,6 +204,38 @@ export default function ParticipanteABM({ participantes }) {
             required
             disabled={!!participanteEditando}
           />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="rol">Rol</label>
+          <select
+            id="rol"
+            name="rol"
+            value={formData.rol}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="alumno">Alumno</option>
+            <option value="docente">Docente</option>
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="nombre_programa">Programa Académico</label>
+          <select
+            id="nombre_programa"
+            name="nombre_programa"
+            value={formData.nombre_programa}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Seleccione un programa</option>
+            {programas.map((prog, idx) => (
+              <option key={idx} value={prog.nombre_programa}>
+                {prog.nombre_programa}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button type="submit" className="small-button">

@@ -78,7 +78,7 @@ def service_eliminar_reserva(id_reserva):
 # Obtener salas disponibles
 def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes):
 
-    if (lista_participantes[0] == ''):
+    if (not lista_participantes or lista_participantes[0] == ''):
         lista_participantes = []
 
     todos = lista_participantes.copy() 
@@ -136,7 +136,7 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
 
     salas_filtradas = [s for s in salas if s["tipo_sala"] in tipos_permitidos]
     if not salas_filtradas:
-        return None, "No hay salas disponibles según el rol", 403
+        return None, f"No hay salas disponibles", 403
 
     salas_disponibles = []
     for sala in salas_filtradas:
@@ -155,4 +155,3 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
         return None, "No hay salas libres en esa fecha y horario", 404
 
     return salas_disponibles, None, 200
-

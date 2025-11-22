@@ -190,7 +190,7 @@ export const getSalasDisponibles = async (requestedReservaData) => {
     ci_reservante: requestedReservaData.ci_reservante,
     lista_participantes: requestedReservaData.lista_participantes
   };
-
+  console.log(body);
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -209,8 +209,9 @@ export const getSalasDisponibles = async (requestedReservaData) => {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else {
       const errorData = await response.json();
-      console.error(`Error ${response.status}:`, errorData.error);
-      throw new Error(`${errorData.error}`);
+      const msg = errorData.error || errorData.message || "Error desconocido";
+      console.error(`Error ${response.status}:`, msg);
+      throw new Error(msg);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);

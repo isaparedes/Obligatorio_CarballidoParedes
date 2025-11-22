@@ -126,8 +126,12 @@ export const createParticipante = async (newParticipanteData) => {
     ci: newParticipanteData.ci,
     nombre: newParticipanteData.nombre,
     apellido: newParticipanteData.apellido,
-    email: newParticipanteData.email
+    email: newParticipanteData.email,
+    rol: newParticipanteData.rol,                  
+    nombre_programa: newParticipanteData.nombre_programa 
   };
+
+  console.log("Body enviado a /participantes:", body);
 
   try {
     const response = await fetch(url, {
@@ -147,14 +151,15 @@ export const createParticipante = async (newParticipanteData) => {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else {
       const errorData = await response.json();
-      console.error(`Error ${response.status}:`, errorData.message);
-      throw new Error(`Fallo al crear el participante: ${errorData.message}`);
+      console.error(`Error ${response.status}:`, errorData.error);
+      throw new Error(`Fallo al crear el participante: ${errorData.error}`);
     }
   } catch (error) {
     console.error("Error de red o del servidor:", error);
     throw error;
   }
 };
+
 
 // PUT /participantes/:ci
 export const editParticipante = async (ci, changedParticipanteData) => {

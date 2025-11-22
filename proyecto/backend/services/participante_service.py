@@ -1,3 +1,4 @@
+from database.db import get_connection
 from dao.participante_dao import (
     obtener_participantes, 
     obtener_participante, 
@@ -8,6 +9,8 @@ from dao.participante_dao import (
     actualizar_participante, 
     eliminar_participante
 )
+
+from dao.reserva_dao import obtener_reservas_activas
 
 # Obtener todos
 def service_obtener_participantes():
@@ -26,33 +29,42 @@ def service_obtener_rol_programa(ci):
     return obtener_rol_programa(ci)
 
 # Crear participante
-def service_crear_participante(data):
 
+def service_crear_participante(data):
     if obtener_participante(data["ci"]):
         return None, "Ya existe un usuario con dicha cédula", 409
 
-    nuevo = insertar_participante(
-        data["ci"],
-        data["nombre"],
-        data["apellido"],
-        data["correo"]
-    )
+    try:
+        conn = get_connection()
+        with conn:
+            with conn.cursor() as cursor:
+                nuevo = insertar_participante(
+                    data["ci"],
+                    data["nombre"],
+                    data["apellido"],
+                    data["email"],
+                    cursor
+                )
+        return nuevo, None, 201
+    except Exception as e:
+        return None, str(e), 500
 
-    return nuevo, None, 201
 
 # Crear participante con su programa
 def service_crear_participante_programa(data):
-
-    if obtener_participante(data["ci"]):
-        return None, "Ya existe un usuario con dicha cédula", 409
-
-    nuevo = insertar_participante_programa(
-        data["ci"],
-        data["nombre_programa"],
-        data["rol"]
-    )
-
-    return nuevo, None, 201
+    try:
+        conn = get_connection()
+        with conn:
+            with conn.cursor() as cursor:
+                nuevo = insertar_participante_programa(
+                    data["ci"],
+                    data["nombre_programa"],
+                    data["rol"],
+                    cursor
+                )
+        return nuevo, None, 201
+    except Exception as e:
+        return None, str(e), 500
 
 # Actualizar participante
 def service_actualizar_participante(ci, data):
@@ -68,6 +80,9 @@ def service_eliminar_participante(ci):
 
     if not obtener_participante(ci):
         return None, "Participante no encontrado", 404
+    
+    if obtener_reservas_activas(ci):
+        return None, "El participante tiene reservas activas", 409
 
     borrado = eliminar_participante(ci)
     return borrado, None, 200

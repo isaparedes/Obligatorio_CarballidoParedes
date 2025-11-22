@@ -9,13 +9,13 @@
 
 - Otro:
     - [X] Uso de repositorio GitHub
-    - [ ] README.md (main): instructivo para correr aplicación
+    - [X] README.md (main): instructivo para correr aplicación
     - [ ] Dockerización de la aplicación
 
 - Base de datos:
     - [x] Insertar más datos
-    - [ ] Restricciones de seguridad
-    - [ ] Validación de campos
+    - [X] Restricciones de seguridad
+    - [X] Validación de campos
           
 - Backend:
     - [x] Consultas obligatorias métrica BI
@@ -33,10 +33,11 @@
 - Frontend:
     - [X] Pestaña inicial con formulario de login/sign up
     - [X] Pestaña con formulario de reservas
-    - [ ] (acceso restringido) Pestaña con métrica BI
-    - [ ] (acceso restringido) Pestaña con ABM de salas
+    - [X] (acceso restringido) Pestaña con métrica BI
+    - [X] (acceso restringido) Pestaña con ABM de salas
     - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
-    - [ ] (acceso restringido) Pestaña con ABM de sanciones
+    - [X] (acceso restringido) Pestaña con ABM de sanciones
+    - [ ] (acceso restringido) Pestaña con ABM de participantes
     - [X] Endpoints necesarios para el funcionamiento del front
     - [X] Validación de campos
 

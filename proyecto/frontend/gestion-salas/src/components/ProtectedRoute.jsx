@@ -29,7 +29,7 @@ export default function ProtectedRoute({ children, rol }) {
     fetchRol();
   }, [ci]);
 
-  if (!token) return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/reserva/form" />;
 
   if (loading) return <div>Cargando...</div>; 
 

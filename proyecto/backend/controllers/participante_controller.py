@@ -6,6 +6,7 @@ from services.participante_service import (
     service_obtener_participante_por_email,
     service_obtener_rol_programa,
     service_crear_participante,
+    service_crear_participante_programa,
     service_actualizar_participante, 
     service_eliminar_participante
 )
@@ -50,7 +51,6 @@ def get_rol_participante(ci):
         return jsonify({"error": "Rol no encontrado"}), 404
     return jsonify(rol_participante)
 
-
 # POST /participantes
 @participante_bp.post("/")
 @require_auth
@@ -61,7 +61,7 @@ def crear_participante():
 
     data = request.get_json()
 
-    campos_obligatorios = ["ci", "nombre", "apellido", "email"]
+    campos_obligatorios = ["ci", "nombre", "apellido", "email", "rol", "nombre_programa"]
     faltantes = [c for c in campos_obligatorios if c not in data]
     if faltantes:
         return jsonify({
@@ -82,12 +82,27 @@ def crear_participante():
         ("@ucu.edu.uy" not in data["email"] and "@correo.ucu.edu.uy" not in data["email"])):
         return jsonify({"error": "Email inválido: debe contener @ucu.edu.uy o @correo.ucu.edu.uy"}), 400
 
-    nuevo, error, status = service_crear_participante(data)
+    if data["rol"] not in ["alumno", "docente"]:
+        return jsonify({"error": "Rol inválido: debe ser 'alumno' o 'docente'"}), 400
 
-    if error:
-        return jsonify({"error": error}), status
+    if not isinstance(data["nombre_programa"], str) or len(data["nombre_programa"]) < 1:
+        return jsonify({"error": "Programa académico inválido"}), 400
 
-    return jsonify(nuevo), status
+    participante, error1, status1 = service_crear_participante(data)
+    if error1:
+        return jsonify({"error": error1}), status1
+
+    programa, error2, status2 = service_crear_participante_programa(data)
+    if error2:
+        return jsonify({"error": error2}), status2
+
+    nuevo = {
+        "participante": participante,
+        "programa": programa
+    }
+
+    return jsonify(nuevo), 201
+
 
 # PUT /participantes/<ci>
 @participante_bp.put("/<string:ci>")

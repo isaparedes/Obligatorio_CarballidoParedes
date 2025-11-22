@@ -126,3 +126,21 @@ def obtener_reservas_semanales(ci, fecha):
             ''', (ci, fecha))
             resultado = cursor.fetchone()
             return resultado["cant_reservas"] if resultado else 0
+        
+
+# Obtener la cantidad de reservas activas que tiene un participante en una semana determinada
+def obtener_reservas_activas(ci):
+    conn = get_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                SELECT COUNT(r.id_reserva) AS cant_reservas
+                FROM reserva r
+                JOIN reserva_participante rp
+                ON r.id_reserva = rp.id_reserva
+                WHERE rp.ci_participante = %s
+                AND r.fecha >= CURDATE()
+                AND r.estado = "activa"
+            ''', (ci))
+            resultado = cursor.fetchone()
+            return resultado["cant_reservas"] if resultado else 0
