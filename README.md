@@ -1,9 +1,11 @@
 # Obligatorio Base de Datos I
 ### Vanesa Carballido e Isabela Paredes
 
-## Instructivo para correr la aplicación de forma local y en contenedor Docker:
+## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [Docker](#docker)
+
+## Local
   
-## ✨ Inicializar backend:
+### ✨ Inicializar backend:
 - En la terminal del proyecto ir a la ruta backend:
     
       cd backend
@@ -45,7 +47,7 @@
       python app.py   
 
    
-## ✨ Inicializar frontend:
+### ✨ Inicializar frontend:
 - Ir a la ruta frontend:
 
       cd frontend
@@ -63,14 +65,14 @@
       npm run dev
 
 
+## Docker
 
+### ✨ Ir a proyecto/backend:
 
+    cd backend
 
+### ✨ Crear archivo **.env** con los datos de la base de datos:
 
-## Agregar .env 
-cd proyecto/backend
-crear .env con valores:
-...
 
       SECRET_KEY="secret_key"
       
@@ -84,11 +86,9 @@ crear .env con valores:
       
       DB_NAME=gestion_salas
 
-...  
-
-## Levantar proyecto
-cd proyecto
-docker compose build
-docker compose up
+### ✨ Levantar proyecto: 
+    cd proyecto
+    docker compose build
+    docker compose up
 
 
