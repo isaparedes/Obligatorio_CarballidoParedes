@@ -1,7 +1,7 @@
 # Obligatorio Base de Datos I
 ### Vanesa Carballido e Isabela Paredes
 
-## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [Docker](#docker)
+## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [`Docker`](#docker)
 
 ## Local
 
@@ -29,8 +29,10 @@
 - Instalar dependencias:
   
       pip install -r requirements.txt
+
+- Crear base de datos local con script **init.sql** de la carpeta **db** 
         
-- Crear archivo **.env** en la carpeta **backend** con los datos de la base de datos:
+- Crear archivo **.env** en la carpeta **backend** con los datos de tu base de datos:
         
       SECRET_KEY="secret_key"
       DB_HOST=127.0.0.1
@@ -74,7 +76,7 @@
     DB_PASSWORD=rootpassword
     DB_NAME=gestion_salas
 
-### ✨ Cconstruir y correr el contenedor en carpeta proyecto:
+### ✨ Cconstruir y correr el contenedor en carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
     docker compose build
     docker compose up
