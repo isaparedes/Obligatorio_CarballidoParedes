@@ -172,7 +172,7 @@ def obtener_sanciones_por_participante():
         with conn.cursor() as cursor:
             cursor.execute('''
                 SELECT p.ci, p.nombre, p.apellido, ppa.rol,
-                COUNT(sp.ci_participante) AS cant_sanciones
+                COUNT(DISTINCT sp.ci_participante) AS cant_sanciones
                 FROM participante p
                 JOIN participante_programa_academico ppa
                 ON p.ci = ppa.ci_participante

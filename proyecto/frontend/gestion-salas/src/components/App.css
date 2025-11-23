@@ -234,7 +234,7 @@ button:hover {
 
 .nav-button {
   background-color: rgba(5, 5, 71);
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   padding: 0.3rem 0.6rem;   
   border-radius: 6px;
@@ -246,6 +246,7 @@ button:hover {
 
 .nav-button:hover {
   background-color: rgb(211, 254, 213);
+  color: rgb(0, 0, 0);
 }
 
 .metrica-card {
