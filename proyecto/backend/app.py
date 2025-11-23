@@ -12,14 +12,14 @@ from controllers.sancion_controller import sancion_bp
 from controllers.programa_controller import programa_bp
 from controllers.edificio_controller import edificio_bp
 
-load_dotenv()
+load_dotenv(override=True)
 
 app = Flask(__name__)
 CORS(app)
 
 
 app.config['JSON_AS_ASCII'] = False
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY") 
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") 
 
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(participante_bp, url_prefix="/participantes")

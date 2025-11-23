@@ -1,7 +1,7 @@
 # Obligatorio Base de Datos I
 ### Vanesa Carballido e Isabela Paredes
 
-## Instructivo para correr la aplicación de forma local:
+## Instructivo para correr la aplicación de forma local y en contenedor Docker:
   
 ## ✨ Inicializar backend:
 - En la terminal del proyecto ir a la ruta backend:
@@ -63,5 +63,32 @@
       npm run dev
 
 
+
+
+
+
+## Agregar .env 
+cd proyecto/backend
+crear .env con valores:
+...
+
+      SECRET_KEY="secret_key"
+      
+      DB_HOST=db
+      
+      DB_PORT=3306
+      
+      DB_USER=root
+      
+      DB_PASSWORD=rootpassword
+      
+      DB_NAME=gestion_salas
+
+...  
+
+## Levantar proyecto
+cd proyecto
+docker compose build
+docker compose up
 
 

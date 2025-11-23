@@ -6,9 +6,9 @@ from datetime import datetime, timedelta, timezone
 from flask import request, jsonify
 from functools import wraps
 
-load_dotenv()
+load_dotenv(override=True)
 
-SECRET_KEY = os.getenv("SECRET_KEY") 
+SECRET_KEY = os.environ.get("SECRET_KEY") 
 
 
 def hash_password(password):
