@@ -6,8 +6,6 @@ from services.auth_service import (
 
 auth_bp = Blueprint("auth", __name__)
 
-# Agregar alguno de get credenciales
-
 # POST /signup
 @auth_bp.post("/signup")
 def registrar_sesion():

@@ -84,7 +84,9 @@ h2 {
   font-family: 'TASA Explorer';
 }
 
-
+select option  {
+  font-family: 'TASA Explorer';
+}
 
 .datos input {
   margin-top: 6px;
@@ -183,7 +185,7 @@ button:hover {
 }
 
 .item {
-  background-color: rgba(231, 245, 231, 1);
+  background-color: #f9f9f9;
   padding: 15px 20px;
   border-radius: 12px;
   width: 100%;
@@ -234,12 +236,12 @@ button:hover {
   background-color: rgba(5, 5, 71);
   color: white;
   border: none;
-  padding: 0.3rem 0.6rem;   /* 👈 menos padding */
+  padding: 0.3rem 0.6rem;   
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  width: auto;              /* 👈 no se expande */
-  display: inline-block;    /* 👈 se ajusta al contenido */
+  width: auto;         
+  display: inline-block;    
 }
 
 .nav-button:hover {

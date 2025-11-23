@@ -122,7 +122,7 @@ export const deleteSancion = async (ci_participante, fecha_inicio, fecha_fin) =>
     } else if (response.status === 200) {
       const data = await response.json();
       console.log("Sanción eliminada exitosamente:", data);
-      return response.status; // ✅ tratar 200 como éxito
+      return response.status; 
     } else if (response.status === 401) {
       throw new Error("No autorizado. Por favor, revisa tu token.");
     } else if (response.status === 404) {

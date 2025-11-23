@@ -82,15 +82,12 @@ def crear_participante():
     if not isinstance(data["email"], str):
         return jsonify({"error": "Email inválido"}), 400
 
-    # Validar que el email tenga alguno de los dominios permitidos
     if not (data["email"].endswith("@ucu.edu.uy") or data["email"].endswith("@correo.ucu.edu.uy")):
         return jsonify({"error": "Email inválido: debe contener @ucu.edu.uy o @correo.ucu.edu.uy"}), 400
 
-    # Validar rol
     if data["rol"] not in ["alumno", "docente"]:
         return jsonify({"error": "Rol inválido: debe ser 'alumno' o 'docente'"}), 400
 
-    # Validar combinación rol-email
     if data["rol"] == "alumno" and data["email"].endswith("@ucu.edu.uy"):
         return jsonify({"error": "Un alumno no puede tener email @ucu.edu.uy"}), 400
 
@@ -100,7 +97,6 @@ def crear_participante():
     if not isinstance(data["nombre_programa"], str) or len(data["nombre_programa"]) < 1:
         return jsonify({"error": "Programa académico inválido"}), 400
 
-    # Crear participante y programa
     participante, error1, status1 = service_crear_participante(data)
     if error1:
         return jsonify({"error": error1}), status1

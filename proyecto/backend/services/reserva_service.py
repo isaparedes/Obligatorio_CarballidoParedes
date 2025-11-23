@@ -96,28 +96,20 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
     if (not lista_participantes or lista_participantes[0] == ''):
         lista_participantes = []
 
-    todos = lista_participantes.copy() 
+    todos = lista_participantes.copy()
     todos.append(ci_reservante)
-
-    print("fecha:", fecha) # borrar
-    print("reservante:", ci_reservante)
-    print("participantes:", todos)
 
     if (len(todos) != len(set(todos))):
         return None, "No puedes repetir participantes", 400
-    
+
     for ci in todos:
         if not obtener_participante(ci):
             return None, f"El participante con cédula {ci} no existe", 404
 
-    
     if obtener_sancionado(ci_reservante):
-        print("reservante sancionado") # borrar
-        return None, "Quién desea reservar está sancionado", 403
-    
+        return None, "El participante que desea reservar está sancionado", 403
     for ci in lista_participantes:
         if obtener_sancionado(ci):
-            print(f"participante sancionado: {ci}") # borrar
             return None, f"El participante con la cédula {ci} está sancionado/a", 403
 
     rol_programa = obtener_rol_programa(ci_reservante)
@@ -125,18 +117,7 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
         rol = rol_programa["rol"]
         programa = rol_programa["tipo"]
     else:
-        rol, programa = None, None   
-
-    if not (rol == "docente" or programa == "posgrado"):
-
-        reservas_dia = obtener_reservas_del_dia(ci_reservante, fecha)
-        if reservas_dia >= 2:
-            return None, "El participante ya tiene 2 horas reservadas ese día", 403
-        
-        reservas_semana = obtener_reservas_semanales(ci_reservante, fecha)
-        if reservas_semana >= 3:
-            return None, "El participante ya tiene 3 reservas activas en esa semana", 403
-
+        rol, programa = None, None
 
     salas = obtener_salas_con_capacidad_minima(len(todos))
     if not salas:
@@ -151,19 +132,34 @@ def service_obtener_salas_disponibles(fecha, ci_reservante, lista_participantes)
 
     salas_filtradas = [s for s in salas if s["tipo_sala"] in tipos_permitidos]
     if not salas_filtradas:
-        return None, f"No hay salas disponibles", 403
+        return None, "No hay salas disponibles", 403
+
+    reservas_dia = obtener_reservas_del_dia(ci_reservante, fecha)
+    reservas_semana = obtener_reservas_semanales(ci_reservante, fecha)
+
+    if not (rol == "docente" or programa == "posgrado"):
+        if reservas_dia >= 2:
+            return None, "El participante ya tiene 2 horas reservadas ese día", 403
+        if reservas_semana >= 3:
+            return None, "El participante ya tiene 3 reservas activas en esa semana", 403
 
     salas_disponibles = []
     for sala in salas_filtradas:
-        nombre_sala, edificio = sala["nombre_sala"], sala["edificio"]
+        nombre_sala, edificio, tipo = sala["nombre_sala"], sala["edificio"], sala["tipo_sala"]
         cant_turnos = len(obtener_turnos())
+
+        es_exclusiva = (rol == "docente" and tipo == "docente") or (programa == "posgrado" and tipo == "posgrado")
+
+        if not es_exclusiva:
+            if reservas_dia >= 2 or reservas_semana >= 3:
+                continue
 
         if sala_esta_disponible(nombre_sala, edificio, fecha, cant_turnos):
             salas_disponibles.append({
                 "nombre_sala": nombre_sala,
                 "edificio": edificio,
                 "capacidad": sala["capacidad"],
-                "tipo_sala": sala["tipo_sala"]
+                "tipo_sala": tipo
             })
 
     if not salas_disponibles:

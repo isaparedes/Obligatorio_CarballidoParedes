@@ -41,7 +41,6 @@ export default function Admin() {
       <ParticipanteABM participantes={participantes}/>
       <ReservaABM reservas={reservas}/>
       <SancionABM sanciones={sanciones}/>
-
     </div>
   );
 }

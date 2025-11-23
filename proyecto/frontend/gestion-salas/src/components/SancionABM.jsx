@@ -10,18 +10,15 @@ export default function SancionABM({ sanciones }) {
     fecha_inicio: "",
   });
 
-  // sincronizar con el padre
   useEffect(() => {
     setSancionesState(sanciones);
   }, [sanciones]);
 
-  // helper para formatear fechas
   const formatDate = (date) => {
     const d = new Date(date);
-    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    return d.toISOString().split("T")[0]; 
   };
 
-  // refrescar sanciones desde BD
   const refreshSanciones = async () => {
     try {
       const sancionesObtenidas = await getSanciones();
@@ -31,7 +28,6 @@ export default function SancionABM({ sanciones }) {
     }
   };
 
-  // manejar inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -40,7 +36,6 @@ export default function SancionABM({ sanciones }) {
     });
   };
 
-  // reset form
   const resetForm = () => {
     setFormData({
       ci_participante: "",
@@ -49,7 +44,6 @@ export default function SancionABM({ sanciones }) {
     setModoEdicion(false);
   };
 
-  // agregar sanción
   const handleAddSancion = async (e) => {
     e.preventDefault();
     try {
@@ -58,14 +52,13 @@ export default function SancionABM({ sanciones }) {
         fecha_inicio: new Date(formData.fecha_inicio),
       });
       setMensaje("Sanción creada exitosamente");
-      await refreshSanciones(); // 👈 refrescar lista
+      await refreshSanciones(); 
       resetForm();
     } catch (e) {
       setMensaje("Error al crear la sanción");
     }
   };
 
-  // eliminar sanción
   const handleDeleteSancion = async (ci_participante, fecha_inicio, fecha_fin) => {
     try {
       const statusCode = await deleteSancion(
@@ -75,7 +68,7 @@ export default function SancionABM({ sanciones }) {
       );
       if (statusCode === 204 || statusCode === 200) {
         setMensaje(`Sanción de CI ${ci_participante} eliminada correctamente.`);
-        await refreshSanciones(); // 👈 refrescar lista
+        await refreshSanciones(); 
       }
     } catch (e) {
       setMensaje(`Error al eliminar la sanción de CI ${ci_participante}.`);

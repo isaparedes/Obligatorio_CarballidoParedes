@@ -15,12 +15,10 @@ export default function SalaABM({ salas }) {
     edificio: "",
   });
 
-  // sincronizar con el padre
   useEffect(() => {
     setSalasState(salas);
   }, [salas]);
 
-  // refrescar salas desde BD
   const refreshSalas = async () => {
     try {
       const salasObtenidas = await getSalas();
@@ -30,7 +28,6 @@ export default function SalaABM({ salas }) {
     }
   };
 
-  // obtener edificios
   useEffect(() => {
     const fetchEdificios = async () => {
       try {
@@ -43,7 +40,6 @@ export default function SalaABM({ salas }) {
     fetchEdificios();
   }, []);
 
-  // manejar inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -52,7 +48,6 @@ export default function SalaABM({ salas }) {
     });
   };
 
-  // reset form
   const resetForm = () => {
     setFormData({
       nombre_sala: "",
@@ -64,7 +59,6 @@ export default function SalaABM({ salas }) {
     setModoEdicion(false);
   };
 
-  // agregar sala
   const handleAddSala = async (e) => {
     e.preventDefault();
     if (!formData.capacidad || isNaN(formData.capacidad) || formData.capacidad <= 0) {
@@ -78,14 +72,13 @@ export default function SalaABM({ salas }) {
       };
       await createSala(dataConCapacidadNumerica);
       setMensaje("Sala creada");
-      await refreshSalas(); // 👈 refrescar lista
+      await refreshSalas(); 
       resetForm();
     } catch (e) {
       setMensaje("Error al crear la sala. Ya existe una sala con dichas credenciales.");
     }
   };
 
-  // editar sala
   const handleEditSala = async (e) => {
     e.preventDefault();
     try {
@@ -95,27 +88,25 @@ export default function SalaABM({ salas }) {
       };
       await editSala(formData.nombre_sala, formData.edificio, dataConCapacidadNumerica);
       setMensaje("Sala editada correctamente");
-      await refreshSalas(); // 👈 refrescar lista
+      await refreshSalas(); 
       resetForm();
     } catch (e) {
       setMensaje("Error al editar la sala");
     }
   };
 
-  // eliminar sala
   const handleDeleteSala = async (nombre_sala, edificio) => {
     try {
       const statusCode = await deleteSala(nombre_sala, edificio);
       if (statusCode === 204 || statusCode === 200) {
         setMensaje(`${nombre_sala} del ${edificio} eliminada correctamente.`);
-        await refreshSalas(); // 👈 refrescar lista
+        await refreshSalas(); 
       }
     } catch (e) {
       setMensaje(`Error al eliminar la ${nombre_sala} del ${edificio}. Tiene reservas asociadas.`);
     }
   };
 
-  // seleccionar sala para editar
   const seleccionarSalaParaEditar = (s) => {
     setSalaEditando(s);
     setFormData({

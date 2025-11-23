@@ -38,13 +38,9 @@ def servicio_registrar_sesion(data):
     try:
         with conn:
             with conn.cursor() as cursor:
-                # 👇 primero participante
+  
                 participante = insertar_participante(ci, nombre, apellido, correo, cursor)
-
-                # 👇 luego login
                 usuario = crear_usuario(correo, hashed, cursor)
-
-                # 👇 finalmente programa académico
                 participante_programa = insertar_participante_programa(ci, nombre_programa, rol, cursor)
 
         return usuario, None, 201

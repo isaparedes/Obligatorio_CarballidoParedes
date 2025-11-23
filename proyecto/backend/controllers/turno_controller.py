@@ -7,7 +7,7 @@ turno_bp = Blueprint("turnos", __name__)
 
 # GET /turnos
 @turno_bp.get("/")
-# @require_auth
+@require_auth
 def get_turnos():
     return jsonify(obtener_turnos())
 

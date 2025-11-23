@@ -3,7 +3,7 @@ import {
   createParticipante,
   editParticipante,
   deleteParticipante,
-  getParticipantes,   // 👈 importar también el getParticipantes
+  getParticipantes,  
 } from "../../api/participante";
 import { getProgramas } from "../../api/programa";
 
@@ -23,19 +23,16 @@ export default function ParticipanteABM({ participantes }) {
     nombre_programa: "",
   });
 
-  // sincronizar con el padre
   useEffect(() => {
     setParticipantesState(participantes);
   }, [participantes]);
 
-  // cargar programas académicos
   useEffect(() => {
     getProgramas()
       .then((programas_academicos) => setProgramas(programas_academicos))
       .catch((err) => console.error("Error al cargar programas académicos:", err));
   }, []);
 
-  // refrescar participantes desde BD
   const refreshParticipantes = async () => {
     try {
       const participantesObtenidos = await getParticipantes();
@@ -45,13 +42,11 @@ export default function ParticipanteABM({ participantes }) {
     }
   };
 
-  // manejar inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // reset form
   const resetForm = () => {
     setFormData({
       ci: "",
@@ -65,7 +60,6 @@ export default function ParticipanteABM({ participantes }) {
     setModoEdicion(false);
   };
 
-  // agregar participante
   const handleAddParticipante = async (e) => {
     e.preventDefault();
     try {
@@ -79,33 +73,30 @@ export default function ParticipanteABM({ participantes }) {
   };
 
 
-  // editar participante
   const handleEditParticipante = async (e) => {
     e.preventDefault();
     try {
       await editParticipante(formData.ci, formData);
       setMensaje("Participante editado correctamente");
-      await refreshParticipantes(); // 👈 refrescar lista
+      await refreshParticipantes(); 
       resetForm();
     } catch (e) {
       setMensaje("Error al editar el participante");
     }
   };
 
-  // eliminar participante
   const handleDeleteParticipante = async (ci) => {
     try {
       const statusCode = await deleteParticipante(ci);
       if (statusCode === 204 || statusCode === 200) {
         setMensaje(`Participante con CI ${ci} eliminado correctamente.`);
-        await refreshParticipantes(); // 👈 refrescar lista
+        await refreshParticipantes();
       }
     } catch (e) {
       setMensaje(`Error al eliminar el participante con CI ${ci}.`);
     }
   };
 
-  // seleccionar participante para editar
   const seleccionarParticipanteParaEditar = (p) => {
     setParticipanteEditando(p);
     setFormData({

@@ -7,12 +7,15 @@ from dao.sala_dao import (
     eliminar_sala
 )
 
+# Obtener todas
 def service_obtener_salas():
     return obtener_salas()
 
+# Obtener sala
 def service_obtener_sala(nombre_sala, edificio):
     return obtener_sala(nombre_sala, edificio)
 
+# Crear sala
 def service_crear_sala(data):
 
     if obtener_sala(data["nombre_sala"], data["edificio"]):
@@ -27,6 +30,7 @@ def service_crear_sala(data):
 
     return nueva, None, 201
 
+# Actualizar sala
 def service_actualizar_sala(nombre_sala, edificio, data):
 
     sala_actual = obtener_sala(nombre_sala, edificio)
@@ -36,6 +40,7 @@ def service_actualizar_sala(nombre_sala, edificio, data):
     actualizada = actualizar_sala(nombre_sala, edificio, data)
     return actualizada, None, 200
 
+# Eliminar sala
 def service_eliminar_sala(nombre_sala, edificio):
 
     if not obtener_sala(nombre_sala, edificio):

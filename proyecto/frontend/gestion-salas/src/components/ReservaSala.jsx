@@ -38,7 +38,6 @@ export default function ReservaSala({ fecha, ci_reservante, participantes, salas
             await delay(2000)
             setMensaje("");
             setReserva(false);
-            // ver que hacemos
         }
         catch (e) {
             setMensaje("Error al reservar")

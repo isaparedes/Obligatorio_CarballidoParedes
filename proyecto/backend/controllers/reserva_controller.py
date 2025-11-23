@@ -117,7 +117,7 @@ def get_salas_disponibles():
     if not request.is_json:
         return jsonify({"error": "Content-Type debe ser application/json"}), 415
     
-    print(request.json) # borrar
+    # print(request.json) 
 
     data = request.get_json()
     fecha = data.get("fecha")  

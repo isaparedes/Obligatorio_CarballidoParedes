@@ -10,20 +10,18 @@ import { getParticipantes } from "../../api/participante";
 import { getTurnosDisponiblesSegunSala } from "../../api/sala";
 
 export default function ReservasABM() {
-  // Listado y feedback
+  
   const [reservas, setReservas] = useState([]);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState("");
 
-  // Alta con restricciones (flujo tipo Reserva.jsx para admin)
   const [participantesDisponibles, setParticipantesDisponibles] = useState([]);
-  const [participantesSeleccionados, setParticipantesSeleccionados] = useState([""]); // el primero será el reservante
+  const [participantesSeleccionados, setParticipantesSeleccionados] = useState([""]); 
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
   const [salasDisp, setSalasDisp] = useState([]);
   const [salaSeleccionada, setSalaSeleccionada] = useState(null);
   const [turnosDisp, setTurnosDisp] = useState([]);
 
-  // Edición
   const [reservaEditando, setReservaEditando] = useState(null);
   const [formData, setFormData] = useState({
     fecha: "",
@@ -31,18 +29,23 @@ export default function ReservasABM() {
     estado: "activa"
   });
 
-  // Cargar reservas y participantes
+  const cargarParticipantes = async () => {
+    try {
+      const data = await getParticipantes();
+      setParticipantesDisponibles(data.filter(p => p.ci !== "000000000"));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   useEffect(() => {
     getReservas()
       .then((data) => setReservas(data))
       .catch((err) => setError(err.message));
 
-    getParticipantes()
-      .then((data) => setParticipantesDisponibles(data.filter(p => p.ci !== "000000000")))
-      .catch((err) => setError(err.message));
+    cargarParticipantes();
   }, []);
 
-  // Helpers
   const agregarParticipante = () => {
     setParticipantesSeleccionados((prev) => [...prev, ""]);
   };
@@ -68,7 +71,6 @@ export default function ReservasABM() {
     setFormData({ fecha: "", id_turno: "", estado: "activa" });
   };
 
-  // Consultar salas disponibles (con reglas; el primero es reservante)
   const handleConsultarSalas = async (e) => {
     e.preventDefault();
     setError("");
@@ -89,7 +91,6 @@ export default function ReservasABM() {
     }
   };
 
-  // Elegir sala y cargar turnos
   const handleElegirSala = async (sala) => {
     setSalaSeleccionada(sala);
     setTurnosDisp([]);
@@ -107,7 +108,7 @@ export default function ReservasABM() {
       setError("Error al obtener turnos de la sala seleccionada.");
     }
   };
-  // Crear reserva (POST /reservas)
+
   const handleCrearReserva = async (turno) => {
     try {
       const todos = participantesSeleccionados;
@@ -121,35 +122,35 @@ export default function ReservasABM() {
       const nueva = await createReserva(datos);
       setReservas((prev) => [...prev, nueva]);
       resetFlujoAlta();
+      await cargarParticipantes(); 
       setMensaje("Reserva creada exitosamente");
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Editar reserva (PUT /reservas/:id)
   const handleEditReserva = async (e) => {
-  e.preventDefault();
-  try {
-    const body = { estado: formData.estado }; // 👈 solo enviamos estado
-    const editada = await editReserva(reservaEditando.id_reserva, body);
-    setReservas((prev) =>
-      prev.map((r) => (r.id_reserva === reservaEditando.id_reserva ? editada : r))
-    );
-    resetEdicion();
-    setMensaje("Reserva editada correctamente");
-  } catch (err) {
-    setError(err.message);
-  }
-};
+    e.preventDefault();
+    try {
+      const body = { estado: formData.estado };
+      const editada = await editReserva(reservaEditando.id_reserva, body);
+      setReservas((prev) =>
+        prev.map((r) => (r.id_reserva === reservaEditando.id_reserva ? editada : r))
+      );
+      resetEdicion();
+      await cargarParticipantes(); 
+      setMensaje("Reserva editada correctamente");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
-
-  // Eliminar reserva (DELETE /reservas/:id)
   const handleDeleteReserva = async (id) => {
     try {
       const status = await deleteReserva(id);
       if (status === 204) {
         setReservas((prev) => prev.filter((r) => r.id_reserva !== id));
+        await cargarParticipantes(); 
         setMensaje(`Reserva ${id} eliminada correctamente`);
       }
     } catch (err) {
@@ -167,7 +168,6 @@ export default function ReservasABM() {
   return (
     <div className="list-box">
       <h2>Reservas</h2>
-      {/* Listado de reservas */}
       <ul className="no-padding">
         {reservas.map((r, i) => (
           <div key={i} className="item-container">
@@ -196,7 +196,6 @@ export default function ReservasABM() {
       </ul>
       {mensaje && <p style={{fontSize: 15}}>{mensaje}</p>}
       {error && <p style={{fontSize: 15}}>{error}</p>}
-      {/* Alta de reserva */}
       {!reservaEditando && (
         <>
           <h3>Agregar Reserva</h3>
@@ -250,7 +249,6 @@ export default function ReservasABM() {
         </>
       )}
 
-      {/* Edición de reserva */}
       {reservaEditando && (
         <form onSubmit={handleEditReserva}>
           <h3>Editar Reserva N° {reservaEditando.id_reserva}</h3>

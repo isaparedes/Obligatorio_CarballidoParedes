@@ -23,7 +23,7 @@ export default function Layout() {
           setRol(null);
         }
       } else {
-        setRol(null); // 👈 si no hay CI, no hay rol
+        setRol(null); 
       }
       setLoadingRol(false);
     };
@@ -32,7 +32,7 @@ export default function Layout() {
 
   const handleLogout = () => {
     localStorage.clear();
-    setRol(null); // 👈 resetear rol al cerrar sesión
+    setRol(null);
     navigate("/login");
   };
 
