@@ -10,6 +10,7 @@
 - En la terminal del proyecto ir a la ruta backend:
     
       cd proyecto
+  
       cd backend
         
 - Instalar entorno virtual:
@@ -76,9 +77,10 @@
     DB_PASSWORD=rootpassword
     DB_NAME=gestion_salas
 
-### ✨ Cconstruir y correr el contenedor en carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
+### ✨ Construir y correr el contenedor en carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
     docker compose build
+    
     docker compose up
 
 
