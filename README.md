@@ -2,7 +2,7 @@
 
 ## Tareas:
 - Informe:
-    - [ ] Fundamentación de decisiones de implementación
+    - [X] Fundamentación de decisiones de implementación
     - [X] Mejoras implementadas o consideradas en el modelo de datos
     - [X] Bitácora del trabajo realizado
     - [X] Bibliografía
@@ -35,9 +35,9 @@
     - [X] Pestaña con formulario de reservas
     - [X] (acceso restringido) Pestaña con métrica BI
     - [X] (acceso restringido) Pestaña con ABM de salas
-    - [ ] (acceso restringido) Pestaña con ABM de reservas de salas
+    - [X] (acceso restringido) Pestaña con ABM de reservas de salas
     - [X] (acceso restringido) Pestaña con ABM de sanciones
-    - [ ] (acceso restringido) Pestaña con ABM de participantes
+    - [X] (acceso restringido) Pestaña con ABM de participantes
     - [X] Endpoints necesarios para el funcionamiento del front
     - [X] Validación de campos
 
