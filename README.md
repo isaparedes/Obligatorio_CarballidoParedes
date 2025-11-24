@@ -1,11 +1,17 @@
 # Obligatorio Base de Datos I
 ### Vanesa Carballido e Isabela Paredes
 
-## Instructivo para correr la aplicación de forma local y en contenedor Docker:
+## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [`Docker`](#docker)
+
+## ✨ Local
+
+### Inicializar backend:
+- En la terminal del proyecto ir a la raiz del proyecto:
+
+      cd proyecto
   
-## ✨ Inicializar backend:
 - En la terminal del proyecto ir a la ruta backend:
-    
+
       cd backend
         
 - Instalar entorno virtual:
@@ -25,28 +31,26 @@
 - Instalar dependencias:
   
       pip install -r requirements.txt
+
+- Crear base de datos local con script **init.sql** de la carpeta **db** 
         
-- Crear archivo **.env** en la carpeta **backend** con los datos de la base de datos:
+- Crear archivo **.env** en la carpeta **backend** con los datos de tu base de datos:
         
       SECRET_KEY="secret_key"
-      
       DB_HOST=127.0.0.1
-      
       DB_PORT=3307
-      
       DB_USER=root
-      
       DB_PASSWORD=rootpassword
-      
       DB_NAME=gestion_salas
   
 - Correr backend:
     
       python app.py   
-
    
-## ✨ Inicializar frontend:
-- Ir a la ruta frontend:
+###  Inicializar frontend:
+
+- Ir a la ruta frontend (desde la raiz del proyecto):
+
 
       cd frontend
   
@@ -63,32 +67,27 @@
       npm run dev
 
 
+## ✨ Docker
+- En la terminal del proyecto ir a la raiz del proyecto:
 
+      cd proyecto
+  
+- Crear archivo **.env** con los datos de la base de datos en carpeta backend:
 
-
-
-## Agregar .env 
-cd proyecto/backend
-crear .env con valores:
-...
 
       SECRET_KEY="secret_key"
-      
       DB_HOST=db
-      
       DB_PORT=3306
-      
       DB_USER=root
-      
       DB_PASSWORD=rootpassword
-      
       DB_NAME=gestion_salas
 
-...  
+- Construir el contenedor en la carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
-## Levantar proyecto
-cd proyecto
-docker compose build
-docker compose up
+      docker compose build
+
+-  Correr el contenedor:
+
+       docker compose up
 
 
