@@ -3,14 +3,15 @@
 
 ## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [`Docker`](#docker)
 
-## ✨ Local
+## Local
 
 ### Inicializar backend:
-- En la terminal del proyecto ir a la raiz del proyecto:
+
+- Ir a la ruta proyecto:
 
       cd proyecto
   
-- En la terminal del proyecto ir a la ruta backend:
+- Ir a la ruta backend:
 
       cd backend
         
@@ -49,8 +50,11 @@
    
 ###  Inicializar frontend:
 
-- Ir a la ruta frontend (desde la raiz del proyecto):
+- Ir a la ruta proyecto nuevamente:
 
+      cd ..
+
+- Ir a la ruta frontend:
 
       cd frontend
   
@@ -66,14 +70,15 @@
 
       npm run dev
 
+- Para acceder al frontend utiliza http://localhost:5000 como indicará la terminal
+  
+## Docker
 
-## ✨ Docker
-- En la terminal del proyecto ir a la raiz del proyecto:
+- Ir a la ruta proyecto:
 
       cd proyecto
   
 - Crear archivo **.env** con los datos de la base de datos en carpeta backend:
-
 
       SECRET_KEY="secret_key"
       DB_HOST=db
@@ -82,12 +87,13 @@
       DB_PASSWORD=rootpassword
       DB_NAME=gestion_salas
 
-- Construir el contenedor en la carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
+- Crear el contenedor en la carpeta proyecto:
 
       docker compose build
 
--  Correr el contenedor:
+- Correr el contenedor (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
        docker compose up
 
-
+- El frontend está expuesto en el host a través del puerto 8080, por lo que puede accederse desde fuera del contenedor usando: http://localhost:8080
+- La base de datos está mapeada al puerto 3308 en el host, así que para conectarse desde fuera del contenedor se debe usar el puerto 3308.
