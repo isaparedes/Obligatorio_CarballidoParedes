@@ -70,7 +70,7 @@
 
       npm run dev
 
-- Para acceder al frontend utiliza http://localhost:5000 como indicará la terminal
+- Para acceder al frontend utiliza http://localhost:5173 como indicará la terminal
   
 ## Docker
 
