@@ -3,12 +3,12 @@
 
 ## Instructivo para correr la aplicación de forma [`local`](#local) y en contenedor [`Docker`](#docker)
 
-## Local
+## ✨ Local
 
-### ✨ Inicializar backend:
+### Inicializar backend:
 - En la terminal del proyecto ir a la raiz del proyecto:
 
-         cd proyecto
+      cd proyecto
   
 - En la terminal del proyecto ir a la ruta backend:
 
@@ -47,7 +47,7 @@
     
       python app.py   
    
-### ✨ Inicializar frontend:
+###  Inicializar frontend:
 
 - Ir a la ruta frontend (desde la raiz del proyecto):
 
@@ -67,22 +67,27 @@
       npm run dev
 
 
-## Docker
+## ✨ Docker
+- En la terminal del proyecto ir a la raiz del proyecto:
 
-### ✨ Crear archivo **.env** con los datos de la base de datos en carpeta backend:
+      cd proyecto
+  
+- Crear archivo **.env** con los datos de la base de datos en carpeta backend:
 
-    SECRET_KEY="secret_key"
-    DB_HOST=db
-    DB_PORT=3306
-    DB_USER=root
-    DB_PASSWORD=rootpassword
-    DB_NAME=gestion_salas
 
-### ✨ Construir el contenedor en la carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
+      SECRET_KEY="secret_key"
+      DB_HOST=db
+      DB_PORT=3306
+      DB_USER=root
+      DB_PASSWORD=rootpassword
+      DB_NAME=gestion_salas
 
-    docker compose build
+- Construir el contenedor en la carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
-### ✨ Correr el contenedor:
-    docker compose up
+      docker compose build
+
+-  Correr el contenedor:
+
+       docker compose up
 
 
