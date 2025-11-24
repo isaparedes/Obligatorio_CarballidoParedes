@@ -6,11 +6,12 @@
 ## Local
 
 ### ✨ Inicializar backend:
+- En la terminal del proyecto ir a la raiz del proyecto:
 
-- En la terminal del proyecto ir a la ruta backend:
-    
-      cd proyecto
+         cd proyecto
   
+- En la terminal del proyecto ir a la ruta backend:
+
       cd backend
         
 - Instalar entorno virtual:
@@ -48,9 +49,9 @@
    
 ### ✨ Inicializar frontend:
 
-- Ir a la ruta frontend:
+- Ir a la ruta frontend (desde la raiz del proyecto):
 
-      cd ..
+
       cd frontend
   
 - Ir a la ruta gestion-salas:
@@ -77,10 +78,11 @@
     DB_PASSWORD=rootpassword
     DB_NAME=gestion_salas
 
-### ✨ Construir y correr el contenedor en carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
+### ✨ Construir el contenedor en la carpeta proyecto (automáticamente se crea la base de datos, se instalan las dependencias necesarias y se corre el proyecto):
 
     docker compose build
-    
+
+### ✨ Correr el contenedor:
     docker compose up
 
 
