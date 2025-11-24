@@ -50,9 +50,9 @@
    
 ###  Inicializar frontend:
 
-- Ir a la ruta proyecto nuevamente:
+- Ir a la ruta proyecto en otra terminal:
 
-      cd ..
+      cd proyecto
 
 - Ir a la ruta frontend:
 
