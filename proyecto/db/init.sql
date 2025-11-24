@@ -1,7 +1,7 @@
 -- Creación de base de datos
 CREATE DATABASE gestion_salas
   CHARACTER SET utf8mb4
-  COLLATE utf8mb4_general_ci;
+  COLLATE utf8mb4_unicode_ci;
 
 -- Creación de tablas
 USE gestion_salas;
@@ -12,20 +12,20 @@ CREATE TABLE participante (
   nombre VARCHAR(100) NOT NULL,
   apellido VARCHAR(100) NOT NULL,
   email VARCHAR(255) NOT NULL UNIQUE
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: login
 CREATE TABLE login (
   correo VARCHAR(255) PRIMARY KEY,
   contrasena VARCHAR(255) NOT NULL,
   FOREIGN KEY (correo) REFERENCES participante(email) ON DELETE CASCADE
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: facultad
 CREATE TABLE facultad (
   id_facultad INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: programa_academico
 CREATE TABLE programa_academico (
@@ -33,7 +33,7 @@ CREATE TABLE programa_academico (
   id_facultad INT,
   tipo ENUM('grado', 'posgrado') NOT NULL,
   FOREIGN KEY (id_facultad) REFERENCES facultad(id_facultad)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: participante_programa_academico
 CREATE TABLE participante_programa_academico (
@@ -43,14 +43,14 @@ CREATE TABLE participante_programa_academico (
   rol ENUM('alumno', 'docente', 'admin') NOT NULL,
   FOREIGN KEY (ci_participante) REFERENCES participante(ci) ON DELETE CASCADE,
   FOREIGN KEY (nombre_programa) REFERENCES programa_academico(nombre_programa)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: edificio
 CREATE TABLE edificio (
   nombre_edificio VARCHAR(255) PRIMARY KEY,
   direccion VARCHAR(255) NOT NULL,
   departamento VARCHAR(255) NOT NULL
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: sala
 CREATE TABLE sala (
@@ -60,14 +60,14 @@ CREATE TABLE sala (
   tipo_sala ENUM('libre', 'posgrado', 'docente') NOT NULL,
   PRIMARY KEY (nombre_sala, edificio),
   FOREIGN KEY (edificio) REFERENCES edificio(nombre_edificio)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: turno
 CREATE TABLE turno (
   id_turno INT AUTO_INCREMENT PRIMARY KEY,
   hora_inicio TIME NOT NULL,
   hora_fin TIME NOT NULL
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: reserva
 CREATE TABLE reserva (
@@ -79,7 +79,7 @@ CREATE TABLE reserva (
   estado ENUM('activa', 'cancelada', 'sin_asistencia', 'finalizada') NOT NULL,
   FOREIGN KEY (nombre_sala, edificio) REFERENCES sala(nombre_sala, edificio),
   FOREIGN KEY (id_turno) REFERENCES turno(id_turno)
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: reserva_participante
 CREATE TABLE reserva_participante (
@@ -90,7 +90,7 @@ CREATE TABLE reserva_participante (
   PRIMARY KEY (ci_participante, id_reserva),
   FOREIGN KEY (ci_participante) REFERENCES participante(ci) ON DELETE RESTRICT,
   FOREIGN KEY (id_reserva) REFERENCES reserva(id_reserva) ON DELETE CASCADE
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Tabla: sancion_participante
 CREATE TABLE sancion_participante (
@@ -99,7 +99,7 @@ CREATE TABLE sancion_participante (
   fecha_fin DATE NOT NULL,
   PRIMARY KEY (ci_participante, fecha_inicio, fecha_fin),
   FOREIGN KEY (ci_participante) REFERENCES participante(ci) ON DELETE RESTRICT
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Inserción de datos
 
@@ -195,13 +195,14 @@ INSERT INTO participante_programa_academico (ci_participante, nombre_programa, r
 ('11111111', 'Ingeniería en Informática', 'alumno'),
 ('99999999', 'Ingeniería Artificial y Ciencia de Datos', 'alumno'),
 ('13131313', 'Ingeniería Artificial y Ciencia de Datos', 'docente'),
-('20202020', 'Maestría en Ciencia de Datos', 'alumno'),
+('20202020', 'Maestría en Ciencia de Datos', 'docente'),
 ('16161616', 'Maestría en Ciencia de Datos', 'docente'),
 ('44444444', 'Ingeniería en Informática', 'alumno'),
 ('22222222', 'Dirección de Empresas', 'alumno'),
-('10101010', 'Dirección de Empresas', 'docente'),
-('21212121', 'Maestría en Políticas Públicas', 'docente'),
+('10101010', 'Dirección de Empresas', 'alumno'),
+('21212121', 'Maestría en Políticas Públicas', 'alumno'),
 ('28282828', 'Contador Público', 'alumno'),
+('25252525', 'Contador Público', 'alumno'),
 ('55555555', 'Contador Público', 'alumno'),
 ('26262626', 'Contador Público', 'docente'),
 ('33333333', 'Maestría en Rehabilitación Oral', 'docente'),
@@ -217,7 +218,8 @@ INSERT INTO participante_programa_academico (ci_participante, nombre_programa, r
 ('24242424', 'Abogacía', 'docente'),
 ('29292929', 'Comunicación', 'docente'),
 ('27272727', 'Abogacía', 'alumno'),
-('14141414', 'Comunicación', 'alumno');
+('12121212', 'Comunicación', 'alumno'),
+('22222223', 'Comunicación', 'docente');
 
 -- Inserción de edificios
 INSERT INTO edificio (nombre_edificio, direccion, departamento) VALUES
@@ -243,7 +245,7 @@ INSERT INTO sala (nombre_sala, edificio, capacidad, tipo_sala) VALUES
 ('Sala 301', 'Edificio Athanasius', 25, 'libre'),
 ('Sala 302', 'Edificio Athanasius', 20, 'posgrado'),
 ('Sala 303', 'Edificio Athanasius', 10, 'docente'),
-('Sala 202', 'Edificio Mullin', 15, 'posgrado'),
+('Sala 202', 'Edificio Mullin', 15, 'libre'),
 ('Sala 203', 'Edificio Mullin', 20, 'libre'),
 ('Sala 204', 'Edificio Mullin', 12, 'docente'),
 ('Sala 401', 'Edificio Semprún', 22, 'libre'),
@@ -362,8 +364,3 @@ INSERT INTO sancion_participante (ci_participante, fecha_inicio, fecha_fin) VALU
 ('12121212', '2026-02-01', '2026-04-01'),
 ('14141414', '2026-03-01', '2026-05-01'),
 ('17171717', '2026-04-01', '2026-06-01');
-
-
-SELECT *
-FROM sancion_participante
-WHERE ci_participante = '14141414';
